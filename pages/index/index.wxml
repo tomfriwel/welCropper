@@ -3,3 +3,5 @@
 
 <template is="tomfriwel-cropper" data="{{data:cropperData}}">
 </template>
+<!-- <view bindtap='showTap'>show</view>
+<view bindtap='hideTap'>hide</view> -->

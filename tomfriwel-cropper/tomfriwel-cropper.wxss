@@ -47,8 +47,8 @@
 }
 
 .cropper_canvas_container .move_item {
-    z-index: 100;
-    opacity: 0;
+    z-index: 101;
+    opacity: 1;
     background: white;
     border-radius: 50%;
 }
