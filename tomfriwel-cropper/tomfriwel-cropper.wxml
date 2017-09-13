@@ -1,0 +1,28 @@
+<template name="tomfriwel-cropper">
+    <scroll-view class="cropper_main_container {{data.hidden?'hidden':''}}">
+        <view class="cropper_container">
+            <canvas class="original_canvas" canvas-id="originalCanvas" style="width:{{data.imageInfo.w}}px;height:{{data.imageInfo.h}}px;"></canvas>
+
+            <movable-area class="cropper_canvas_container" style="left:{{data.left}}px;top:{{data.top}}px;width:{{data.width}}px;height:{{data.height}}px;">
+                <canvas class="canvas" canvas-id="canvas" style="width:{{data.width}}px;height:{{data.height}}px;"></canvas>
+                <canvas class="move_canvas" canvas-id="moveCanvas" style="width:{{data.width}}px;height:{{data.height}}px;"></canvas>
+
+                <block wx:for="{{data.items}}" wx:key="moveItem">
+                    <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{item.x-data.itemLength/2}}" y="{{item.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
+                </block>
+            </movable-area>
+        </view>
+
+        <view class="cropper_toolbar">
+            <view class="select_image_button button_item">
+                <button type="primary" bindtap="selectImage">选择图片</button>
+            </view>
+            <view class="crop_image_button button_item">
+                <button type="primary" bindtap="cropImage">截取图片</button>
+            </view>
+            <!-- <view class="button_item">
+                <button type="primary" bindtap="rotateImage">旋转</button>
+            </view> -->
+        </view>
+    </scroll-view>
+</template>

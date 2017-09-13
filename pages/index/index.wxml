@@ -1,0 +1,5 @@
+<!--index.wxml-->
+<import src="/tomfriwel-cropper/tomfriwel-cropper.wxml" />
+
+<template is="tomfriwel-cropper" data="{{data:cropperData}}">
+</template>
