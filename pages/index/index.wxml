@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<import src="/tomfriwel-cropper/tomfriwel-cropper.wxml" />
+<import src="/welCropper/welCropper" />
 
-<template is="tomfriwel-cropper" data="{{data:cropperData}}">
-</template>
+<template is="welCropper" data="{{data:cropperData, cropperMovableItems:cropperMovableItems}}"></template>
+<button bindtap='selectTap'>select image</button>

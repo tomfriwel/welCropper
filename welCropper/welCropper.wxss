@@ -1,0 +1,77 @@
+.cropper_main_container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    width: 750rpx;
+    height: 100vh;
+    background: #555;
+    overflow: hidden;
+}
+.cropper_main_container.hidden {
+    display: none;
+}
+
+.cropper_container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+/* button */
+
+.cropper_toolbar {
+    position: absolute;
+    z-index: 100;
+    bottom: 0;
+    height: 50px;
+    background: black;
+    width: 100%;
+    line-height: 50px;
+    font-size: 15px;
+    text-align: center;
+    color: white;
+}
+
+.cropper_toolbar .button_item {
+    position: absolute;
+    top: 0;
+    /* float: left; */
+    width: 200rpx;
+}
+
+.crop_image_button {
+    right: 0;
+    color: #1FB922;
+}
+.cancel_button {
+    left: 0;
+}
+
+/* canvas */
+
+.cropper_canvas_container {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.cropper_canvas_container .move_item {
+    z-index: 100;
+    opacity: 0;
+    background: white;
+    border-radius: 50%;
+}
+
+.cropper_canvas_container .canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.original_canvas {
+    position: absolute;
+    left: 750rpx;
+    top: 100vh;
+}

@@ -1,47 +1,51 @@
+// pages/test/test.js
 
-var init = function(W, H) {
-    var that = this
+const device = wx.getSystemInfoSync()
+const W = device.windowWidth
+const H = device.windowHeight - 50
 
-    that.setData({
-        cropperData: {
-            hidden:true,
+Page({
+    data: {
+        containerInfo: {
+            hidden: false,
             left: 0,
             top: 0,
             width: W,
             height: H,
-            itemLength: 50,
-            items: {
-                topleft: {
-                    x: 50,
-                    y: 50
-                },
-                topright: {
-                    x: W - 50,
-                    y: 50
-                },
-                bottomleft: {
-                    x: 50,
-                    y: H - 50
-                },
-                bottomright: {
-                    x: W - 50,
-                    y: H - 50
-                }
+        },
+        itemLength: 50,
+        items: {
+            topleft: {
+                x: 50,
+                y: 50
             },
-            imageInfo: {
-                src: '',
-                w: 0,
-                h: 0
+            topright: {
+                x: W - 50,
+                y: 50
             },
-            scaleInfo: {
-                x: 1,
-                y: 1
+            bottomleft: {
+                x: 50,
+                y: H - 50
+            },
+            bottomright: {
+                x: W - 50,
+                y: H - 50
             }
+        },
+        imageInfo: {
+            src: '',
+            w: 0,
+            h: 0
+        },
+        scaleInfo: {
+            x: 1,
+            y: 1
         }
-    })
+    },
+    onLoad: function (options) {
 
-
-    that.selectImage = () => {
+    },
+    selectImage: function () {
         var that = this
 
         wx.chooseImage({
@@ -64,16 +68,13 @@ var init = function(W, H) {
                 })
             }
         })
-    }
+    },
 
-    that.cropImage = () => {
+    cropImage: function () {
         let that = this
-        let cropperData = that.data.cropperData
-        let scaleInfo = cropperData.scaleInfo
-        let width = cropperData.width
-        let height = cropperData.height
+        let scaleInfo = that.data.scaleInfo
 
-        let items = cropperData.items
+        let items = that.data.items
 
         let maxX = 0, maxY = 0
         for (let key in items) {
@@ -125,14 +126,13 @@ var init = function(W, H) {
                 console.log(res)
             }
         })
-    }
-    that.rotateImage = () => {
+    },
+    rotateImage: function () {
         let that = this
-    }
+    },
 
-    that.loadImage = (src, width, height) => {
+    loadImage: function (src, width, height) {
         var that = this
-        let cropperData = that.data.cropperData
         var size = that.adjustSize(width, height)
 
         var left = (W - size.width) / 2
@@ -144,16 +144,23 @@ var init = function(W, H) {
         console.log('height=' + height)
 
         // set data
-        cropperData.imageInfo = {
+        var updateData = {}
+        var containerInfo = that.data.containerInfo
+
+        containerInfo.left = left
+        containerInfo.top = top
+        containerInfo.width = size.width
+        containerInfo.height = size.height
+
+        updateData.containerInfo = containerInfo
+
+        updateData.imageInfo = {
             src: src,
             w: width,
             h: height
         }
-        cropperData.left = left
-        cropperData.top = top
-        cropperData.width = size.width
-        cropperData.height = size.height
-        cropperData.items = {
+
+        updateData.items = {
             topleft: {
                 x: 50,
                 y: 50
@@ -172,24 +179,22 @@ var init = function(W, H) {
             }
         }
 
-        cropperData.scaleInfo = {
+        updateData.scaleInfo = {
             x: width / size.width,
             y: height / size.height
         }
 
-        that.setData({
-            cropperData
-        })
+        that.setData(updateData)
 
 
         var ctx = wx.createCanvasContext("originalCanvas")
         ctx.drawImage(src, 0, 0, width, height)
         ctx.draw()
 
-        that.drawLines(that.data.cropperData.items)
-    }
+        that.drawLines(that.data.items)
+    },
 
-    that.adjustSize = (width, height) => {
+    adjustSize: function (width, height) {
         if (width > W) {
             height = W / width * height
             width = W
@@ -204,11 +209,10 @@ var init = function(W, H) {
             width: width,
             height: height
         }
-    }
-    that.drawLines = (items, key) => {
+    },
+    drawLines: function (items, key) {
         var that = this
-        let cropperData = that.data.cropperData
-        var imageInfo = cropperData.imageInfo
+        var imageInfo = that.data.imageInfo
 
         if (key) {
             var x = items[key].x
@@ -280,14 +284,13 @@ var init = function(W, H) {
         }
 
         ctx.draw()
-    }
+    },
     // move events
-    that.setupMoveItem = (key, changedTouches, callback) => {
+    setupMoveItem: function (key, changedTouches, callback) {
         let that = this
-        let cropperData = that.data.cropperData
-        let items = cropperData.items
-        let left = cropperData.left
-        let top = cropperData.top
+        let items = that.data.items
+        let left = that.data.containerInfo.left
+        let top = that.data.containerInfo.top
 
         if (changedTouches.length == 1) {
             var touch = changedTouches[0]
@@ -303,32 +306,45 @@ var init = function(W, H) {
                 callback(items)
             }
         }
-    }
-    that.moveEvent = (e) => {
+    },
+    moveEvent: function (e) {
         let that = this
         let key = e.currentTarget.dataset.key
         that.setupMoveItem(key, e.changedTouches)
-    }
-    that.endEvent = (e) => {
+    },
+    endEvent: function (e) {
         console.log("end")
         var that = this
-        let cropperData = that.data.cropperData
         var key = e.currentTarget.dataset.key
 
         that.setupMoveItem(key, e.changedTouches, (items) => {
-            cropperData.items = items
-            that.setData({
-                cropperData
-            })
+            var updateData = {}
+            updateData.items = items
+            // {
+            //     topleft: {
+            //         x: 50,
+            //         y: 50
+            //     },
+            //     topright: {
+            //         x: 400 - 50,
+            //         y: 50
+            //     },
+            //     bottomleft: {
+            //         x: 50,
+            //         y: 400 - 50
+            //     },
+            //     bottomright: {
+            //         x: 400 - 50,
+            //         y: 400 - 50
+            //     }
+            // }
+
+            console.log(updateData.items)
+
+            // setTimeout(() => {
+            that.setData(updateData)
+            // }, 1000)
         })
 
     }
-
-    that.drawLines(that.data.cropperData.items)
-}
-
-
-module.exports = {
-    init
-}
-
+})

@@ -1,8 +1,9 @@
+/* pages/test/test.wxss */
 .cropper_main_container {
     position: absolute;
     left: 0;
     top: 0;
-    z-index: 100;
+    /* z-index: 100; */
     width: 750rpx;
     height: 100vh;
     background: #555;
@@ -12,18 +13,15 @@
     display: none;
 }
 
-.cropper_container {
-    position: absolute;
-    left: 0;
-    top: 0;
+/* .cropper_container {
     width: 100%;
-}
+} */
 
 /* button */
 
 .cropper_toolbar {
     position: absolute;
-    z-index: 100;
+    /* z-index: 100; */
     bottom: 0;
     height: 50px;
     background: red;
@@ -35,9 +33,6 @@
     width: 200rpx;
 }
 
-.select_image_button {
-}
-
 /* canvas */
 
 .cropper_canvas_container {
@@ -47,8 +42,7 @@
 }
 
 .cropper_canvas_container .move_item {
-    z-index: 100;
-    opacity: 0;
+    opacity: 1;
     background: white;
     border-radius: 50%;
 }
