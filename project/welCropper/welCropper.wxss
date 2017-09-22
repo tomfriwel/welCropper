@@ -58,7 +58,7 @@
 /* opacity:0隐藏，如果想看就设置为1，只能在测试机能看到，真机上canvas层级在最高层 */
 .cropper_canvas_container .move_item {
     z-index: 100;
-    opacity: 0;
+    opacity: 1;
     background: white;
     border-radius: 50%;
 }

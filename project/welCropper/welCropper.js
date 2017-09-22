@@ -1,3 +1,52 @@
+// 获取选中区域的(x, y, w, h)
+const getCropRect = (cropperMovableItems) => {
+    let maxX = 0, maxY = 0
+    for (let key in cropperMovableItems) {
+        let item = cropperMovableItems[key]
+        maxX = item.x > maxX ? item.x : maxX
+        maxY = item.y > maxY ? item.y : maxY
+    }
+
+    let minX = maxX, minY = maxY
+    for (let key in cropperMovableItems) {
+        let item = cropperMovableItems[key]
+        minX = item.x < minX ? item.x : minX
+        minY = item.y < minY ? item.y : minY
+    }
+
+    return {
+        x: minX,
+        y: minY,
+        w: maxX - minX,
+        h: maxY - minY
+    }
+}
+
+
+
+// 获取适应屏幕的图片显示大小
+const getAdjustSize = (W, H, width, height) => {
+    if (width > W) {
+        height = W / width * height
+        width = W
+    }
+
+    if (height > H) {
+        width = H / height * width
+        height = H
+    }
+
+    return {
+        width: width,
+        height: height
+    }
+}
+
+const cropperUtil = {
+    getCropRect,
+    getAdjustSize
+}
+
 
 var init = function (W, H) {
     let that = this
@@ -19,7 +68,7 @@ var init = function (W, H) {
                 x: 1,
                 y: 1
             },
-            cropCallback:null
+            cropCallback: null
         },
         cropperMovableItems: {
             topleft: {
@@ -44,7 +93,7 @@ var init = function (W, H) {
     // 显示cropper，如果有图片则载入
     that.showCropper = function (src, callback) {
         let that = this
-        
+
         that.data.cropperData.hidden = false
         that.data.cropperData.cropCallback = callback
 
@@ -166,33 +215,6 @@ var init = function (W, H) {
         })
     }
 
-    // 获取选中区域的(x, y, w, h)
-    that.getCropRect = () => {
-        let that = this
-        let cropperMovableItems = that.data.cropperMovableItems
-
-        let maxX = 0, maxY = 0
-        for (let key in cropperMovableItems) {
-            let item = cropperMovableItems[key]
-            maxX = item.x > maxX ? item.x : maxX
-            maxY = item.y > maxY ? item.y : maxY
-        }
-
-        let minX = maxX, minY = maxY
-        for (let key in cropperMovableItems) {
-            let item = cropperMovableItems[key]
-            minX = item.x < minX ? item.x : minX
-            minY = item.y < minY ? item.y : minY
-        }
-
-        return {
-            x: minX,
-            y: minY,
-            w: maxX - minX,
-            h: maxY - minY
-        }
-    }
-
     // 暂无
     // that.rotateImage = () => {
     //     let that = this
@@ -201,15 +223,11 @@ var init = function (W, H) {
     // 根据图片大小设置canvas大小，并绘制图片
     that.loadImage = (src, width, height) => {
         let that = this
-        let size = that.adjustSize(width, height)
+        let size = cropperUtil.getAdjustSize(W, H, width, height)
 
+        // 适应屏幕的位置
         let left = (W - size.width) / 2
         let top = (H - size.height) / 2
-
-        console.log('left:' + left)
-        console.log('top:' + top)
-        console.log('width=' + width)
-        console.log('height=' + height)
 
         // set data
         let updateData = {}
@@ -257,29 +275,11 @@ var init = function (W, H) {
         that.drawLines(that.data.cropperMovableItems)
     }
 
-    // 获取适应屏幕的图片显示大小
-    that.adjustSize = (width, height) => {
-        if (width > W) {
-            height = W / width * height
-            width = W
-        }
-
-        if (height > H) {
-            width = H / height * width
-            height = H
-        }
-
-        return {
-            width: width,
-            height: height
-        }
-    }
-
     // 清空canvas上的数据
-    that.clearCanvas = ()=> {
+    that.clearCanvas = () => {
         let cropperData = that.data.cropperData
         let imageInfo = cropperData.imageInfo
-        let size = that.adjustSize(imageInfo.w, imageInfo.h)
+        let size = cropperUtil.getAdjustSize(W, H, imageInfo.w, imageInfo.h)
 
         if (imageInfo.src != '') {
             let src = imageInfo.src
@@ -305,7 +305,7 @@ var init = function (W, H) {
         let that = this
         let cropperData = that.data.cropperData
         let imageInfo = cropperData.imageInfo
-        let size = that.adjustSize(imageInfo.w, imageInfo.h)
+        let size = cropperUtil.getAdjustSize(W, H, imageInfo.w, imageInfo.h)
 
         if (imageInfo.src != '') {
             let src = imageInfo.src
@@ -350,11 +350,11 @@ var init = function (W, H) {
             }
         }
 
-        let size = that.adjustSize(imageInfo.w, imageInfo.h)
+        let size = cropperUtil.getAdjustSize(W, H, imageInfo.w, imageInfo.h)
         let ctx = wx.createCanvasContext("moveCanvas")
 
         //绘制高亮选中区域
-        let rect = that.getCropRect()
+        let rect = cropperUtil.getCropRect(cropperMovableItems)
         ctx.setFillStyle('rgba(0,0,0,0.5)')
         ctx.fillRect(0, 0, size.width, size.height)
         ctx.setFillStyle('rgba(0,0,0,0)')
@@ -380,6 +380,7 @@ var init = function (W, H) {
         ctx.setFillStyle('white')
         ctx.setStrokeStyle('white')
 
+        // 绘制不同样式的角
         if (cornerType == 'circle') {
             ctx.beginPath()
             ctx.arc(rect.x, rect.y, 10, 0, 2 * Math.PI, true)
