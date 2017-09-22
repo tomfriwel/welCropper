@@ -1,5 +1,8 @@
 ### welCropper 微信小程序截图工具
 
+<img src="documents/result.gif" width=300 />
+<img src="documents/screenshot.jpeg" width=300 />
+
 * 保证图片质量
 
 #### Documents
