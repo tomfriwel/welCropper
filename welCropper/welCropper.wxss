@@ -20,7 +20,6 @@
 }
 
 /* button */
-
 .cropper_toolbar {
     position: absolute;
     z-index: 100;
@@ -37,7 +36,6 @@
 .cropper_toolbar .button_item {
     position: absolute;
     top: 0;
-    /* float: left; */
     width: 200rpx;
 }
 
@@ -57,6 +55,7 @@
     top: 0;
 }
 
+/* opacity:0隐藏，如果想看就设置为1，只能在测试机能看到，真机上canvas层级在最高层 */
 .cropper_canvas_container .move_item {
     z-index: 100;
     opacity: 0;
@@ -70,6 +69,8 @@
     top: 0;
 }
 
+  
+/* 因为display:none在真机上会造成无法截取图片，所以这里是通过移到显示区域外来达到隐藏效果的 */
 .original_canvas {
     position: absolute;
     left: 750rpx;

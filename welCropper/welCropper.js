@@ -194,9 +194,9 @@ var init = function (W, H) {
     }
 
     // 暂无
-    that.rotateImage = () => {
-        let that = this
-    }
+    // that.rotateImage = () => {
+    //     let that = this
+    // }
 
     // 根据图片大小设置canvas大小，并绘制图片
     that.loadImage = (src, width, height) => {
