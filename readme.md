@@ -2,6 +2,37 @@
 
 <img src="documents/screenshot.jpeg" width=300 /><img src="documents/result.gif" width=300 />
 
+#### 文件目录结构，要在测试机上运行，工程目录选择文件夹`project`
+```
+./
+├── documents
+│   ├── hierarchy.png
+│   ├── result.gif
+│   └── screenshot.jpeg
+├── project
+│   ├── app.js
+│   ├── app.json
+│   ├── app.wxss
+│   ├── pages
+│   │   ├── index
+│   │   │   ├── index.js
+│   │   │   ├── index.json
+│   │   │   ├── index.wxml
+│   │   │   └── index.wxss
+│   │   └── test
+│   │       ├── test.js
+│   │       ├── test.json
+│   │       ├── test.wxml
+│   │       └── test.wxss
+│   ├── utils
+│   │   └── util.js
+│   └── welCropper
+│       ├── welCropper.js
+│       ├── welCropper.wxml
+│       └── welCropper.wxss
+└── readme.md
+```
+
 * 保证图片质量
 
 #### Documents
