@@ -51,9 +51,7 @@ data中的名字：
 * showCropper
 * hideCropper
 * cropImage
-* getCropRect   
 * loadImage
-* adjustSize
 * clearCanvas
 * drawImage
 * drawLines
