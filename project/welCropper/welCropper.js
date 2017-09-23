@@ -187,6 +187,10 @@ var init = function (W, H) {
         console.log('x=' + x + ',y=' + y + ',w=' + w + ',h=' + h)
 
         let ctx = wx.createCanvasContext("originalCanvas")
+
+        wx.showLoading({
+            title: '正在截取...',
+        })
         wx.canvasToTempFilePath({
             x: x,
             y: y,
@@ -197,6 +201,9 @@ var init = function (W, H) {
             canvasId: 'originalCanvas',
             success: function (res) {
                 let tempFilePath = res.tempFilePath
+
+
+                wx.hideLoading()
 
                 wx.saveImageToPhotosAlbum({
                     filePath: tempFilePath,

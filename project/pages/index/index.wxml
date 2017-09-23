@@ -1,7 +1,7 @@
 <!--index.wxml-->
 
 <!-- 引入组件 -->
-<import src="/welCropper/welCropper" />
+<import src="/welCropper/welCropper.wxml" />
 
 <!-- 调用组件 -->
 <template is="welCropper" data="{{data:cropperData, cropperMovableItems:cropperMovableItems}}"></template>
