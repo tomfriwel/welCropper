@@ -125,7 +125,8 @@ _**/pages/index/index.wxss**_
 ### 效果图
 ![效果动图](http://upload-images.jianshu.io/upload_images/2158535-bedf30dc0d9ca735.gif?imageMogr2/auto-orient/strip)
 
-![截图](http://upload-images.jianshu.io/upload_images/2158535-5e3599e8d29d42a9.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/300)
+
+![效果图](http://upload-images.jianshu.io/upload_images/2158535-160c32c03e14a938.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300)
 
 #### 如果将`movable-view`显示出来是这样的：
 
