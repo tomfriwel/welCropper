@@ -69,6 +69,7 @@
     height: 18px;
     border-radius: 50%;
     border: 1px solid #fff;
+    overflow: hidden;
 }
 .original_button .check_container .check_center{
     position: absolute;
@@ -77,6 +78,7 @@
     width: 14px;
     height: 14px;
     border-radius: 50%;
+    overflow: hidden;
 }
 .original_button.checked .check_container .check_center {
     background: #26AB28;

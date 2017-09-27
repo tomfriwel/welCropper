@@ -401,6 +401,7 @@ var init = function (W, H) {
         }
     }
 
+    // 单独绘制原图，当切换原图与非原图时使用
     that.drawOriginalImage = ()=> {
         let that = this
         let cropperData = that.data.cropperData
