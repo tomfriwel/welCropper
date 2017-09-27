@@ -29,14 +29,18 @@ Page({
                 console.log(tempFilePath)
 
                 // 将选取图片传入cropper，并显示cropper
-                that.showCropper(tempFilePath, (resPath) => {
-                    console.log("crop callback:" + resPath)
-                    wx.previewImage({
-                        current: '',
-                        urls: [resPath]
-                    })
+                that.showCropper({
+                    src: tempFilePath,
+                    sizeType: 'original',   //'original'(default) | 'compressed'
+                    callback: (resPath) => {
+                        console.log("crop callback:" + resPath)
+                        wx.previewImage({
+                            current: '',
+                            urls: [resPath]
+                        })
 
-                    // that.hideCropper() //隐藏，我在项目里是点击完成就上传，所以如果回调是上传，那么隐藏掉就行了，不用previewImage
+                        // that.hideCropper() //隐藏，我在项目里是点击完成就上传，所以如果回调是上传，那么隐藏掉就行了，不用previewImage
+                    }
                 })
             }
         })

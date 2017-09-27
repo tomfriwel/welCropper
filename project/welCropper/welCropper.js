@@ -23,7 +23,6 @@ const getCropRect = (cropperMovableItems) => {
 }
 
 
-
 // 获取适应屏幕的图片显示大小
 const getAdjustSize = (W, H, width, height) => {
     if (width > W) {
@@ -68,7 +67,8 @@ var init = function (W, H) {
                 x: 1,
                 y: 1
             },
-            cropCallback: null
+            cropCallback: null,
+            sizeType: 'original'    //'original'(default) | 'compressed'
         },
         cropperMovableItems: {
             topleft: {
@@ -91,11 +91,15 @@ var init = function (W, H) {
     })
 
     // 显示cropper，如果有图片则载入
-    that.showCropper = function (src, callback) {
+    that.showCropper = function (options) {
         let that = this
+        let src = options.src
+        let callback = options.callback
+        let sizeType = options.sizeType
 
         that.data.cropperData.hidden = false
         that.data.cropperData.cropCallback = callback
+        that.data.cropperData.sizeType = sizeType
 
         that.setData({
             cropperData: that.data.cropperData,
@@ -250,6 +254,13 @@ var init = function (W, H) {
         cropperData.width = size.width
         cropperData.height = size.height
 
+        let compressedScale = that.data.cropperData.sizeType == 'compressed' ? 0.5 : 1.0
+
+        cropperData.scaleInfo = {
+            x: width * compressedScale / size.width,
+            y: height * compressedScale / size.height
+        }
+
         updateData.cropperData = cropperData
 
         updateData.cropperMovableItems = {
@@ -271,11 +282,6 @@ var init = function (W, H) {
             }
         }
 
-        cropperData.scaleInfo = {
-            x: width / size.width,
-            y: height / size.height
-        }
-
         that.setData(updateData)
 
         that.drawImage()
@@ -290,17 +296,19 @@ var init = function (W, H) {
 
         if (imageInfo.src != '') {
             let src = imageInfo.src
+            let compressedScale = that.data.cropperData.sizeType == 'compressed' ? 0.5 : 1.0
 
-            //绘制原图
+            //清空原图
             let ctx = wx.createCanvasContext("originalCanvas")
-            ctx.clearRect(0, 0, imageInfo.w, imageInfo.h)
+            ctx.clearRect(0, 0, imageInfo.w * compressedScale, imageInfo.h * compressedScale)
             ctx.draw()
 
-            //绘制选择区图片
+            //清空选择区图片
             let canvas = wx.createCanvasContext("canvas")
             canvas.clearRect(0, 0, size.width, size.height)
             canvas.draw()
 
+            // 清空白线框
             let moveCanvas = wx.createCanvasContext("moveCanvas")
             moveCanvas.clearRect(0, 0, size.width, size.height)
             moveCanvas.draw()
@@ -316,10 +324,11 @@ var init = function (W, H) {
 
         if (imageInfo.src != '') {
             let src = imageInfo.src
-
+            let compressedScale = that.data.cropperData.sizeType == 'compressed' ? 0.5 : 1.0
+            
             //绘制原图
             let originalCanvas = wx.createCanvasContext("originalCanvas")
-            originalCanvas.drawImage(src, 0, 0, imageInfo.w, imageInfo.h)
+            originalCanvas.drawImage(src, 0, 0, imageInfo.w * compressedScale, imageInfo.h * compressedScale)
             originalCanvas.draw()
 
             //绘制选择区图片
@@ -362,12 +371,13 @@ var init = function (W, H) {
 
         //绘制高亮选中区域
         let rect = cropperUtil.getCropRect(cropperMovableItems)
+        // 绘制半透明遮罩
         ctx.setFillStyle('rgba(0,0,0,0.5)')
         ctx.fillRect(0, 0, size.width, size.height)
+
+        // 清除选中区域的半透明遮罩，使选中区域高亮
         ctx.setFillStyle('rgba(0,0,0,0)')
         ctx.clearRect(rect.x, rect.y, rect.w, rect.h)
-
-        console.log(rect)
 
         //绘制选中边框
         ctx.setStrokeStyle('white')
