@@ -31,7 +31,7 @@ Page({
                 // 将选取图片传入cropper，并显示cropper
                 that.showCropper({
                     src: tempFilePath,
-                    sizeType: 'original',   //'original'(default) | 'compressed'
+                    sizeType: ['original', 'compressed'],   //'original'(default) | 'compressed'
                     callback: (resPath) => {
                         console.log("crop callback:" + resPath)
                         wx.previewImage({

@@ -34,20 +34,70 @@
 }
 
 .cropper_toolbar .button_item {
-    position: absolute;
-    top: 0;
-    width: 200rpx;
+    width: 70px;
+    height: 50px;
 }
 
-.crop_image_button {
-    right: 0;
-    color: #1FB922;
-}
+
+/* cancel_button */
 .cancel_button {
+    position: absolute;
     left: 0;
+    top: 0;
+}
+
+
+/* original_button */
+.original_button {
+    position: relative;
+    margin: 0 auto;
+    width: 70px;
+    height: 50px;
+}
+.original_button .check_container {
+    position: relative;
+    float: left;
+    margin-top: 14px;
+    width: 18px;
+    height: 18px;
+}
+.original_button .check_container .check_border{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+}
+.original_button .check_container .check_center{
+    position: absolute;
+    left: 3px;
+    top:3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+}
+.original_button.checked .check_container .check_center {
+    background: #26AB28;
+}
+.original_button .check_text {
+    float: left;
+    width: 50px;
+}
+
+/* crop_image_button */
+.crop_image_button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #26AB28;
 }
 
 /* canvas */
+.cropper_movable_area_container {
+    position: absolute;
+}
 
 .cropper_canvas_container {
     position: absolute;
@@ -56,7 +106,7 @@
 }
 
 /* opacity:0隐藏，如果想看就设置为1，只能在测试机能看到，真机上canvas层级在最高层 */
-.cropper_canvas_container .move_item {
+.cropper_movable_area_container .move_item {
     z-index: 100;
     opacity: 1;
     background: white;
@@ -67,6 +117,7 @@
     position: absolute;
     left: 0;
     top: 0;
+    /* opacity: 0; */
 }
 
   
