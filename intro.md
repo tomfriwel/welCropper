@@ -136,7 +136,7 @@ _**/pages/index/index.wxss**_
 * 因为`wx.canvasToTempFilePath`输出的是`.png`图片，截出来的图有可能远远大于原图（比如3通道图变成4通道的图）
 
 
-源代码：
+### 源代码：
 [Github:tomfriwel/welCropper](https://github.com/tomfriwel/welCropper)，将`welCropper`文件夹复制到自己项目，引入调用就行了。
 
 #### 如果出现什么bug、问题或者建议可以告诉我，我会尽量改进。

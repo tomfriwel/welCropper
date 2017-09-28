@@ -431,12 +431,14 @@ var init = function (W, H) {
             var x = cropperMovableItems[key].x
             var y = cropperMovableItems[key].y
 
+            // 边界检测，使截图不超出截图区域
             x = x < 0 ? 0 : (x > size.width ? size.width : x)
             y = y < 0 ? 0 : (y > size.height ? size.height : y)
 
             cropperMovableItems[key].x = x
             cropperMovableItems[key].y = y
 
+            // 同时设置相连两个点的位置
             if (key == 'topleft') {
                 cropperMovableItems['bottomleft'].x = x
                 cropperMovableItems['topright'].y = y
