@@ -29,7 +29,8 @@ Page({
                 console.log(tempFilePath)
 
                 // 将选取图片传入cropper，并显示cropper
-                let mode = "quadrangle"   //rectangle, quadrangle
+                let modes = ["rectangle", "quadrangle"]
+                let mode = modes[1]   //rectangle, quadrangle
                 that.showCropper({
                     src: tempFilePath,
                     mode: mode,

@@ -434,6 +434,7 @@ var init = function (W, H) {
         let mode = cropperData.mode
         let size = cropperUtil.getAdjustSize(W, H, imageInfo.w, imageInfo.h)
 
+        let dotsWithoutKey = []
         if (key) {
             var x = cropperMovableItems[key].x
             var y = cropperMovableItems[key].y
@@ -464,6 +465,13 @@ var init = function (W, H) {
                     cropperMovableItems['bottomleft'].y = y
                 }
             }
+            else{
+                dotsWithoutKey.push(cropperMovableItems['topleft'])
+                dotsWithoutKey.push(cropperMovableItems['topright'])
+                dotsWithoutKey.push(cropperMovableItems['bottomright'])
+                dotsWithoutKey.push(cropperMovableItems['bottomleft'])
+                dotsWithoutKey.push(cropperMovableItems['topleft'])
+            }
         }
 
         let ctx = wx.createCanvasContext("moveCanvas")
@@ -472,53 +480,85 @@ var init = function (W, H) {
         let rect = cropperUtil.getCropRect(cropperMovableItems)
         console.log(rect)
 
-        // 绘制半透明遮罩
-        ctx.setFillStyle('rgba(0,0,0,0.5)')
-        ctx.fillRect(0, 0, size.width, size.height)
+        if (mode == 'rectangle') {
+            // 绘制半透明遮罩
+            ctx.setFillStyle('rgba(0,0,0,0.5)')
+            ctx.fillRect(0, 0, size.width, size.height)
 
-        // 清除选中区域的半透明遮罩，使选中区域高亮
-        ctx.setFillStyle('rgba(0,0,0,0)')
-        ctx.clearRect(rect.x, rect.y, rect.w, rect.h)
+            // 清除选中区域的半透明遮罩，使选中区域高亮
+            ctx.setFillStyle('rgba(0,0,0,0)')
+            ctx.clearRect(rect.x, rect.y, rect.w, rect.h)
 
-        //绘制选中边框
-        ctx.setStrokeStyle('white')
-        ctx.setLineWidth(2)
-        ctx.beginPath()
-        ctx.moveTo(rect.x, rect.y)
-        ctx.lineTo(rect.x + rect.w, rect.y)
-        ctx.lineTo(rect.x + rect.w, rect.y + rect.h)
-        ctx.lineTo(rect.x, rect.y + rect.h)
-        ctx.lineTo(rect.x, rect.y)
+            //绘制选中边框
+            ctx.setStrokeStyle('white')
+            ctx.setLineWidth(2)
+            ctx.beginPath()
+            ctx.moveTo(rect.x, rect.y)
+            ctx.lineTo(rect.x + rect.w, rect.y)
+            ctx.lineTo(rect.x + rect.w, rect.y + rect.h)
+            ctx.lineTo(rect.x, rect.y + rect.h)
+            ctx.lineTo(rect.x, rect.y)
 
-        ctx.stroke()
-        ctx.closePath()
+            ctx.stroke()
+            ctx.closePath()
+        }
+        else {
+            //绘制选中边框
+            ctx.setStrokeStyle('white')
+            ctx.setLineWidth(2)
+            ctx.beginPath()
+            for(let i=0,len=dotsWithoutKey.length; i<len; i++){
+                let dot = dotsWithoutKey[i]
+                if(i==0){
+                    ctx.moveTo(dot.x, dot.y)
+                }
+                else {
+                    ctx.lineTo(dot.x, dot.y)
+                }
+            }
 
-        //绘制四个角的圆点
+            ctx.stroke()
+            ctx.closePath()
+        }
+
+        //绘制四个角
         let cornerType = mode=='rectangle' ? 'rect' : 'circle'
         ctx.setFillStyle('white')
         ctx.setStrokeStyle('white')
 
         // 绘制不同样式的角
         if (cornerType == 'circle') {
-            ctx.beginPath()
-            ctx.arc(rect.x, rect.y, 10, 0, 2 * Math.PI, true)
-            ctx.fill()
-            ctx.closePath()
+            for (let i = 0, len = dotsWithoutKey.length; i < len; i++) {
+                let dot = dotsWithoutKey[i]
+                if (i != 4) {
+                    ctx.beginPath()
+                    ctx.arc(dot.x, dot.y, 10, 0, 2 * Math.PI, true)
+                    ctx.fill()
+                    ctx.closePath()
+                }
+                else {
+                    break
+                }
+            }
+            // ctx.beginPath()
+            // ctx.arc(rect.x, rect.y, 10, 0, 2 * Math.PI, true)
+            // ctx.fill()
+            // ctx.closePath()
 
-            ctx.beginPath()
-            ctx.arc(rect.x + rect.w, rect.y, 10, 0, 2 * Math.PI, true)
-            ctx.fill()
-            ctx.closePath()
+            // ctx.beginPath()
+            // ctx.arc(rect.x + rect.w, rect.y, 10, 0, 2 * Math.PI, true)
+            // ctx.fill()
+            // ctx.closePath()
 
-            ctx.beginPath()
-            ctx.arc(rect.x + rect.w, rect.y + rect.h, 10, 0, 2 * Math.PI, true)
-            ctx.fill()
-            ctx.closePath()
+            // ctx.beginPath()
+            // ctx.arc(rect.x + rect.w, rect.y + rect.h, 10, 0, 2 * Math.PI, true)
+            // ctx.fill()
+            // ctx.closePath()
 
-            ctx.beginPath()
-            ctx.arc(rect.x, rect.y + rect.h, 10, 0, 2 * Math.PI, true)
-            ctx.fill()
-            ctx.closePath()
+            // ctx.beginPath()
+            // ctx.arc(rect.x, rect.y + rect.h, 10, 0, 2 * Math.PI, true)
+            // ctx.fill()
+            // ctx.closePath()
         }
         else if (cornerType == 'rect') {
             let len = 20, w = 3.0, offset = w / 2.0
