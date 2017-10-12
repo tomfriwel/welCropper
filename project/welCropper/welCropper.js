@@ -69,7 +69,8 @@ var init = function (W, H) {
             },
             cropCallback: null,
             sizeType: ['original', 'compressed'],    //'original'(default) | 'compressed'
-            original: false  // 默认压缩，压缩比例为截图的0.4
+            original: false,  // 默认压缩，压缩比例为截图的0.4
+            mode: 'rectangle' //默认矩形
         },
         cropperMovableItems: {
             topleft: {
@@ -97,6 +98,8 @@ var init = function (W, H) {
         let src = options.src
         let callback = options.callback
         let sizeType = options.sizeType
+        let mode = options.mode
+
         let filterType = []
         if (sizeType.indexOf('original') > -1) {
             filterType.push('original')
@@ -108,6 +111,9 @@ var init = function (W, H) {
             that.data.cropperData.original = true
         }
 
+        if(mode){
+            that.data.cropperData.mode = mode
+        }
         that.data.cropperData.hidden = false
         that.data.cropperData.cropCallback = callback
         that.data.cropperData.sizeType = filterType
@@ -425,6 +431,7 @@ var init = function (W, H) {
         let that = this
         let cropperData = that.data.cropperData
         let imageInfo = cropperData.imageInfo
+        let mode = cropperData.mode
         let size = cropperUtil.getAdjustSize(W, H, imageInfo.w, imageInfo.h)
 
         if (key) {
@@ -434,26 +441,28 @@ var init = function (W, H) {
             // 边界检测，使截图不超出截图区域
             x = x < 0 ? 0 : (x > size.width ? size.width : x)
             y = y < 0 ? 0 : (y > size.height ? size.height : y)
-
             cropperMovableItems[key].x = x
             cropperMovableItems[key].y = y
 
-            // 同时设置相连两个点的位置
-            if (key == 'topleft') {
-                cropperMovableItems['bottomleft'].x = x
-                cropperMovableItems['topright'].y = y
-            }
-            else if (key == 'topright') {
-                cropperMovableItems['bottomright'].x = x
-                cropperMovableItems['topleft'].y = y
-            }
-            else if (key == 'bottomleft') {
-                cropperMovableItems['topleft'].x = x
-                cropperMovableItems['bottomright'].y = y
-            }
-            else if (key == 'bottomright') {
-                cropperMovableItems['topright'].x = x
-                cropperMovableItems['bottomleft'].y = y
+            // 如果是在矩形模式下
+            if (mode == 'rectangle') {
+                // 同时设置相连两个点的位置，是相邻的两个点跟随着移动点动，保证选框为矩形
+                if (key == 'topleft') {
+                    cropperMovableItems['bottomleft'].x = x
+                    cropperMovableItems['topright'].y = y
+                }
+                else if (key == 'topright') {
+                    cropperMovableItems['bottomright'].x = x
+                    cropperMovableItems['topleft'].y = y
+                }
+                else if (key == 'bottomleft') {
+                    cropperMovableItems['topleft'].x = x
+                    cropperMovableItems['bottomright'].y = y
+                }
+                else if (key == 'bottomright') {
+                    cropperMovableItems['topright'].x = x
+                    cropperMovableItems['bottomleft'].y = y
+                }
             }
         }
 
@@ -485,7 +494,7 @@ var init = function (W, H) {
         ctx.closePath()
 
         //绘制四个角的圆点
-        let cornerType = 'rect'//'circle'
+        let cornerType = mode=='rectangle' ? 'rect' : 'circle'
         ctx.setFillStyle('white')
         ctx.setStrokeStyle('white')
 
