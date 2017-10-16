@@ -233,68 +233,98 @@ var init = function (W, H) {
     that.cropImage = () => {
         let that = this
         let cropperData = that.data.cropperData
+        let mode = cropperData.mode
         let scaleInfo = cropperData.scaleInfo
         let width = cropperData.width
         let height = cropperData.height
 
         let cropperMovableItems = that.data.cropperMovableItems
 
-        let maxX = 0, maxY = 0
-        for (let key in cropperMovableItems) {
-            let item = cropperMovableItems[key]
-            maxX = item.x > maxX ? item.x : maxX
-            maxY = item.y > maxY ? item.y : maxY
-        }
-
-        let minX = maxX, minY = maxY
-        for (let key in cropperMovableItems) {
-            let item = cropperMovableItems[key]
-            minX = item.x < minX ? item.x : minX
-            minY = item.y < minY ? item.y : minY
-        }
-
-        let w = maxX - minX, h = maxY - minY
-        w *= scaleInfo.x
-        h *= scaleInfo.y
-
-        let x = minX * scaleInfo.x, y = minY * scaleInfo.y
-
-        console.log('x=' + x + ',y=' + y + ',w=' + w + ',h=' + h)
-
-        let ctx = wx.createCanvasContext("originalCanvas")
-
-        wx.showLoading({
-            title: '正在截取...',
-        })
-        wx.canvasToTempFilePath({
-            x: x,
-            y: y,
-            width: w,
-            height: h,
-            destWidth: w,
-            destHeight: h,
-            canvasId: 'originalCanvas',
-            success: function (res) {
-                let tempFilePath = res.tempFilePath
-
-
-                wx.hideLoading()
-
-                wx.saveImageToPhotosAlbum({
-                    filePath: tempFilePath,
-                    success(res) {
-                    }
-                })
-
-                if (that.data.cropperData.cropCallback) {
-                    that.data.cropperData.cropCallback(tempFilePath)
-                }
-            },
-            fail(res) {
-                console.log("fail res:")
-                console.log(res)
+        if (mode == 'rectangle') {
+            let maxX = 0, maxY = 0
+            for (let key in cropperMovableItems) {
+                let item = cropperMovableItems[key]
+                maxX = item.x > maxX ? item.x : maxX
+                maxY = item.y > maxY ? item.y : maxY
             }
-        })
+
+            let minX = maxX, minY = maxY
+            for (let key in cropperMovableItems) {
+                let item = cropperMovableItems[key]
+                minX = item.x < minX ? item.x : minX
+                minY = item.y < minY ? item.y : minY
+            }
+
+            let w = maxX - minX, h = maxY - minY
+            w *= scaleInfo.x
+            h *= scaleInfo.y
+
+            let x = minX * scaleInfo.x, y = minY * scaleInfo.y
+
+            console.log('crop rect: x=' + x + ',y=' + y + ',w=' + w + ',h=' + h)
+
+            let ctx = wx.createCanvasContext("originalCanvas")
+
+            wx.showLoading({
+                title: '正在截取...',
+            })
+            wx.canvasToTempFilePath({
+                x: x,
+                y: y,
+                width: w,
+                height: h,
+                destWidth: w,
+                destHeight: h,
+                canvasId: 'originalCanvas',
+                success: function (res) {
+                    let tempFilePath = res.tempFilePath
+
+
+                    wx.hideLoading()
+
+                    wx.saveImageToPhotosAlbum({
+                        filePath: tempFilePath,
+                        success(res) {
+                        }
+                    })
+
+                    if (that.data.cropperData.cropCallback) {
+                        that.data.cropperData.cropCallback(tempFilePath)
+                    }
+                },
+                fail(res) {
+                    console.log("fail res:")
+                    console.log(res)
+                }
+            })
+        }
+        else {
+            let res = [[0, 0], [0, 0], [0, 0], [0, 0]]
+            for(let key in cropperMovableItems){
+                let x = Math.ceil(cropperMovableItems[key].x * scaleInfo.x)
+                let y = Math.ceil(cropperMovableItems[key].y * scaleInfo.y)
+
+
+                let index = 0
+                if(key=='topleft') {
+                    index = 0   
+                }
+                else if (key == 'bottomleft') {
+                    index = 1
+                }
+                else if (key == 'bottomright') {
+                    index = 2
+                }
+                else if (key == 'topright') {
+                    index = 3
+                }
+                res[index] = [x, y]
+            }
+
+            if (that.data.cropperData.cropCallback) {
+                that.data.cropperData.cropCallback(res)
+            }
+        }
     }
 
     // 暂无
@@ -465,14 +495,13 @@ var init = function (W, H) {
                     cropperMovableItems['bottomleft'].y = y
                 }
             }
-            else{
-                dotsWithoutKey.push(cropperMovableItems['topleft'])
-                dotsWithoutKey.push(cropperMovableItems['topright'])
-                dotsWithoutKey.push(cropperMovableItems['bottomright'])
-                dotsWithoutKey.push(cropperMovableItems['bottomleft'])
-                dotsWithoutKey.push(cropperMovableItems['topleft'])
-            }
         }
+
+        dotsWithoutKey.push(cropperMovableItems['topleft'])
+        dotsWithoutKey.push(cropperMovableItems['topright'])
+        dotsWithoutKey.push(cropperMovableItems['bottomright'])
+        dotsWithoutKey.push(cropperMovableItems['bottomleft'])
+        dotsWithoutKey.push(cropperMovableItems['topleft'])
 
         let ctx = wx.createCanvasContext("moveCanvas")
 
