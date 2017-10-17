@@ -65,10 +65,15 @@ data中的名字：
 
 ```
 /**
-    inputPath:输入图片地址
-    callback(resPath):点击“完成”按钮后毁掉函数，毁掉函数中会有截图地址
+    src:输入图片地址
+    callback(res):点击“完成”按钮后毁掉函数，毁掉函数中会有截图地址
 */
-showCropper(inputPath, callback)
+showCropper({
+    src,    //字符串, 图片path
+    mode,   //字符串, "rectangle" 或 "quadrangle". quadrangle只会返回4个点的坐标. rectangle返回截图path
+    sizeType,   //数组, ['original', 'compressed'], 默认original
+    callback    //回调函数, callback(res): mode=rectangle, res=path; mode=quadrangle, res=[[x,y], [x,y], [x,y], [x,y]]
+})
 
 ```
 
