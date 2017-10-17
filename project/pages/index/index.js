@@ -32,7 +32,7 @@ Page({
                 // mode=rectangle 返回图片path
                 // mode=quadrangle 返回4个点的坐标，并不返回图片。这个模式需要配合后台使用，用于perspective correction
                 let modes = ["rectangle", "quadrangle"]
-                let mode = modes[0]   //rectangle, quadrangle
+                let mode = modes[1]   //rectangle, quadrangle
                 that.showCropper({
                     src: tempFilePath,
                     mode: mode,

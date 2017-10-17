@@ -97,15 +97,30 @@ Page({
                 console.log(tempFilePath)
                 
                 // 将选取图片传入cropper，并显示cropper
+                // mode=rectangle 返回图片path
+                // mode=quadrangle 返回4个点的坐标，并不返回图片。这个模式需要配合后台使用，用于perspective correction
+                let modes = ["rectangle", "quadrangle"]
+                let mode = modes[0]   //rectangle, quadrangle
                 that.showCropper({
                     src: tempFilePath,
-                    sizeType: ['original', 'compressed'],   //'original' | 'compressed'(default)
-                    callback: (resPath) => {
-                        console.log("crop callback:" + resPath)
-                        wx.previewImage({
-                            current: '',
-                            urls: [resPath]
-                        })
+                    mode: mode,
+                    sizeType: ['original', 'compressed'],   //'original'(default) | 'compressed'
+                    callback: (res) => {
+                        if (mode == 'rectangle') {
+                            console.log("crop callback:" + res)
+                            wx.previewImage({
+                                current: '',
+                                urls: [res]
+                            })
+                        }
+                        else {
+                            wx.showModal({
+                                title: '',
+                                content: JSON.stringify(res),
+                            })
+
+                            console.log(res)
+                        }
 
                         // that.hideCropper() //隐藏，我在项目里是点击完成就上传，所以如果回调是上传，那么隐藏掉就行了，不用previewImage
                     }
@@ -131,6 +146,9 @@ _**/pages/index/index.wxss**_
 #### 如果将`movable-view`显示出来是这样的：
 
 ![显示movable-view后](http://upload-images.jianshu.io/upload_images/2158535-06e62d35b74b0f04.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300)
+
+![mode=quadrangle](http://upload-images.jianshu.io/upload_images/2158535-7a45c633faa6e908.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300)
+
 
 ### 注意
 * 因为`wx.canvasToTempFilePath`输出的是`.png`图片，截出来的图有可能远远大于原图（比如3通道图变成4通道的图）
