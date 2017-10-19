@@ -41,9 +41,82 @@ const getAdjustSize = (W, H, width, height) => {
     }
 }
 
+// http://www.geeksforgeeks.org/convex-hull-set-1-jarviss-algorithm-or-wrapping/
+
+// To find orientation of ordered triplet (p, q, r).
+// The function returns following values
+// 0 --> p, q and r are colinear
+// 1 --> Clockwise
+// 2 --> Counterclockwise
+function orientation(p, q, r) {
+    var val = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+
+    if (val == 0) return 0;  // collinear
+    return (val > 0) ? 1 : 2; // clock or counterclock wise
+}
+
+// Prints convex hull of a set of n points.
+function convexHull(points, n) {
+    // There must be at least 3 points
+    if (n < 3) return;
+
+    // Initialize Result
+    var hull = [];
+
+    // Find the leftmost point
+    var l = 0;
+    for (var i = 1; i < n; i++) {
+        if (points[i].x < points[l].x) {
+            l = i;
+        }
+    }
+    // Start from leftmost point, keep moving 
+    // counterclockwise until reach the start point
+    // again. This loop runs O(h) times where h is
+    // number of points in result or output.
+    var p = l, q;
+    do {
+        // Add current point to result
+        // Prevent duplicates object
+        // if (hull.findIndex(i => i.x == points[p].x && i.y == points[p].y)==-1){
+        hull.push(points[p]);
+        // }
+
+        // Search for a point 'q' such that 
+        // orientation(p, x, q) is counterclockwise 
+        // for all points 'x'. The idea is to keep 
+        // track of last visited most counterclock-
+        // wise point in q. If any point 'i' is more 
+        // counterclock-wise than q, then update q.
+        q = (p + 1) % n;
+
+        for (var i = 0; i < n; i++) {
+            // If i is more counterclockwise than 
+            // current q, then update q
+            if (orientation(points[p], points[i], points[q]) == 2)
+                q = i;
+        }
+
+        // Now q is the most counterclockwise with
+        // respect to p. Set p as q for next iteration, 
+        // so that q is added to result 'hull'
+        p = q;
+
+    } while (p != l);  // While we don't come to first 
+    // point
+
+    // Print Result
+    // for (var i in hull) {
+    //     var temp = hull[i]
+    //     console.log("(" + temp.x + ", " + temp.y + ")");
+    // }
+    return hull
+}
+
 const cropperUtil = {
     getCropRect,
-    getAdjustSize
+    getAdjustSize,
+    convexHull
 }
 
 
@@ -70,7 +143,7 @@ var init = function (W, H) {
             cropCallback: null,
             sizeType: ['original', 'compressed'],    //'original'(default) | 'compressed'
             original: false,  // 默认压缩，压缩比例为截图的0.4
-            mode: 'rectangle' //默认矩形
+            mode: 'rectangle', //默认矩形
         },
         cropperMovableItems: {
             topleft: {
@@ -89,6 +162,9 @@ var init = function (W, H) {
                 x: W - 50,
                 y: H - 50
             }
+        },
+        cropperChangableData:{
+            canCrop:true
         }
     })
 
@@ -111,7 +187,7 @@ var init = function (W, H) {
             that.data.cropperData.original = true
         }
 
-        if(mode){
+        if (mode) {
             that.data.cropperData.mode = mode
         }
         that.data.cropperData.hidden = false
@@ -204,31 +280,6 @@ var init = function (W, H) {
         that.drawOriginalImage()
     }
 
-    // that.selectImage = () => {
-    //     var that = this
-
-    //     wx.chooseImage({
-    //         count: 1, // 默认9
-    //         sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-    //         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-    //         success(res) {
-    //             const src = res.tempFilePaths[0]
-    //             console.log(res)
-
-    //             wx.getImageInfo({
-    //                 src: src,
-    //                 success: function (res) {
-    //                     console.log(res)
-
-    //                     var w = res.width, h = res.height
-
-    //                     that.loadImage(src, w, h)
-    //                 }
-    //             })
-    //         }
-    //     })
-    // }
-
     // 截取选中图片，如果有回调，则调用
     that.cropImage = () => {
         let that = this
@@ -300,14 +351,15 @@ var init = function (W, H) {
         }
         else {
             let res = [[0, 0], [0, 0], [0, 0], [0, 0]]
-            for(let key in cropperMovableItems){
+            let points = []
+            for (let key in cropperMovableItems) {
                 let x = Math.ceil(cropperMovableItems[key].x * scaleInfo.x)
                 let y = Math.ceil(cropperMovableItems[key].y * scaleInfo.y)
 
 
                 let index = 0
-                if(key=='topleft') {
-                    index = 0   
+                if (key == 'topleft') {
+                    index = 0
                 }
                 else if (key == 'bottomleft') {
                     index = 1
@@ -319,7 +371,13 @@ var init = function (W, H) {
                     index = 3
                 }
                 res[index] = [x, y]
+
+                points.push({ x, y })
             }
+
+            cropperUtil.convexHull(points, points.length)
+
+
 
             if (that.data.cropperData.cropCallback) {
                 that.data.cropperData.cropCallback(res)
@@ -328,6 +386,7 @@ var init = function (W, H) {
     }
 
     // 暂无
+    // 旋转图片
     // that.rotateImage = () => {
     //     let that = this
     // }
@@ -457,57 +516,34 @@ var init = function (W, H) {
     }
 
     //绘制选框
-    that.drawLines = (cropperMovableItems, key) => {
+    that.drawLines = (cropperMovableItems, callback) => {
         let that = this
         let cropperData = that.data.cropperData
         let imageInfo = cropperData.imageInfo
         let mode = cropperData.mode
         let size = cropperUtil.getAdjustSize(W, H, imageInfo.w, imageInfo.h)
 
-        let dotsWithoutKey = []
-        if (key) {
-            var x = cropperMovableItems[key].x
-            var y = cropperMovableItems[key].y
+        let convexDots = []
+        let orderedDots = []
 
-            // 边界检测，使截图不超出截图区域
-            x = x < 0 ? 0 : (x > size.width ? size.width : x)
-            y = y < 0 ? 0 : (y > size.height ? size.height : y)
-            cropperMovableItems[key].x = x
-            cropperMovableItems[key].y = y
+        orderedDots.push(cropperMovableItems['topleft'])
+        orderedDots.push(cropperMovableItems['topright'])
+        orderedDots.push(cropperMovableItems['bottomright'])
+        orderedDots.push(cropperMovableItems['bottomleft'])
 
-            // 如果是在矩形模式下
-            if (mode == 'rectangle') {
-                // 同时设置相连两个点的位置，是相邻的两个点跟随着移动点动，保证选框为矩形
-                if (key == 'topleft') {
-                    cropperMovableItems['bottomleft'].x = x
-                    cropperMovableItems['topright'].y = y
-                }
-                else if (key == 'topright') {
-                    cropperMovableItems['bottomright'].x = x
-                    cropperMovableItems['topleft'].y = y
-                }
-                else if (key == 'bottomleft') {
-                    cropperMovableItems['topleft'].x = x
-                    cropperMovableItems['bottomright'].y = y
-                }
-                else if (key == 'bottomright') {
-                    cropperMovableItems['topright'].x = x
-                    cropperMovableItems['bottomleft'].y = y
-                }
-            }
+        // 获取凸边形的点
+        convexDots = cropperUtil.convexHull(orderedDots, orderedDots.length)
+
+        // 四个点组成的四边形是不是凸四边形
+        let canCrop = convexDots.length == 4
+        if(callback){
+            callback(canCrop)
         }
-
-        dotsWithoutKey.push(cropperMovableItems['topleft'])
-        dotsWithoutKey.push(cropperMovableItems['topright'])
-        dotsWithoutKey.push(cropperMovableItems['bottomright'])
-        dotsWithoutKey.push(cropperMovableItems['bottomleft'])
-        dotsWithoutKey.push(cropperMovableItems['topleft'])
 
         let ctx = wx.createCanvasContext("moveCanvas")
 
         //绘制高亮选中区域
-        let rect = cropperUtil.getCropRect(cropperMovableItems)
-        console.log(rect)
+        let rect = cropperUtil.getCropRect(convexDots)
 
         if (mode == 'rectangle') {
             // 绘制半透明遮罩
@@ -533,41 +569,42 @@ var init = function (W, H) {
         }
         else {
             //绘制选中边框
-            ctx.setStrokeStyle('white')
+            // 如果四个点组成的四边形不是凸四边形，则显示红色，表示不可取
+            let color = canCrop ? 'white' : 'red'
+
+            ctx.setStrokeStyle(color)
             ctx.setLineWidth(2)
             ctx.beginPath()
-            for(let i=0,len=dotsWithoutKey.length; i<len; i++){
-                let dot = dotsWithoutKey[i]
-                if(i==0){
+            for (let i = 0, len = convexDots.length; i < len; i++) {
+                let dot = convexDots[i]
+                if (i == 0) {
                     ctx.moveTo(dot.x, dot.y)
                 }
                 else {
                     ctx.lineTo(dot.x, dot.y)
                 }
             }
+            let dot = convexDots[0]
+            ctx.lineTo(dot.x, dot.y)
 
             ctx.stroke()
             ctx.closePath()
         }
 
         //绘制四个角
-        let cornerType = mode=='rectangle' ? 'rect' : 'circle'
+        let cornerType = mode == 'rectangle' ? 'rect' : 'circle'
         ctx.setFillStyle('white')
         ctx.setStrokeStyle('white')
 
         // 绘制不同样式的角
         if (cornerType == 'circle') {
-            for (let i = 0, len = dotsWithoutKey.length; i < len; i++) {
-                let dot = dotsWithoutKey[i]
-                if (i != 4) {
-                    ctx.beginPath()
-                    ctx.arc(dot.x, dot.y, 10, 0, 2 * Math.PI, true)
-                    ctx.fill()
-                    ctx.closePath()
-                }
-                else {
-                    break
-                }
+            for (let i = 0, len = orderedDots.length; i < len; i++) {
+                let dot = orderedDots[i]
+
+                ctx.beginPath()
+                ctx.arc(dot.x, dot.y, 10, 0, 2 * Math.PI, true)
+                ctx.fill()
+                ctx.closePath()
             }
             // ctx.beginPath()
             // ctx.arc(rect.x, rect.y, 10, 0, 2 * Math.PI, true)
@@ -626,20 +663,54 @@ var init = function (W, H) {
         let cropperMovableItems = that.data.cropperMovableItems
         let left = cropperData.left
         let top = cropperData.top
+        let imageInfo = cropperData.imageInfo
+        let mode = cropperData.mode
+        let size = cropperUtil.getAdjustSize(W, H, imageInfo.w, imageInfo.h)
 
         if (changedTouches.length == 1) {
             let touch = changedTouches[0]
             let x = touch.clientX
             let y = touch.clientY
 
-            cropperMovableItems[key].x = x - left
-            cropperMovableItems[key].y = y - top
+            // 相对画布的点
+            x = x - left
+            y = y - top
 
-            that.drawLines(cropperMovableItems, key)
+            cropperMovableItems[key].x = x
+            cropperMovableItems[key].y = y
 
-            if (callback) {
-                callback(cropperMovableItems)
+            // 边界检测，使截图不超出截图区域
+            x = x < 0 ? 0 : (x > size.width ? size.width : x)
+            y = y < 0 ? 0 : (y > size.height ? size.height : y)
+            cropperMovableItems[key].x = x
+            cropperMovableItems[key].y = y
+
+            // 如果是在矩形模式下
+            if (mode == 'rectangle') {
+                // 同时设置相连两个点的位置，是相邻的两个点跟随着移动点动，保证选框为矩形
+                if (key == 'topleft') {
+                    cropperMovableItems['bottomleft'].x = x
+                    cropperMovableItems['topright'].y = y
+                }
+                else if (key == 'topright') {
+                    cropperMovableItems['bottomright'].x = x
+                    cropperMovableItems['topleft'].y = y
+                }
+                else if (key == 'bottomleft') {
+                    cropperMovableItems['topleft'].x = x
+                    cropperMovableItems['bottomright'].y = y
+                }
+                else if (key == 'bottomright') {
+                    cropperMovableItems['topright'].x = x
+                    cropperMovableItems['bottomleft'].y = y
+                }
             }
+
+            that.drawLines(cropperMovableItems, function(canCrop){
+                if (callback) {
+                    callback(cropperMovableItems, canCrop)
+                }
+            })
         }
     }
 
@@ -655,10 +726,14 @@ var init = function (W, H) {
         console.log("end")
         let that = this
         let cropperData = that.data.cropperData
+        let cropperMovableItems = that.data.cropperMovableItems
+        let cropperChangableData = that.data.cropperChangableData
         let key = e.currentTarget.dataset.key
 
-        that.setupMoveItem(key, e.changedTouches, (cropperMovableItems) => {
+        that.setupMoveItem(key, e.changedTouches, (cropperMovableItems, canCrop) => {
+            cropperChangableData.canCrop = canCrop
             that.setData({
+                cropperChangableData: cropperChangableData,
                 cropperMovableItems: cropperMovableItems
             })
         })

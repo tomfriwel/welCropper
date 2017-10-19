@@ -17,8 +17,10 @@ Page({
         // 初始化组件数据和绑定事件
         cropper.init.apply(that, [W, H]);
     },
-    selectTap() {
-        var that = this
+    selectTap(e) {
+        let that = this
+        let mode = e.currentTarget.dataset.mode
+        console.log(e)
 
         wx.chooseImage({
             count: 1, // 默认9
@@ -31,8 +33,8 @@ Page({
                 // 将选取图片传入cropper，并显示cropper
                 // mode=rectangle 返回图片path
                 // mode=quadrangle 返回4个点的坐标，并不返回图片。这个模式需要配合后台使用，用于perspective correction
-                let modes = ["rectangle", "quadrangle"]
-                let mode = modes[1]   //rectangle, quadrangle
+                // let modes = ["rectangle", "quadrangle"]
+                // let mode = modes[1]   //rectangle, quadrangle
                 that.showCropper({
                     src: tempFilePath,
                     mode: mode,

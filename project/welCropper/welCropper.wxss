@@ -95,6 +95,10 @@
     top: 0;
     color: #26AB28;
 }
+.crop_image_button.disable {
+     /* color: #038905;  */
+     color: rgba(0, 0, 0, 0);
+}
 
 /* canvas */
 .cropper_movable_area_container {
