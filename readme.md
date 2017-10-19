@@ -2,6 +2,9 @@
 
 <img src="documents/screenshot.png" width=300 /><img src="documents/result.gif" width=300 />
 
+
+#### 当前分支有bug，使用请下载release
+
 #### 文件目录结构，要在测试机上运行，工程目录选择文件夹`project`
 ```
 ./
@@ -45,6 +48,7 @@ data中的名字：
 
 * cropperData
 * cropperMovableItems
+* cropperChangableData
 
 函数名：
 

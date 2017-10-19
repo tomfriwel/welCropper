@@ -163,9 +163,9 @@ var init = function (W, H) {
                 y: H - 50
             }
         },
-        cropperChangableData:{
-            canCrop:true
-        }
+        // cropperChangableData:{
+        //     canCrop:true
+        // }
     })
 
     // 显示cropper，如果有图片则载入
@@ -727,13 +727,13 @@ var init = function (W, H) {
         let that = this
         let cropperData = that.data.cropperData
         let cropperMovableItems = that.data.cropperMovableItems
-        let cropperChangableData = that.data.cropperChangableData
+        // let cropperChangableData = that.data.cropperChangableData
         let key = e.currentTarget.dataset.key
 
         that.setupMoveItem(key, e.changedTouches, (cropperMovableItems, canCrop) => {
             cropperChangableData.canCrop = canCrop
             that.setData({
-                cropperChangableData: cropperChangableData,
+                // cropperChangableData: cropperChangableData,
                 cropperMovableItems: cropperMovableItems
             })
         })
