@@ -2,7 +2,7 @@
 
 ### ***当前分支有bug，使用请下载release***
 
-<img src="documents/screenshot.png" width=300 /><img src="documents/result.gif" width=300 />
+<img src="documents/screenshot.png" width=300 /><img src="documents/screenshot1.png" width=300 /><img src="documents/result.gif" width=300 />
 
 #### 文件目录结构，要在测试机上运行，工程目录选择文件夹`project`
 ```
@@ -90,7 +90,7 @@ showCropper({
 <import src="/welCropper/welCropper" />
 
 <!-- 调用组件 -->
-<template is="welCropper" data="{{data:cropperData, cropperMovableItems:cropperMovableItems}}"></template>
+<template is="welCropper" data="{{data:cropperData, cropperMovableItems:cropperMovableItems, cropperChangableData:cropperChangableData}}"></template>
 
 <!-- 用于选择图片，传入cropper中 -->
 <button bindtap='selectTap'>select image</button>
