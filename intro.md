@@ -53,14 +53,14 @@ wx.canvasToTempFilePath({
     └── welCropper.wxss
 ```
 
-调用组件时，需要传入`cropperData`和`cropperMovableItems`，因为数据和事件都是绑定在`Page`上的，所以要避免使用组件里面已经被占用的命名。
+调用组件时，需要传入`cropperData`、`cropperMovableItems`、`cropperChangableData`，因为数据和事件都是绑定在`Page`上的，所以要避免使用组件里面已经被占用的命名。
 _**/pages/index/index.wxml**_
 ```
 <!-- 引入组件 -->
 <import src="/welCropper/welCropper.wxml" />
 
 <!-- 调用组件 -->
-<template is="welCropper" data="{{data:cropperData, cropperMovableItems:cropperMovableItems}}"></template>
+<template is="welCropper" data="{{data:cropperData, cropperMovableItems:cropperMovableItems, cropperChangableData:cropperChangableData}}"></template>
 
 <!-- 用于选择图片，传入cropper中 -->
 <button bindtap='selectTap'>select image</button>
@@ -137,11 +137,22 @@ _**/pages/index/index.wxss**_
 @import "/welCropper/welCropper.wxss";
 ```
 
+### 注意
+* 因为`wx.canvasToTempFilePath`输出的是`.png`图片，截出来的图有可能远远大于原图（比如3通道图变成4通道的图）
+
+
+### 源代码
+[Github:tomfriwel/welCropper](https://github.com/tomfriwel/welCropper)，将`welCropper`文件夹复制到自己项目，引入调用就行了。
+
+#### ***如果出现什么bug、问题或者建议可以告诉我，我会尽量改进。***
+
 ### 效果图
-![效果动图](http://upload-images.jianshu.io/upload_images/2158535-bedf30dc0d9ca735.gif?imageMogr2/auto-orient/strip)
+![效果动图mode=rectangle](http://upload-images.jianshu.io/upload_images/2158535-bedf30dc0d9ca735.gif?imageMogr2/auto-orient/strip)
+
+![效果动图mode=quadrangle](http://upload-images.jianshu.io/upload_images/2158535-b24ca97a376501aa.gif?imageMogr2/auto-orient/strip)
 
 
-![效果图](http://upload-images.jianshu.io/upload_images/2158535-160c32c03e14a938.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300)
+![效果图mode=rectangle](http://upload-images.jianshu.io/upload_images/2158535-160c32c03e14a938.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300)
 
 #### 如果将`movable-view`显示出来是这样的：
 
@@ -149,12 +160,4 @@ _**/pages/index/index.wxss**_
 
 ![mode=quadrangle](http://upload-images.jianshu.io/upload_images/2158535-7a45c633faa6e908.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/300)
 
-
-### 注意
-* 因为`wx.canvasToTempFilePath`输出的是`.png`图片，截出来的图有可能远远大于原图（比如3通道图变成4通道的图）
-
-
-### 源代码：
-[Github:tomfriwel/welCropper](https://github.com/tomfriwel/welCropper)，将`welCropper`文件夹复制到自己项目，引入调用就行了。
-
-#### 如果出现什么bug、问题或者建议可以告诉我，我会尽量改进。
+![效果图](http://upload-images.jianshu.io/upload_images/2158535-1c814a8869bb79e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/900)
