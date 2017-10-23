@@ -41,7 +41,7 @@ Page({
 
         degree = degree==360?90:degree+90
 
-        console.log()
+        console.log(degree)
         
         ctx.translate(150, 150)
         ctx.rotate(degree * Math.PI / 180)

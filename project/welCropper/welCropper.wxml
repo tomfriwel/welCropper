@@ -1,7 +1,7 @@
 <template name="welCropper">
     <scroll-view class="cropper_main_container {{data.hidden?'hidden':''}}">
         <view class="cropper_container">
-            <canvas class="original_canvas" canvas-id="originalCanvas" style="width:{{data.imageInfo.w}}px;height:{{data.imageInfo.h}}px;"></canvas>
+            <canvas class="original_canvas" canvas-id="originalCanvas" style="width:{{data.imageInfo.width}}px;height:{{data.imageInfo.height}}px;"></canvas>
 
             <view class='cropper_canvas_container'>
                 <canvas class="canvas" canvas-id="canvas" style="left:{{data.left}}px;top:{{data.top}}px;width:{{data.width}}px;height:{{data.height}}px;"></canvas>  
