@@ -411,6 +411,9 @@ var init = function (W, H) {
     // 旋转图片
     that.rotateImage = () => {
         let that = this
+        let imageInfo = that.data.cropperData.imageInfo
+        let width = imageInfo.width
+        let height = imageInfo.height
         let rotateDegree = that.data.cropperChangableData.rotateDegree
 
         rotateDegree = rotateDegree == 360 ? 90 : rotateDegree + 90
@@ -418,7 +421,7 @@ var init = function (W, H) {
         // 判断是否为垂直方向
         let isVertical = rotateDegree%180>0
 
-
+        
     }
 
     // 根据图片大小设置canvas大小，并绘制图片
