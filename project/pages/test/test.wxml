@@ -1,28 +1,4 @@
 <!--pages/test/test.wxml-->
-<scroll-view class="cropper_main_container {{containerInfo.hidden?'hidden':''}}">
-    <view class="cropper_container">
-        <canvas class="original_canvas" canvas-id="originalCanvas" style="width:{{imageInfo.w}}px;height:{{imageInfo.h}}px;"></canvas>
-
-        <movable-area class="cropper_canvas_container" style="left:{{containerInfo.left}}px;top:{{containerInfo.top}}px;width:{{containerInfo.width}}px;height:{{containerInfo.height}}px;">
-            <canvas class="canvas" canvas-id="canvas" style="width:{{containerInfo.width}}px;height:{{containerInfo.height}}px;"></canvas>
-            <canvas class="move_canvas" canvas-id="moveCanvas" style="width:{{containerInfo.width}}px;height:{{containerInfo.height}}px;"></canvas>
-
-            <block wx:for="{{items}}" wx:key="moveItem">
-                <movable-view class="move_item" style="width:{{itemLength}}px; height:{{itemLength}}px;" direction="all" x="{{item.x-itemLength/2}}" y="{{item.y-itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent"
-                    data-key="{{index}}"></movable-view>
-            </block>
-        </movable-area>
-    </view>
-
-    <view class="cropper_toolbar">
-        <view class="select_image_button button_item">
-            <button type="primary" bindtap="selectImage">选择图片</button>
-        </view>
-        <view class="crop_image_button button_item">
-            <button type="primary" bindtap="cropImage">截取图片</button>
-        </view>
-        <!-- <view class="button_item">
-            <button type="primary" bindtap="rotateImage">旋转</button>
-        </view> -->
-    </view>
-</scroll-view>
+<button bindtap='chooseImage'>choose image</button>
+<canvas canvas-id='test' style="left:{{left}}px;top:{{top}}px;width:{{width}}px;height:{{height}}px;border:1px solid black;"></canvas>
+<button bindtap='rotateImage'>rotate image</button>
