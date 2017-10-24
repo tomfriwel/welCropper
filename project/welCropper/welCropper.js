@@ -304,14 +304,16 @@ var init = function (W, H) {
     that.originalChange = () => {
         let that = this
         let imageInfo = that.data.cropperData.imageInfo
-        let width = imageInfo.width
-        let height = imageInfo.height
+        let originalSize = that.data.cropperChangableData.originalSize
+        let width = originalSize.width
+        let height = originalSize.height
         let original = !that.data.cropperData.original
 
         let compressedScale = original ? 1.0 : 0.4
         let size = cropperUtil.getAdjustSize(W, H, width, height)
 
         console.log("change original=" + original)
+        
         that.data.cropperData.original = original
         that.data.cropperData.scaleInfo = {
             x: width * compressedScale / size.width,
