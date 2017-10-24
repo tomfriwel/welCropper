@@ -72,7 +72,7 @@
     background: #26ab28;
 }
 
-.original_button .check_container .check_border {
+/* .original_button .check_container .check_border {
     position: absolute;
     left: 0;
     top: 0;
@@ -100,7 +100,7 @@
 .original_button .check_text {
     float: left;
     width: 50px;
-}
+} */
 
 /* rotate image */
 
@@ -112,12 +112,12 @@
 
 /* crop_image_button */
 
-/* .crop_image_button {
-    position: absolute;
+ .crop_image_button {
+    /* position: absolute;
     right: 0;
-    top: 0;
+    top: 0; */
     color: #26ab28;
-} */
+} 
 
 .crop_image_button.disable {
     /* color: #038905;  */
