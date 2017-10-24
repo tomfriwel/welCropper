@@ -8,8 +8,8 @@ Page({
     data: {
         left:10,
         top:10,
-        height:300,
-        width:300,
+        height:98*2,
+        width:128*2,
         path:'',
         degree:0
     },
@@ -43,10 +43,10 @@ Page({
 
         console.log(degree)
         
-        ctx.translate(150, 150)
+        ctx.translate(98, 128)
         ctx.rotate(degree * Math.PI / 180)
-        ctx.translate(-150, -150)
-        ctx.drawImage(path, 0, 0, 300, 300)
+        ctx.translate(-98, -128)
+        ctx.drawImage(path, 0, 0, 98 * 2, 128 * 2)
         
         ctx.draw()
 

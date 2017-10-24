@@ -113,10 +113,55 @@ function convexHull(points, n) {
     return hull
 }
 
+function drawImageWithDegree(canvasId, path, width, height, degree) {
+    let ctx = wx.createCanvasContext(canvasId)
+
+    let isVertical = degree % 180 > 0
+
+    let drawWidth = isVertical ? height : width
+    let drawHeight = isVertical ? width : height
+
+    let centerX = width / 2
+    let cneterY = height / 2
+
+    let drawCenterX = drawWidth / 2
+    let drawCneterY = drawHeight / 2
+
+    let d = Math.abs(width-height)/2
+
+    // ctx.translate(drawCenterX, drawCneterY)
+    // ctx.rotate(degree * Math.PI / 180)
+    // ctx.translate(-drawCenterX, -drawCneterY)
+
+    ctx.translate(centerX, cneterY)
+    ctx.rotate(degree * Math.PI / 180)
+    ctx.translate(-centerX, -cneterY)
+
+    // ctx.translate(-d, d)
+    if (isVertical) {
+        if (drawHeight > drawWidth) {
+            ctx.drawImage(path, d, -d, drawWidth, drawHeight)
+        }
+        else {
+            ctx.drawImage(path, -d, d, drawWidth, drawHeight)
+        }
+    }
+    else {
+        ctx.drawImage(path, 0, 0, drawWidth, drawHeight)
+    }
+
+    console.log("width=" + width + ", height=" + height)
+    console.log("drawWidth=" + drawWidth + ", drawHeight=" + drawHeight)
+    console.log("centerX=" + centerX + ", cneterY=" + cneterY)
+
+    ctx.draw()
+}
+
 const cropperUtil = {
     getCropRect,
     getAdjustSize,
-    convexHull
+    convexHull,
+    drawImageWithDegree
 }
 
 
@@ -163,9 +208,17 @@ var init = function (W, H) {
                 y: H - 50
             }
         },
-        cropperChangableData:{
-            canCrop:true,
-            rotateDegree:0
+        cropperChangableData: {
+            canCrop: true,
+            rotateDegree: 0,
+            originalSize: {
+                width: 0,
+                height: 0
+            },
+            scaleSize: {
+                width: 0,
+                height: 0
+            }
         }
     })
 
@@ -203,11 +256,9 @@ var init = function (W, H) {
             wx.getImageInfo({
                 src: src,
                 success: function (res) {
-                    console.log(res)
-
                     var w = res.width, h = res.height
 
-                    that.loadImage(src, w, h)
+                    that.loadImage(src, w, h, false)
                 }
             })
         }
@@ -246,7 +297,7 @@ var init = function (W, H) {
             }
         })
 
-        that.clearCanvas()
+        that.clearCanvas(that.data.cropperData.imageInfo)
     }
 
     // 原图按钮被点击
@@ -352,7 +403,6 @@ var init = function (W, H) {
                 success: function (res) {
                     let tempFilePath = res.tempFilePath
 
-
                     wx.hideLoading()
 
                     wx.saveImageToPhotosAlbum({
@@ -399,8 +449,6 @@ var init = function (W, H) {
 
             cropperUtil.convexHull(points, points.length)
 
-
-
             if (that.data.cropperData.cropCallback) {
                 that.data.cropperData.cropCallback(res)
             }
@@ -410,6 +458,7 @@ var init = function (W, H) {
     // 测试
     // 旋转图片
     that.rotateImage = () => {
+        console.log("rotate image")
         let that = this
         let imageInfo = that.data.cropperData.imageInfo
         let width = imageInfo.width
@@ -419,13 +468,41 @@ var init = function (W, H) {
         rotateDegree = rotateDegree == 360 ? 90 : rotateDegree + 90
 
         // 判断是否为垂直方向
-        let isVertical = rotateDegree%180>0
+        let isVertical = rotateDegree % 180 > 0
+        let rotateWidth = isVertical ? height : width
+        let rotateHeight = isVertical ? width : height
 
-        
+        let size = cropperUtil.getAdjustSize(W, H, rotateWidth, rotateHeight)
+
+        // 适应屏幕的位置
+        let left = (W - size.width) / 2
+        let top = (H - size.height) / 2
+        let cropperData = that.data.cropperData
+
+        cropperData.left = left
+        cropperData.top = top
+
+        let cropperChangableData = that.data.cropperChangableData
+        cropperChangableData.originalSize = {
+            width: rotateWidth,
+            height: rotateHeight
+        }
+        cropperChangableData.scaleSize = {
+            width: size.width,
+            height: size.height
+        }
+        cropperChangableData.rotateDegree = rotateDegree
+
+        that.setData({
+            cropperChangableData: cropperChangableData,
+            cropperData: cropperData
+        })
+
+        that.loadImage(imageInfo.path, rotateWidth, rotateHeight, true)
     }
 
     // 根据图片大小设置canvas大小，并绘制图片
-    that.loadImage = (src, width, height) => {
+    that.loadImage = (src, width, height, isRotate) => {
         let that = this
         let size = cropperUtil.getAdjustSize(W, H, width, height)
 
@@ -437,10 +514,12 @@ var init = function (W, H) {
         let updateData = {}
         let cropperData = that.data.cropperData
 
-        cropperData.imageInfo = {
-            path: src,
-            width: width,
-            height: height
+        if (!isRotate) {
+            cropperData.imageInfo = {
+                path: src,
+                width: width,
+                height: height
+            }
         }
         cropperData.left = left
         cropperData.top = top
@@ -476,16 +555,33 @@ var init = function (W, H) {
             }
         }
 
+        let cropperChangableData = that.data.cropperChangableData
+        cropperChangableData.originalSize = {
+            width: width,
+            height: height
+        }
+        cropperChangableData.scaleSize = {
+            width: size.width,
+            height: size.height
+        }
+
+        updateData.cropperChangableData = cropperChangableData
+
         that.setData(updateData)
 
-        that.drawImage()
-        that.drawLines(that.data.cropperMovableItems)
+        // console.log("loadImage size:" + width + "*" + height)
+        that.drawImage({
+            path: that.data.cropperData.imageInfo.path,
+            width: width,
+            height: height
+        })
+        // that.drawImage(that.data.cropperData.imageInfo)
+        that.drawLines(that.data.cropperMovableItems, that.data.cropperData.imageInfo)
     }
 
     // 清空canvas上的数据
-    that.clearCanvas = () => {
+    that.clearCanvas = (imageInfo) => {
         let cropperData = that.data.cropperData
-        let imageInfo = cropperData.imageInfo
         let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
 
         if (imageInfo.path != '') {
@@ -509,27 +605,35 @@ var init = function (W, H) {
     }
 
     //绘制图片
-    that.drawImage = () => {
+    that.drawImage = (imageInfo) => {
         let that = this
         let cropperData = that.data.cropperData
-        let imageInfo = cropperData.imageInfo
         let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
 
         if (imageInfo.path != '') {
             let path = imageInfo.path
             let compressedScale = that.data.cropperData.original ? 1.0 : 0.4
+            let rotateDegree = that.data.cropperChangableData.rotateDegree
 
             //绘制原图
-            let originalCanvas = wx.createCanvasContext("originalCanvas")
-            originalCanvas.drawImage(path, 0, 0, imageInfo.width * compressedScale, imageInfo.height * compressedScale)
-            originalCanvas.draw()
+            cropperUtil.drawImageWithDegree(
+                "originalCanvas",
+                path,
+                imageInfo.width * compressedScale,
+                imageInfo.height * compressedScale,
+                rotateDegree
+            )
+            // let originalCanvas = wx.createCanvasContext("originalCanvas")
+            // originalCanvas.drawImage(path, 0, 0, imageInfo.width * compressedScale, imageInfo.height * compressedScale)
+            // originalCanvas.draw()
 
             //绘制选择区图片
-            let canvas = wx.createCanvasContext("canvas")
-            canvas.drawImage(path, 0, 0, size.width, size.height)
-            canvas.draw()
+            cropperUtil.drawImageWithDegree("canvas", path, size.width, size.height, rotateDegree)
+            // let canvas = wx.createCanvasContext("canvas")
+            // canvas.drawImage(path, 0, 0, size.width, size.height)
+            // canvas.draw()
 
-            console.log("draw="+path)
+            console.log("draw=" + path)
         }
     }
 
@@ -538,23 +642,31 @@ var init = function (W, H) {
         let that = this
         let cropperData = that.data.cropperData
         let imageInfo = cropperData.imageInfo
+        let originalSize = that.data.cropperChangableData.originalSize
 
         if (imageInfo.path != '') {
             let path = imageInfo.path
             let compressedScale = that.data.cropperData.original ? 1.0 : 0.4
+            let rotateDegree = that.data.cropperChangableData.rotateDegree
 
             //绘制原图
-            let originalCanvas = wx.createCanvasContext("originalCanvas")
-            originalCanvas.drawImage(path, 0, 0, imageInfo.width * compressedScale, imageInfo.height * compressedScale)
+            cropperUtil.drawImageWithDegree(
+                "originalCanvas",
+                path,
+                originalSize.width * compressedScale,
+                originalSize.height * compressedScale,
+                rotateDegree
+            )
+            // let originalCanvas = wx.createCanvasContext("originalCanvas")
+            // originalCanvas.drawImage(path, 0, 0, imageInfo.width * compressedScale, imageInfo.height * compressedScale)
             // originalCanvas.draw()
         }
     }
 
     //绘制选框
-    that.drawLines = (cropperMovableItems, callback) => {
+    that.drawLines = (cropperMovableItems, imageInfo, callback) => {
         let that = this
         let cropperData = that.data.cropperData
-        let imageInfo = cropperData.imageInfo
         let mode = cropperData.mode
         let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
 
@@ -571,7 +683,7 @@ var init = function (W, H) {
 
         // 四个点组成的四边形是不是凸四边形
         let canCrop = convexDots.length == 4
-        if(callback){
+        if (callback) {
             callback(canCrop)
         }
 
@@ -641,25 +753,6 @@ var init = function (W, H) {
                 ctx.fill()
                 ctx.closePath()
             }
-            // ctx.beginPath()
-            // ctx.arc(rect.x, rect.y, 10, 0, 2 * Math.PI, true)
-            // ctx.fill()
-            // ctx.closePath()
-
-            // ctx.beginPath()
-            // ctx.arc(rect.x + rect.w, rect.y, 10, 0, 2 * Math.PI, true)
-            // ctx.fill()
-            // ctx.closePath()
-
-            // ctx.beginPath()
-            // ctx.arc(rect.x + rect.w, rect.y + rect.h, 10, 0, 2 * Math.PI, true)
-            // ctx.fill()
-            // ctx.closePath()
-
-            // ctx.beginPath()
-            // ctx.arc(rect.x, rect.y + rect.h, 10, 0, 2 * Math.PI, true)
-            // ctx.fill()
-            // ctx.closePath()
         }
         else if (cornerType == 'rect') {
             let len = 20, w = 3.0, offset = w / 2.0
@@ -692,13 +785,12 @@ var init = function (W, H) {
     }
 
     // move events
-    that.setupMoveItem = (key, changedTouches, callback) => {
+    that.setupMoveItem = (key, changedTouches, imageInfo, callback) => {
         let that = this
         let cropperData = that.data.cropperData
         let cropperMovableItems = that.data.cropperMovableItems
         let left = cropperData.left
         let top = cropperData.top
-        let imageInfo = cropperData.imageInfo
         let mode = cropperData.mode
         let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
 
@@ -741,7 +833,7 @@ var init = function (W, H) {
                 }
             }
 
-            that.drawLines(cropperMovableItems, function(canCrop){
+            that.drawLines(cropperMovableItems, imageInfo, function (canCrop) {
                 if (callback) {
                     callback(cropperMovableItems, canCrop)
                 }
@@ -753,7 +845,13 @@ var init = function (W, H) {
     that.moveEvent = (e) => {
         let that = this
         let key = e.currentTarget.dataset.key
-        that.setupMoveItem(key, e.changedTouches)
+        let originalSize = that.data.cropperChangableData.originalSize
+
+        that.setupMoveItem(key, e.changedTouches, {
+            path: that.data.cropperData.imageInfo.path,
+            width: originalSize.width,
+            height: originalSize.height
+        })
     }
 
     // moveable-view touchend，end的时候设置movable-view的位置，如果在move阶段设置位置，选中会不流畅
@@ -763,9 +861,14 @@ var init = function (W, H) {
         let cropperData = that.data.cropperData
         let cropperMovableItems = that.data.cropperMovableItems
         let cropperChangableData = that.data.cropperChangableData
+        let originalSize = cropperChangableData.originalSize
         let key = e.currentTarget.dataset.key
 
-        that.setupMoveItem(key, e.changedTouches, (cropperMovableItems, canCrop) => {
+        that.setupMoveItem(key, e.changedTouches, {
+            path: that.data.cropperData.imageInfo.path,
+            width: originalSize.width,
+            height: originalSize.height
+        }, (cropperMovableItems, canCrop) => {
             cropperChangableData.canCrop = canCrop
             that.setData({
                 cropperChangableData: cropperChangableData,

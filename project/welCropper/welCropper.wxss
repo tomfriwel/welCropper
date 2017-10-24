@@ -87,6 +87,12 @@
     float: left;
     width: 50px;
 }
+/* rotate image */
+.rotate_button {
+    position: absolute;
+    left: 50px;
+    top: 0;
+}
 
 /* crop_image_button */
 .crop_image_button {
@@ -114,8 +120,8 @@
 /* opacity:0隐藏，如果想看就设置为1，只能在测试机能看到，真机上canvas层级在最高层 */
 .cropper_movable_area_container .move_item {
     z-index: 100;
-     /* opacity: 0.7;  */
-     opacity: 0; 
+      opacity: 0.7;  
+     /* opacity: 0;  */
     background: white;
     border-radius: 50%;
 }

@@ -1,4 +1,4 @@
 <!--pages/test/test.wxml-->
 <button bindtap='chooseImage'>choose image</button>
-<canvas canvas-id='test' style="left:{{left}}px;top:{{top}}px;width:{{width}}px;height:{{height}}px;border:1px solid black;"></canvas>
 <button bindtap='rotateImage'>rotate image</button>
+<canvas canvas-id='test' style="left:{{left}}px;top:{{top}}px;width:{{width}}px;height:{{height}}px;border:1px solid black;"></canvas>
