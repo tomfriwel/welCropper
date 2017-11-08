@@ -150,10 +150,6 @@ function drawImageWithDegree(canvasId, path, width, height, degree) {
         ctx.drawImage(path, 0, 0, drawWidth, drawHeight)
     }
 
-    console.log("width=" + width + ", height=" + height)
-    console.log("drawWidth=" + drawWidth + ", drawHeight=" + drawHeight)
-    console.log("centerX=" + centerX + ", cneterY=" + cneterY)
-
     ctx.draw()
 }
 
@@ -163,7 +159,6 @@ const cropperUtil = {
     convexHull,
     drawImageWithDegree
 }
-
 
 var init = function (W, H) {
     let that = this
