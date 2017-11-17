@@ -1,7 +1,5 @@
 ### welCropper 微信小程序截图工具
 
-### ***当前分支有bug，使用请下载release***
-
 <img src="documents/screenshot2.png" width=600 />
 ----
 <img src="documents/result.gif" width=300 />
