@@ -5,12 +5,27 @@ const device = wx.getSystemInfoSync()
 const W = device.windowWidth
 const H = device.windowHeight - 50
 
+var cropperUtil = require("./welCropperUtil.js")
+
 Component({
     /**
      * 组件的属性列表
      */
     properties: {
-
+        isShow:{
+            type: Boolean,
+            value: false,
+            observer: function (newVal, oldVal) {
+                console.log("newVal="+newVal)
+                console.log("oldVal=" + oldVal)
+                if (newVal) {
+                    this.showCropper({})
+                }
+                else {
+                    this.hideCropper()
+                }
+            }
+        }
     },
 
     /**
@@ -78,7 +93,7 @@ Component({
             let that = this
             let src = options.src
             let callback = options.callback
-            let sizeType = options.sizeType
+            let sizeType = options.sizeType || ['original']
             let mode = options.mode
 
             let filterType = []
@@ -145,7 +160,8 @@ Component({
                 cropperChangableData: {
                     canCrop: true,
                     rotateDegree: 0
-                }
+                },
+                isShow:false
             })
 
             that.clearCanvas(that.data.cropperData.imageInfo)
@@ -433,7 +449,8 @@ Component({
         },
 
         // 清空canvas上的数据
-        clearCanvas: function(imageInfo) {
+        clearCanvas: function (imageInfo) {
+            let that = this
             let cropperData = that.data.cropperData
             let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
 

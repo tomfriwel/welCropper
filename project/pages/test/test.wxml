@@ -1,4 +1,6 @@
 <!--pages/test/test.wxml-->
-<view>
-    <wel-cropper />
-</view>
+
+<button bindtap='selectImage' data-mode='rectangle'>select image</button>
+<!-- <block wx:if="{{showCropper}}"> -->
+    <wel-cropper is-show="{{isShowCropper}}" />
+<!-- </block> -->
