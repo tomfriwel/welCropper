@@ -1,0 +1,46 @@
+<!--components/welCropper.wxml-->
+<!-- 小程序基础库版本 >= 1.6.3  -->
+<scroll-view class="cropper_main_container {{data.hidden?'hidden':''}}">
+    <view class="cropper_container">
+        <canvas class="original_canvas" canvas-id="originalCanvas" style="width:{{cropperChangableData.originalSize.width}}px;height:{{cropperChangableData.originalSize.height}}px;"></canvas>
+
+        <view class='cropper_canvas_container'>
+            <canvas class="canvas" canvas-id="canvas" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;"></canvas>
+            <canvas class="move_canvas" canvas-id="moveCanvas" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;"></canvas>
+
+            <movable-area class="cropper_movable_area_container" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
+                <block wx:if="{{cropperMovableItems}}">
+                    <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
+                        <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{item.x-data.itemLength/2}}" y="{{item.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
+                    </block>
+                </block>
+            </movable-area>
+        </view>
+    </view>
+
+    <view class="cropper_toolbar">
+        <view class="button_item cancel_button" bindtap="hideCropper">
+            取消
+        </view>
+        <view class="button_item rotate_button" bindtap="rotateImage">
+            旋转
+        </view>
+
+        <block wx:if="{{data.sizeType.length==2}}">
+            <view class="original_button button_item {{data.original?'checked':''}}" bindtap="originalChange">
+                <view>原图</view>
+            </view>
+        </block>
+        <block wx:else>
+            <view class="original_button button_item">
+                <view></view>
+            </view>
+        </block>
+        <view class="crop_image_button button_item {{cropperChangableData.canCrop?'':'disable'}}" bindtap="{{cropperChangableData.canCrop?'cropImage':''}}">
+            完成
+        </view>
+        <!-- <view class="crop_image_button button_item" bindtap="cropImage">
+                完成
+            </view> -->
+    </view>
+</scroll-view>
