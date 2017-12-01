@@ -38,6 +38,12 @@
 
 * 保证图片质量，也可以选择压缩图
 
+#### 两种模式
+通过`showCropper`的`mode`设定
+* mode:'rectangle' 返回图片
+* mode:'quadrangle' 并不返回图片，只返回在图片中的四个点，用于perspective correction（可以查找OpenCV相关资料）
+
+
 #### Documents
 
 <img src="documents/hierarchy.png" width=600 />
