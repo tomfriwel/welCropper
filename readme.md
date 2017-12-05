@@ -1,8 +1,8 @@
 ### welCropper 微信小程序截图工具
 
-<img src="https://github.com/tomfriwel/welCropper/blob/master/documents/screenshot2.png" width=600 />
+<img src="https://github.com/tomfriwel/welCropper/blob/master/documents/screenshot2.png?raw=true" width=600 />
 ----
-<img src="https://github.com/tomfriwel/welCropper/blob/master/documents/result.gif" width=300 />
+<img src="https://github.com/tomfriwel/welCropper/blob/master/documents/result.gif?raw=true" width=300 />
 
 
 #### 文件目录结构，要在测试机上运行，工程目录选择文件夹`project`
@@ -46,7 +46,7 @@
 
 #### Documents
 
-<img src="https://github.com/tomfriwel/welCropper/blob/master/welCropper/documents/hierarchy.png" width=600 />
+<img src="https://github.com/tomfriwel/welCropper/blob/master/welCropper/documents/hierarchy.png?raw=true" width=600 />
 
 因为`cropper`的数据和事件是直接绑定到`Page`上的，所以数据和事件命名应该避免一下名字（之后会想办法避免这种情况）及其相关解释：
 
