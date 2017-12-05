@@ -37,6 +37,8 @@
 ```
 
 * 保证图片质量，也可以选择压缩图
+* 支持图片旋转
+* 自由选择截图框
 
 #### 两种模式
 通过`showCropper`的`mode`设定
@@ -46,7 +48,9 @@
 
 #### Documents
 
-<img src="https://github.com/tomfriwel/welCropper/blob/master/welCropper/documents/hierarchy.png?raw=true" width=600 />
+<img src="https://github.com/tomfriwel/welCropper/blob/master/documents/hierarchy.png?raw=true" width=600 />
+
+* 使用`movable-view`的原因是不用自己实现拖拽，直接使用官方提供的这个组件。
 
 因为`cropper`的数据和事件是直接绑定到`Page`上的，所以数据和事件命名应该避免一下名字（之后会想办法避免这种情况）及其相关解释：
 
