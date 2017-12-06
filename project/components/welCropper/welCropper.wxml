@@ -1,7 +1,7 @@
 <!--components/welCropper.wxml-->
 <!-- 小程序基础库版本 >= 1.6.3  -->
-<scroll-view class="cropper_main_container {{cropperData.hidden?'hidden':''}}">
-    <view class="cropper_container">
+<!-- <scroll-view class="cropper_main_container {{cropperData.hidden?'hidden':''}}">
+     <view class="cropper_container">
         <canvas class="original_canvas" canvas-id="originalCanvas" style="width:{{cropperChangableData.originalSize.width}}px;height:{{cropperChangableData.originalSize.height}}px;"></canvas>
 
         <view class='cropper_canvas_container'>
@@ -10,7 +10,7 @@
 
             <movable-area class="cropper_movable_area_container" style="left:{{cropperData.left}}px;top:{{cropperData.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
                 <block wx:if="{{cropperMovableItems}}">
-                    <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
+                     <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
                         <movable-view class="move_item" style="width:{{cropperData.itemLength}}px; height:{{cropperData.itemLength}}px;" direction="all" x="{{item.x-cropperData.itemLength/2}}" y="{{item.y-cropperData.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
                     </block>
                 </block>
@@ -39,8 +39,15 @@
         <view class="crop_image_button button_item {{cropperChangableData.canCrop?'':'disable'}}" bindtap="{{cropperChangableData.canCrop?'cropImage':''}}">
             完成
         </view>
-        <!-- <view class="crop_image_button button_item" bindtap="cropImage">
-                完成
-            </view> -->
-    </view>
-</scroll-view>
+    </view> 
+</scroll-view> -->
+ <!-- <movable-area class="cropper_movable_area_container" style="width:{{width}}px;height:{{height}}px;">
+    <block wx:if="{{cropperMovableItems}}">
+            <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
+            <movable-view class="move_item" style="width:{{length}}px; height:{{length}}px;" direction="all" x="{{item.x-length/2}}" y="{{item.y-length/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
+        </block>
+    </block>
+</movable-area>  -->
+  <movable-area class="cropper_movable_area_container" style="width:{{width}}px;height:{{height}}px;">
+    <movable-view class="move_item" style="width:{{length}}px; height:{{length}}px;" direction="all" x="{{x-length/2}}" y="{{y-length/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
+</movable-area>  

@@ -16,14 +16,40 @@ Component({
             type: Boolean,
             value: false,
             observer: function (newVal, oldVal) {
-                console.log("newVal="+newVal)
-                console.log("oldVal=" + oldVal)
-                if (newVal) {
-                    this.showCropper({})
-                }
-                else {
-                    this.hideCropper()
-                }
+                this.data.cropperData.hidden = !newVal
+            }
+        },
+        path: {
+            type: String,
+            value: '',
+            observer:function(path){
+                console.log(this.data)
+                var mode = 'rectangle'
+                this.showCropper({
+                    src: path,
+                    mode: mode,
+                    sizeType: ['original', 'compressed'],   //'original'(default) | 'compressed'
+                    callback: (res) => {
+                        if (mode == 'rectangle') {
+                            console.log("crop callback:" + res)
+                            wx.previewImage({
+                                current: '',
+                                urls: [res]
+                            })
+                        }
+                        else {
+                            console.log('callback :'+ res)
+                            wx.showModal({
+                                title: '',
+                                content: JSON.stringify(res),
+                            })
+
+                            console.log(res)
+                        }
+
+                        // that.hideCropper() //隐藏，我在项目里是点击完成就上传，所以如果回调是上传，那么隐藏掉就行了，不用previewImage
+                    }
+                })
             }
         }
     },
@@ -32,65 +58,73 @@ Component({
      * 组件的初始数据
      */
     data: {
-        cropperData: {
-            hidden: true,
-            left: 0,
-            top: 0,
-            width: W,
-            height: H,
-            itemLength: 50,
-            imageInfo: {
-                path: '',
-                width: 0,
-                height: 0
-            },
-            scaleInfo: {
-                x: 1,
-                y: 1
-            },
-            cropCallback: null,
-            sizeType: ['original', 'compressed'],    //'original'(default) | 'compressed'
-            original: false,  // 默认压缩，压缩比例为截图的0.4
-            mode: 'rectangle', //默认矩形
-        },
-        cropperMovableItems: {
-            topleft: {
-                x: 50,
-                y: 50
-            },
-            topright: {
-                x: W - 50,
-                y: 50
-            },
-            bottomleft: {
-                x: 50,
-                y: H - 50
-            },
-            bottomright: {
-                x: W - 50,
-                y: H - 50
-            }
-        },
-        cropperChangableData: {
-            canCrop: true,
-            rotateDegree: 0,
-            originalSize: {
-                width: 0,
-                height: 0
-            },
-            scaleSize: {
-                width: 0,
-                height: 0
-            }
-        }
     },
+    ready:function () {
+        this.setData({
+            cropperData: {
+                hidden: true,
+                left: 0,
+                top: 0,
+                width: W,
+                height: H,
+                itemLength: 50,
+                imageInfo: {
+                    path: '',
+                    width: 0,
+                    height: 0
+                },
+                scaleInfo: {
+                    x: 1,
+                    y: 1
+                },
+                cropCallback: null,
+                sizeType: ['original', 'compressed'],    //'original'(default) | 'compressed'
+                original: false,  // 默认压缩，压缩比例为截图的0.4
+                mode: 'rectangle', //默认矩形
+            },
+            cropperMovableItems: {
+                topleft: {
+                    x: -1,
+                    y: -1
+                },
+                topright: {
+                    x: -1,
+                    y: -1
+                },
+                bottomleft: {
+                    x: -1,
+                    y: -1
+                },
+                bottomright: {
+                    x: -1,
+                    y: -1
+                }
+            },
+            width:0,
+            height:0,
+            length:50,
+            x:-1,
+            y:-1,
+            cropperChangableData: {
+                canCrop: true,
+                rotateDegree: 0,
+                originalSize: {
+                    width: 0,
+                    height: 0
+                },
+                scaleSize: {
+                    width: 110,
+                    height: 110
+                }
+            }
+        })
 
-    /**
-     * 组件的方法列表
-     */
+        console.log('ready')
+        console.log(this.data.cropperMovableItems)
+    },
     methods: {    // 显示cropper，如果有图片则载入
         showCropper: function(options) {
-            let that = this
+            let z = this
             let src = options.src
             let callback = options.callback
             let sizeType = options.sizeType || ['original']
@@ -104,18 +138,18 @@ Component({
                 filterType.push('compressed')
             }
             if (filterType.length == 1 && filterType.indexOf('original') > -1) {
-                that.data.cropperData.original = true
+                z.data.cropperData.original = true
             }
 
             if (mode) {
-                that.data.cropperData.mode = mode
+                z.data.cropperData.mode = mode
             }
-            that.data.cropperData.hidden = false
-            that.data.cropperData.cropCallback = callback
-            that.data.cropperData.sizeType = filterType
+            z.data.cropperData.hidden = false
+            z.data.cropperData.cropCallback = callback
+            z.data.cropperData.sizeType = filterType
 
-            that.setData({
-                cropperData: that.data.cropperData,
+            z.setData({
+                cropperData: z.data.cropperData,
             })
 
             if (src) {
@@ -124,10 +158,62 @@ Component({
                     success: function (res) {
                         var w = res.width, h = res.height
 
-                        that.loadImage(src, w, h, false)
+                        z.setupMovableInfo(w, h)
+                        // z.loadImage(src, w, h, false)
                     }
                 })
             }
+        },
+        setupMovableInfo: function (width, height) {
+            var size = {
+                width: 300,
+                height: 300,
+            }//cropperUtil.getAdjustSize(W, H, width, height)
+            var updateData = {}
+            updateData.x = 100
+            updateData.y = 100
+            Object.assign(updateData, size)
+            // updateData.cropperMovableItems = {
+            //     topleft: {
+            //         x: -11,
+            //         y:-11
+            //     },
+            //     topright: {
+            //         x: -11,
+            //         y: -11
+            //     },
+            //     bottomleft: {
+            //         x: -11,
+            //         y: -11
+            //     },
+            //     bottomright: {
+            //         x: -11,
+            //         y: -11
+            //     }
+            // }
+            this.setData(updateData)
+
+            var cropperMovableItems = {
+                topleft: {
+                    x: 50,
+                    y: 50
+                },
+                topright: {
+                    x: size.width - 50,
+                    y: 50
+                },
+                bottomleft: {
+                    x: 50,
+                    y: size.height - 50
+                },
+                bottomright: {
+                    x: size.width - 50,
+                    y: size.height - 50
+                }
+            }
+            this.setData({
+                cropperMovableItems: cropperMovableItems
+            })
         },
 
         // 隐藏cropper
@@ -274,11 +360,11 @@ Component({
 
                         wx.hideLoading()
 
-                        wx.saveImageToPhotosAlbum({
-                            filePath: tempFilePath,
-                            success(res) {
-                            }
-                        })
+                        // wx.saveImageToPhotosAlbum({
+                        //     filePath: tempFilePath,
+                        //     success(res) {
+                        //     }
+                        // })
 
                         if (that.data.cropperData.cropCallback) {
                             that.data.cropperData.cropCallback(tempFilePath)
@@ -405,7 +491,19 @@ Component({
 
             updateData.cropperData = cropperData
 
-            updateData.cropperMovableItems = {
+            let cropperChangableData = that.data.cropperChangableData
+            cropperChangableData.originalSize = {
+                width: width,
+                height: height
+            }
+            cropperChangableData.scaleSize = {
+                width: size.width,
+                height: size.height
+            }
+
+            updateData.cropperChangableData = cropperChangableData
+
+            var cropperMovableItems = {
                 topleft: {
                     x: 50,
                     y: 50
@@ -424,19 +522,12 @@ Component({
                 }
             }
 
-            let cropperChangableData = that.data.cropperChangableData
-            cropperChangableData.originalSize = {
-                width: width,
-                height: height
-            }
-            cropperChangableData.scaleSize = {
-                width: size.width,
-                height: size.height
-            }
-
-            updateData.cropperChangableData = cropperChangableData
-
             that.setData(updateData)
+            setTimeout(function () {
+                that.setData({
+                    cropperMovableItems: cropperMovableItems
+                })
+            }, 1000)
 
             // console.log("loadImage size:" + width + "*" + height)
             that.drawImage({
@@ -446,6 +537,9 @@ Component({
             })
             // that.drawImage(that.data.cropperData.imageInfo)
             that.drawLines(that.data.cropperMovableItems, that.data.cropperData.imageInfo)
+
+            console.log('loadImage')
+            console.log(this.data.cropperMovableItems)
         },
 
         // 清空canvas上的数据
@@ -713,38 +807,39 @@ Component({
 
         // moveable-view touchmove
         moveEvent: function(e) {
-            let that = this
-            let key = e.currentTarget.dataset.key
-            let originalSize = that.data.cropperChangableData.originalSize
+            // let z = this
+            // let key = e.currentTarget.dataset.key
+            // let originalSize = z.data.cropperChangableData.originalSize
 
-            that.setupMoveItem(key, e.changedTouches, {
-                path: that.data.cropperData.imageInfo.path,
-                width: originalSize.width,
-                height: originalSize.height
-            })
+            // z.setupMoveItem(key, e.changedTouches, {
+            //     path: z.data.cropperData.imageInfo.path,
+            //     width: originalSize.width,
+            //     height: originalSize.height
+            // })
         },
 
         // moveable-view touchend，end的时候设置movable-view的位置，如果在move阶段设置位置，选中会不流畅
         endEvent: function(e) {
             console.log("end")
-            let that = this
-            let cropperData = that.data.cropperData
-            let cropperMovableItems = that.data.cropperMovableItems
-            let cropperChangableData = that.data.cropperChangableData
-            let originalSize = cropperChangableData.originalSize
-            let key = e.currentTarget.dataset.key
+            console.log(e)
+            // let z = this
+            // let cropperData = z.data.cropperData
+            // let cropperMovableItems = z.data.cropperMovableItems
+            // let cropperChangableData = z.data.cropperChangableData
+            // let originalSize = cropperChangableData.originalSize
+            // let key = e.currentTarget.dataset.key
 
-            that.setupMoveItem(key, e.changedTouches, {
-                path: that.data.cropperData.imageInfo.path,
-                width: originalSize.width,
-                height: originalSize.height
-            }, (cropperMovableItems, canCrop) => {
-                cropperChangableData.canCrop = canCrop
-                that.setData({
-                    cropperChangableData: cropperChangableData,
-                    cropperMovableItems: cropperMovableItems
-                })
-            })
+            // z.setupMoveItem(key, e.changedTouches, {
+            //     path: z.data.cropperData.imageInfo.path,
+            //     width: originalSize.width,
+            //     height: originalSize.height
+            // }, (cropperMovableItems, canCrop) => {
+            //     cropperChangableData.canCrop = canCrop
+            //     z.setData({
+            //         cropperChangableData: cropperChangableData,
+            //         cropperMovableItems: cropperMovableItems
+            //     })
+            // })
         }
     }
 })

@@ -2,5 +2,5 @@
 
 <button bindtap='selectImage' data-mode='rectangle'>select image</button>
 <!-- <block wx:if="{{showCropper}}"> -->
-    <wel-cropper is-show="{{isShowCropper}}" />
+<wel-cropper is-show="{{isShowCropper}}" path="{{path}}" />
 <!-- </block> -->

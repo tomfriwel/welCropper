@@ -128,7 +128,8 @@
 /* canvas */
 
 .cropper_movable_area_container {
-    position: absolute;
+    /* position: absolute; */
+    margin: 0 auto;
 }
 
 .cropper_canvas_container {
@@ -141,9 +142,9 @@
 
 .cropper_movable_area_container .move_item {
     z-index: 100;
-    /* opacity: 0.7;   */
-    opacity: 0;
-    background: white;
+     opacity: 0.7;   
+    /* opacity: 0; */
+    background: red;
     border-radius: 50%;
 }
 
@@ -160,4 +161,10 @@
     position: absolute;
     left: 750rpx;
     top: 100vh;
+}
+
+.cropper_movable_area_container {
+    width: 700rpx;
+    height: 700rpx;
+    border: 2rpx solid red;
 }
