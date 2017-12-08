@@ -1,8 +1,8 @@
 <!--pages/test/test.wxml-->
 
 <button bindtap='tapHandler'>change size</button>
-<movable-area class="move_container" style="width:{{width}}px;height:{{height}}px;">
-    <movable-view class="move_item" style="width:{{length}}px; height:{{length}}px;" direction="all" x="{{x-length/2}}" y="{{y-length/2}}"></movable-view>
+<movable-area class="move_container" style="width:{{size.width}}px;height:{{size.height}}px;">
+    <movable-view class="move_item" style="width:{{length}}px; height:{{length}}px;" direction="all" x="{{item.x-length/2}}" y="{{item.y-length/2}}"></movable-view>
 </movable-area>  
 <!-- <block wx:if="{{showCropper}}"> -->
  <!-- <wel-cropper is-show="{{isShowCropper}}" path="{{path}}" />  -->

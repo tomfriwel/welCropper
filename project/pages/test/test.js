@@ -8,18 +8,24 @@ Page({
     data: {
         path:'',
         isShowCropper: false,
-        width: 100,
-        height: 100,
+        size: {
+            width: 100,
+            height: 100,
+        },
+        item: {
+            x: 22,
+            y: 22,
+        },
         length: 50,
-        x: 22,
-        y: 22,
     },
     onLoad: function (options) {
     },
     tapHandler: function () {
         this.setData({
-            width: 300,
-            height: 300,
+            size:{
+                width: 300,
+                height: 300,
+            }
         })
     },
     selectImage:function(){
