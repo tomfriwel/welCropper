@@ -1,8 +1,8 @@
 ### welCropper 微信小程序截图工具
 
-<img src="https://github.com/tomfriwel/welCropper/blob/master/documents/screenshot2.png?raw=true" width=600 />
+<img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/screenshot2.png" width=600 />
 ----
-<img src="https://github.com/tomfriwel/welCropper/blob/master/documents/result.gif?raw=true" width=300 />
+<img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/result.gif" width=300 />
 
 
 #### 文件目录结构，要在测试机上运行，工程目录选择文件夹`project`
@@ -48,7 +48,7 @@
 
 #### Documents
 
-<img src="https://github.com/tomfriwel/welCropper/blob/master/documents/hierarchy.png?raw=true" width=600 />
+<img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/hierarchy.png" width=600 />
 
 * 使用`movable-view`的原因是不用自己实现拖拽，直接使用官方提供的这个组件。
 
