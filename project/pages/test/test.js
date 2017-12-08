@@ -7,9 +7,20 @@ const H = device.windowHeight - 50
 Page({
     data: {
         path:'',
-        isShowCropper:false
+        isShowCropper: false,
+        width: 100,
+        height: 100,
+        length: 50,
+        x: 22,
+        y: 22,
     },
     onLoad: function (options) {
+    },
+    tapHandler: function () {
+        this.setData({
+            width: 300,
+            height: 300,
+        })
     },
     selectImage:function(){
         var z = this

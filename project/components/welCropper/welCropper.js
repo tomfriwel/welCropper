@@ -58,66 +58,122 @@ Component({
      * 组件的初始数据
      */
     data: {
+        cropperData: {
+            hidden: true,
+            left: 0,
+            top: 0,
+            width: W,
+            height: H,
+            itemLength: 50,
+            imageInfo: {
+                path: '',
+                width: 0,
+                height: 0
+            },
+            scaleInfo: {
+                x: 1,
+                y: 1
+            },
+            cropCallback: null,
+            sizeType: ['original', 'compressed'],    //'original'(default) | 'compressed'
+            original: false,  // 默认压缩，压缩比例为截图的0.4
+            mode: 'rectangle', //默认矩形
+        },
+        cropperMovableItems: {
+            topleft: {
+                x: -1,
+                y: -1
+            },
+            topright: {
+                x: -1,
+                y: -1
+            },
+            bottomleft: {
+                x: -1,
+                y: -1
+            },
+            bottomright: {
+                x: -1,
+                y: -1
+            }
+        },
+        width: -1,
+        height: -1,
+        length: 50,
+        x: -1,
+        y: -1,
+        cropperChangableData: {
+            canCrop: true,
+            rotateDegree: 0,
+            originalSize: {
+                width: 0,
+                height: 0
+            },
+            scaleSize: {
+                width: 110,
+                height: 110
+            }
+        }
     },
     ready:function () {
-        this.setData({
-            cropperData: {
-                hidden: true,
-                left: 0,
-                top: 0,
-                width: W,
-                height: H,
-                itemLength: 50,
-                imageInfo: {
-                    path: '',
-                    width: 0,
-                    height: 0
-                },
-                scaleInfo: {
-                    x: 1,
-                    y: 1
-                },
-                cropCallback: null,
-                sizeType: ['original', 'compressed'],    //'original'(default) | 'compressed'
-                original: false,  // 默认压缩，压缩比例为截图的0.4
-                mode: 'rectangle', //默认矩形
-            },
-            cropperMovableItems: {
-                topleft: {
-                    x: -1,
-                    y: -1
-                },
-                topright: {
-                    x: -1,
-                    y: -1
-                },
-                bottomleft: {
-                    x: -1,
-                    y: -1
-                },
-                bottomright: {
-                    x: -1,
-                    y: -1
-                }
-            },
-            width:0,
-            height:0,
-            length:50,
-            x:-1,
-            y:-1,
-            cropperChangableData: {
-                canCrop: true,
-                rotateDegree: 0,
-                originalSize: {
-                    width: 0,
-                    height: 0
-                },
-                scaleSize: {
-                    width: 110,
-                    height: 110
-                }
-            }
-        })
+        // this.setData({
+        //     cropperData: {
+        //         hidden: true,
+        //         left: 0,
+        //         top: 0,
+        //         width: W,
+        //         height: H,
+        //         itemLength: 50,
+        //         imageInfo: {
+        //             path: '',
+        //             width: 0,
+        //             height: 0
+        //         },
+        //         scaleInfo: {
+        //             x: 1,
+        //             y: 1
+        //         },
+        //         cropCallback: null,
+        //         sizeType: ['original', 'compressed'],    //'original'(default) | 'compressed'
+        //         original: false,  // 默认压缩，压缩比例为截图的0.4
+        //         mode: 'rectangle', //默认矩形
+        //     },
+        //     cropperMovableItems: {
+        //         topleft: {
+        //             x: -1,
+        //             y: -1
+        //         },
+        //         topright: {
+        //             x: -1,
+        //             y: -1
+        //         },
+        //         bottomleft: {
+        //             x: -1,
+        //             y: -1
+        //         },
+        //         bottomright: {
+        //             x: -1,
+        //             y: -1
+        //         }
+        //     },
+        //     width:220,
+        //     height:220,
+        //     length:50,
+        //     x:-1,
+        //     y:-1,
+        //     cropperChangableData: {
+        //         canCrop: true,
+        //         rotateDegree: 0,
+        //         originalSize: {
+        //             width: 0,
+        //             height: 0
+        //         },
+        //         scaleSize: {
+        //             width: 110,
+        //             height: 110
+        //         }
+        //     }
+        // })
 
         console.log('ready')
         console.log(this.data.cropperMovableItems)
@@ -172,7 +228,9 @@ Component({
             var updateData = {}
             updateData.x = 100
             updateData.y = 100
-            Object.assign(updateData, size)
+            updateData.width = 100
+            updateData.height = 100
+            // Object.assign(updateData, size)
             // updateData.cropperMovableItems = {
             //     topleft: {
             //         x: -11,
@@ -193,27 +251,27 @@ Component({
             // }
             this.setData(updateData)
 
-            var cropperMovableItems = {
-                topleft: {
-                    x: 50,
-                    y: 50
-                },
-                topright: {
-                    x: size.width - 50,
-                    y: 50
-                },
-                bottomleft: {
-                    x: 50,
-                    y: size.height - 50
-                },
-                bottomright: {
-                    x: size.width - 50,
-                    y: size.height - 50
-                }
-            }
-            this.setData({
-                cropperMovableItems: cropperMovableItems
-            })
+            // var cropperMovableItems = {
+            //     topleft: {
+            //         x: 50,
+            //         y: 50
+            //     },
+            //     topright: {
+            //         x: size.width - 50,
+            //         y: 50
+            //     },
+            //     bottomleft: {
+            //         x: 50,
+            //         y: size.height - 50
+            //     },
+            //     bottomright: {
+            //         x: size.width - 50,
+            //         y: size.height - 50
+            //     }
+            // }
+            // this.setData({
+            //     cropperMovableItems: cropperMovableItems
+            // })
         },
 
         // 隐藏cropper
