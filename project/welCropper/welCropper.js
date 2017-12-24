@@ -150,7 +150,9 @@ function drawImageWithDegree(canvasId, path, width, height, degree) {
         ctx.drawImage(path, 0, 0, drawWidth, drawHeight)
     }
 
-    ctx.draw()
+    ctx.draw(false, function (e) {
+        console.log('draw callback')
+    })
 }
 
 const cropperUtil = {

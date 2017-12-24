@@ -21,12 +21,27 @@ Page({
     onLoad: function (options) {
     },
     tapHandler: function () {
+        var z = this
+
         this.setData({
             size:{
                 width: 300,
                 height: 300,
-            }
+            },
+            item: {
+                x: 0,
+                y: 0,
+            },
         })
+
+        setTimeout(function(){
+            z.setData({
+                item: {
+                    x: 233,
+                    y: 0,
+                },
+            })
+        }, 100)
     },
     selectImage:function(){
         var z = this

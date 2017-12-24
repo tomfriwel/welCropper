@@ -8,7 +8,7 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "1.6.4",
+	"libVersion": "1.6.6",
 	"appid": "wx0d1a8c4093fa912f",
 	"projectname": "wel-cropper",
 	"condition": {
