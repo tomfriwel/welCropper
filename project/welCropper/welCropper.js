@@ -497,7 +497,37 @@ var init = function (W, H) {
             cropperData: cropperData
         })
 
-        that.loadImage(imageInfo.path, rotateWidth, rotateHeight, true)
+        let cropperMovableItemsCopy = that.data.cropperMovableItems
+        let cropperMovableItems = {
+            topleft: {
+                x: 0,
+                y: 0
+            },
+            topright: {
+                x: 0,
+                y: 0
+            },
+            bottomleft: {
+                x: 0,
+                y: 0
+            },
+            bottomright: {
+                x: 0,
+                y: 0
+            }
+        }
+
+        that.setData({
+            cropperMovableItems: cropperMovableItems
+        })
+
+        setTimeout(() => {
+            that.loadImage(imageInfo.path, rotateWidth, rotateHeight, true)
+            // that.setData({
+            //     cropperMovableItems: cropperMovableItemsCopy
+            // })
+        }, 100)
+
     }
 
     // 根据图片大小设置canvas大小，并绘制图片
