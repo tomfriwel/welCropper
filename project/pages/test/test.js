@@ -6,53 +6,101 @@ const H = device.windowHeight - 50
 
 Page({
     data: {
-        path:'',
+        path: '',
         isShowCropper: false,
         size: {
             width: 100,
             height: 100,
         },
         item: {
-            x: 22,
-            y: 22,
+            x: 66,
+            y: 66,
         },
         length: 50,
+        left: 0,
+        top: 200
     },
     onLoad: function (options) {
+        // this.setData({
+        //     size: {
+        //         width: 300,
+        //         height: 300,
+        //     },
+        // })
+    },
+    startEvent:function(e) {
+        var left = this.data.left
+        var top = this.data.top
+    },
+    moveEvent: function (e) {
+        // console.log(this.data.item)
+
+        var changedTouches = e.changedTouches
+        if (changedTouches.length == 1) {
+            let touch = changedTouches[0]
+            let x = touch.clientX
+            let y = touch.clientY
+
+            let size = this.data.size
+
+            this.setData({
+                left:x-size.width/2,
+                top: y - size.height / 2
+            })
+        }
+    },
+    endEvent: function (e) {
+        console.log(e)
+        console.log(this.data)
+        var changedTouches = e.changedTouches
+        if (changedTouches.length == 1) {
+            let touch = changedTouches[0]
+            let x = touch.clientX
+            let y = touch.clientY
+
+            var left = this.data.left
+            var top = this.data.top
+
+            // 相对画布的点
+            x = x - left
+            y = y - top
+            this.setData({
+                x,
+                y
+            })
+        }
     },
     tapHandler: function () {
         var z = this
 
+        var item = this.data.item
         this.setData({
-            size:{
+            size: {
                 width: 300,
                 height: 300,
             },
             item: {
-                x: 0,
-                y: 0,
+                x: -1,
+                y: -1,
             },
         })
 
-        setTimeout(function(){
+        setTimeout(function () {
             z.setData({
-                item: {
-                    x: 233,
-                    y: 0,
-                },
+                item
             })
         }, 100)
     },
-    selectImage:function(){
+    selectImage: function () {
         var z = this
         wx.chooseImage({
-            count:1,
-            success: function(res) {
+            count: 1,
+            success: function (res) {
                 var path = res.tempFilePaths[0]
-                if(path) {
+                if (path) {
                     z.setData({
-                        path:path,
-                        isShowCropper:true
+                        path: path,
+                        isShowCropper: true
                     })
                 }
                 else {

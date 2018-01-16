@@ -1,6 +1,5 @@
 .move_container {
-    /* position: absolute; */
-     margin: 0 auto; 
+    position: absolute;
     border: 2rpx solid red;
 }
 
@@ -8,4 +7,7 @@
     opacity: 0.7;
     background: red;
     border-radius: 50%;
+}
+
+.move_container {
 }

@@ -1,0 +1,7 @@
+/* components/room/room.wxss */
+.room-container {
+    position: absolute;
+    border: 2rpx solid red;
+    width: 100px;
+    height: 100px;
+}

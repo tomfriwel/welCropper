@@ -1,5 +1,7 @@
 {
     "usingComponents": {
-        "wel-cropper":"/components/welCropper/welCropper"
-    }
+        "wel-cropper":"/components/welCropper/welCropper",
+        "room": "/components/room/room"
+    },
+    "disableScroll":true
 }
