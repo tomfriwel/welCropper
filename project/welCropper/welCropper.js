@@ -22,7 +22,6 @@ const getCropRect = (cropperMovableItems) => {
     }
 }
 
-
 // 获取适应屏幕的图片显示大小
 const getAdjustSize = (W, H, width, height) => {
     if (width > W) {
@@ -215,6 +214,9 @@ var init = function (W, H) {
             scaleSize: {
                 width: 0,
                 height: 0
+            },
+            shape:{
+
             }
         }
     })
@@ -455,6 +457,19 @@ var init = function (W, H) {
     }
 
     // 测试
+    // 截取形状
+    that.changeCropShapeHandler = () => {
+        wx.showActionSheet({
+            itemList: ['test0', 'test1', 'test2'],
+            success: function (res) {
+                console.log(res.tapIndex)
+            },
+            fail: function (res) {
+                console.log(res.errMsg)
+            }
+        })
+    }
+
     // 旋转图片
     that.rotateImage = () => {
         console.log("rotate image")
