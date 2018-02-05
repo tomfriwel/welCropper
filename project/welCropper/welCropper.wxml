@@ -1,3 +1,4 @@
+
 <template name="welCropper">
     <scroll-view class="cropper_main_container {{data.hidden?'hidden':''}}">
         <view class="cropper_container">
@@ -8,8 +9,11 @@
                 <canvas class="move_canvas" canvas-id="moveCanvas" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;"></canvas>
 
                 <movable-area class="cropper_movable_area_container" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
+                    
                     <block wx:if="{{cropperMovableItems}}">
+                    
                         <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
+                        <movable-view class="move_item" style="width:{{99}}px; height:{{99}}px;" direction="all" x="{{cropperMoveItem.x}}" y="{{cropperMoveItem.y}}"></movable-view>
                             <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{item.x-data.itemLength/2}}" y="{{item.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
                         </block>
                     </block>

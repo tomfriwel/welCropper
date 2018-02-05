@@ -81,27 +81,22 @@ Component({
         },
         cropperMovableItems: {
             topleft: {
-                x: -1,
-                y: -1
+                x: 50,
+                y: 50
             },
             topright: {
-                x: -1,
-                y: -1
+                x: W - 50,
+                y: 50
             },
             bottomleft: {
-                x: -1,
-                y: -1
+                x: 50,
+                y: H - 50
             },
             bottomright: {
-                x: -1,
-                y: -1
+                x: W - 50,
+                y: H - 50
             }
         },
-        width: -1,
-        height: -1,
-        length: 50,
-        x: -1,
-        y: -1,
         cropperChangableData: {
             canCrop: true,
             rotateDegree: 0,
@@ -110,8 +105,11 @@ Component({
                 height: 0
             },
             scaleSize: {
-                width: 110,
-                height: 110
+                width: 0,
+                height: 0
+            },
+            shape: {
+
             }
         }
     },

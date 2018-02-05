@@ -48,6 +48,13 @@
         </block>
     </block>
 </movable-area>  -->
-<movable-area class="cropper_movable_area_container" style="width:{{width}}px;height:{{height}}px;">
+
+<!-- <movable-area class="cropper_movable_area_container" style="width:{{width}}px;height:{{height}}px;">
     <movable-view class="move_item" style="width:{{length}}px; height:{{length}}px;" direction="all" x="{{x-length/2}}" y="{{y-length/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{0}}"></movable-view>
-</movable-area>  
+</movable-area>   -->
+
+<!-- 引入组件 -->
+<import src="/welCropper/welCropper.wxml" />
+
+<!-- 调用组件 -->
+ <template is="welCropper" data="{{data:cropperData, cropperMovableItems:cropperMovableItems, cropperChangableData:cropperChangableData}}"></template> 

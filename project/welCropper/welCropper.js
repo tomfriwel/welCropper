@@ -126,7 +126,7 @@ function drawImageWithDegree(canvasId, path, width, height, degree) {
     let drawCenterX = drawWidth / 2
     let drawCneterY = drawHeight / 2
 
-    let d = Math.abs(width-height)/2
+    let d = Math.abs(width - height) / 2
 
     // ctx.translate(drawCenterX, drawCneterY)
     // ctx.rotate(degree * Math.PI / 180)
@@ -154,11 +154,29 @@ function drawImageWithDegree(canvasId, path, width, height, degree) {
     })
 }
 
+// 查找topleft的点
+function findTopLeft(items) {
+    let x = items.topleft.x, y = items.topleft.y
+    for (let i in items) {
+        let item = items[i]
+        if (x > item.x) {
+            x = item.x
+        }
+        if (y > item.y) {
+            y = item.y
+        }
+    }
+    return {
+        x, y
+    }
+}
+
 const cropperUtil = {
     getCropRect,
     getAdjustSize,
     convexHull,
-    drawImageWithDegree
+    drawImageWithDegree,
+    findTopLeft
 }
 
 var init = function (W, H) {
@@ -171,7 +189,7 @@ var init = function (W, H) {
             top: 0,
             width: W,
             height: H,
-            itemLength: 50,
+            itemLength: 30,
             imageInfo: {
                 path: '',
                 width: 0,
@@ -215,7 +233,7 @@ var init = function (W, H) {
                 width: 0,
                 height: 0
             },
-            shape:{
+            shape: {
 
             }
         }
@@ -312,7 +330,7 @@ var init = function (W, H) {
         let size = cropperUtil.getAdjustSize(W, H, width, height)
 
         console.log("change original=" + original)
-        
+
         that.data.cropperData.original = original
         that.data.cropperData.scaleInfo = {
             x: width * compressedScale / size.width,
@@ -914,9 +932,10 @@ var init = function (W, H) {
             height: originalSize.height
         }, (cropperMovableItems, canCrop) => {
             cropperChangableData.canCrop = canCrop
+
             that.setData({
                 cropperChangableData: cropperChangableData,
-                cropperMovableItems: cropperMovableItems
+                cropperMovableItems: cropperMovableItems,
             })
         })
     }

@@ -1,5 +1,6 @@
 .move_container {
     position: absolute;
+    top: 100rpx;
     border: 2rpx solid red;
 }
 

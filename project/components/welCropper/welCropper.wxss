@@ -1,4 +1,7 @@
 /* components/welCropper.wxss */
+
+@import "/welCropper/welCropper.wxss";
+
 .cropper_main_container {
     position: absolute;
     left: 0;

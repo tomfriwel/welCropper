@@ -35,19 +35,19 @@ Page({
     moveEvent: function (e) {
         // console.log(this.data.item)
 
-        var changedTouches = e.changedTouches
-        if (changedTouches.length == 1) {
-            let touch = changedTouches[0]
-            let x = touch.clientX
-            let y = touch.clientY
+        // var changedTouches = e.changedTouches
+        // if (changedTouches.length == 1) {
+        //     let touch = changedTouches[0]
+        //     let x = touch.clientX
+        //     let y = touch.clientY
 
-            let size = this.data.size
+        //     let size = this.data.size
 
-            this.setData({
-                left:x-size.width/2,
-                top: y - size.height / 2
-            })
-        }
+        //     this.setData({
+        //         left:x-size.width/2,
+        //         top: y - size.height / 2
+        //     })
+        // }
     },
     endEvent: function (e) {
         console.log(e)
