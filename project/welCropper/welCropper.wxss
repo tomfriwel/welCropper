@@ -17,7 +17,9 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content:center;
 }
 
 /* button */
@@ -127,13 +129,21 @@
 /* canvas */
 
 .cropper_movable_area_container {
-    position: absolute;
+    position: relative;
 }
-
-.cropper_canvas_container {
+.cropper_canvas_container_item {
     position: absolute;
     left: 0;
     top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.cropper_canvas_container {
+    /* position: absolute;
+    left: 0;
+    top: 0; */
+    position: relative;
 }
 
 /* opacity:0隐藏，如果想看就设置为1，只能在测试机能看到，真机上canvas层级在最高层 */
@@ -163,5 +173,6 @@
 
 .scale-image {
     position: absolute;
-    transform-origin: center center;
+    left: 0;
+    top: 0;
 }

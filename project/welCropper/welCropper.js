@@ -189,6 +189,8 @@ var init = function (W, H) {
             top: 0,
             width: W,
             height: H,
+            W: W,
+            H: H,
             itemLength: 50,
             imageInfo: {
                 path: '',
@@ -235,6 +237,12 @@ var init = function (W, H) {
             },
             shape: {
 
+            },
+            previewImageInfo:{
+                x:0,
+                y:0,
+                w:0,
+                h:0
             }
         }
     })
@@ -579,7 +587,7 @@ var init = function (W, H) {
 
     // 根据图片大小设置canvas大小，并绘制图片
     that.loadImage = (src, width, height, isRotate) => {
-        let that = this
+        let z = this
         let size = cropperUtil.getAdjustSize(W, H, width, height)
 
         // 适应屏幕的位置
@@ -588,7 +596,7 @@ var init = function (W, H) {
 
         // set data
         let updateData = {}
-        let cropperData = that.data.cropperData
+        let cropperData = z.data.cropperData
 
         if (!isRotate) {
             cropperData.imageInfo = {
@@ -602,7 +610,7 @@ var init = function (W, H) {
         cropperData.width = size.width
         cropperData.height = size.height
 
-        let compressedScale = that.data.cropperData.original ? 1.0 : 0.4
+        let compressedScale = z.data.cropperData.original ? 1.0 : 0.4
         // let scaleSize = cropperUtil.getAdjustSize(W, H, width, height)
 
         cropperData.scaleInfo = {
@@ -631,7 +639,21 @@ var init = function (W, H) {
             }
         }
 
-        let cropperChangableData = that.data.cropperChangableData
+        let cropperChangableData = z.data.cropperChangableData
+        let rotateDegree = cropperChangableData.rotateDegree
+
+        // 判断是否为垂直方向
+        let isVertical = rotateDegree % 180 > 0
+        let rotateWidth = isVertical ? size.height : size.width
+            let rotateHeight = isVertical ? size.width : size.height
+
+        console.log('rotateWidth:' + rotateWidth + ', rotateHeight:' + rotateHeight)
+
+        cropperChangableData.previewImageInfo.x = (W-rotateWidth)/2
+        cropperChangableData.previewImageInfo.y = (H - rotateHeight) / 2
+        cropperChangableData.previewImageInfo.w = rotateWidth
+        cropperChangableData.previewImageInfo.h = rotateHeight
+
         cropperChangableData.originalSize = {
             width: width,
             height: height
@@ -643,16 +665,16 @@ var init = function (W, H) {
 
         updateData.cropperChangableData = cropperChangableData
 
-        that.setData(updateData)
+        z.setData(updateData)
 
         // console.log("loadImage size:" + width + "*" + height)
-        that.drawImage({
-            path: that.data.cropperData.imageInfo.path,
+        z.drawImage({
+            path: z.data.cropperData.imageInfo.path,
             width: width,
             height: height
         })
         // that.drawImage(that.data.cropperData.imageInfo)
-        that.drawLines(that.data.cropperMovableItems, that.data.cropperData.imageInfo)
+        z.drawLines(z.data.cropperMovableItems, z.data.cropperData.imageInfo)
     }
 
     // 清空canvas上的数据
