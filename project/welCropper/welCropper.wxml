@@ -5,17 +5,20 @@
             <canvas class="original_canvas" canvas-id="originalCanvas" style="width:{{cropperChangableData.originalSize.width}}px;height:{{cropperChangableData.originalSize.height}}px;"></canvas>
 
             <view class='cropper_canvas_container'>
-                <canvas class="canvas" canvas-id="canvas" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;"></canvas>  
+                <!-- <canvas class="canvas" canvas-id="canvas" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;"></canvas>   -->
+                <image src='{{data.imageInfo.path}}' class='scale-image' style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;"></image>
                 <canvas class="move_canvas" canvas-id="moveCanvas" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;"></canvas>
 
                 <movable-area class="cropper_movable_area_container" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
                     
                     <block wx:if="{{cropperMovableItems}}">
-                    
-                        <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
-                        <movable-view class="move_item" style="width:{{99}}px; height:{{99}}px;" direction="all" x="{{cropperMoveItem.x}}" y="{{cropperMoveItem.y}}"></movable-view>
+                        <!-- <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{cropperMovableItems.topleft.x-data.itemLength/2}}" y="{{cropperMovableItems.topleft.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="topleft"></movable-view>
+                        <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{cropperMovableItems.topright.x-data.itemLength/2}}" y="{{cropperMovableItems.topright.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="topright"></movable-view>
+                        <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{cropperMovableItems.bottomleft.x-data.itemLength/2}}" y="{{cropperMovableItems.bottomleft.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="bottomleft"></movable-view>
+                        <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{cropperMovableItems.bottomright.x-data.itemLength/2}}" y="{{cropperMovableItems.bottomright.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="bottomright"></movable-view> -->
+                         <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
                             <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{item.x-data.itemLength/2}}" y="{{item.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
-                        </block>
+                        </block> 
                     </block>
                 </movable-area>
             </view>

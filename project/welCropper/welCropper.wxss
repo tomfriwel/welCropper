@@ -160,3 +160,6 @@
     left: 750rpx;
     top: 100vh;
 }
+.scale-image {
+    position: absolute;
+}

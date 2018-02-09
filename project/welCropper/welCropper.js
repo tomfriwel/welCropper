@@ -189,7 +189,7 @@ var init = function (W, H) {
             top: 0,
             width: W,
             height: H,
-            itemLength: 30,
+            itemLength: 50,
             imageInfo: {
                 path: '',
                 width: 0,
@@ -241,7 +241,8 @@ var init = function (W, H) {
 
     // 显示cropper，如果有图片则载入
     that.showCropper = (options) => {
-        let that = this
+        let z = this
+        let cropperData = z.data.cropperData
         let src = options.src
         let callback = options.callback
         let sizeType = options.sizeType
@@ -255,25 +256,36 @@ var init = function (W, H) {
             filterType.push('compressed')
         }
         if (filterType.length == 1 && filterType.indexOf('original') > -1) {
-            that.data.cropperData.original = true
+            cropperData.original = true
         }
 
         if (mode) {
-            that.data.cropperData.mode = mode
+            cropperData.mode = mode
         }
-        that.data.cropperData.hidden = false
-        that.data.cropperData.cropCallback = callback
-        that.data.cropperData.sizeType = filterType
+        cropperData.hidden = false
+        cropperData.cropCallback = callback
+        cropperData.sizeType = filterType
 
-        that.setData({
-            cropperData: that.data.cropperData,
-        })
+        // z.setData({
+        //     cropperData: cropperData,
+        // })
 
         if (src) {
+            console.log(src)
             wx.getImageInfo({
                 src: src,
                 success: function (res) {
                     var w = res.width, h = res.height
+
+                    // let cropperData = z.data.cropperData
+                    cropperData.imageInfo = {
+                        path: src,
+                        width:w,
+                        height:h
+                    }
+                    z.setData({
+                        cropperData: cropperData
+                    })
 
                     that.loadImage(src, w, h, false)
                 }
@@ -932,6 +944,8 @@ var init = function (W, H) {
             height: originalSize.height
         }, (cropperMovableItems, canCrop) => {
             cropperChangableData.canCrop = canCrop
+
+            console.log(cropperMovableItems)
 
             that.setData({
                 cropperChangableData: cropperChangableData,
