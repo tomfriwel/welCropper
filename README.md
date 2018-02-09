@@ -4,6 +4,9 @@
 ----
 <img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/result.gif" width=300 />
 
+#### wepy 版本(别人根据我的这个封装的,可以去看看,我并没有测试过,大家有需求的可以去试试)
+
+[callmesoul/wepy-corpper](https://github.com/callmesoul/wepy-corpper)
 
 #### 文件目录结构，要在测试机上运行，工程目录选择文件夹`project`
 ```
