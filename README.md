@@ -1,5 +1,9 @@
 ### welCropper 微信小程序截图工具
 
+#### 注意
+
+* 不建议用在过大的图片上，有些机型会导致崩溃（原因可能是将图片绘制在`canvas`上后的大小远远超过原图，有时一开始就会崩溃，有时调用`wx.canvasToTempFilePath`会崩溃）
+
 <img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/screenshot2.png" width=600 />
 ----
 <img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/result.gif" width=300 />
