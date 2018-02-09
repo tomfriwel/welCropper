@@ -238,11 +238,11 @@ var init = function (W, H) {
             shape: {
 
             },
-            previewImageInfo:{
-                x:0,
-                y:0,
-                w:0,
-                h:0
+            previewImageInfo: {
+                x: 0,
+                y: 0,
+                w: 0,
+                h: 0
             }
         }
     })
@@ -288,8 +288,8 @@ var init = function (W, H) {
                     // let cropperData = z.data.cropperData
                     cropperData.imageInfo = {
                         path: src,
-                        width:w,
-                        height:h
+                        width: w,
+                        height: h
                     }
                     z.setData({
                         cropperData: cropperData
@@ -330,7 +330,13 @@ var init = function (W, H) {
             },
             cropperChangableData: {
                 canCrop: true,
-                rotateDegree: 0
+                rotateDegree: 0,
+                previewImageInfo: {
+                    x: 0,
+                    y: 0,
+                    w: 0,
+                    h: 0,
+                }
             }
         })
 
@@ -444,11 +450,11 @@ var init = function (W, H) {
 
                     wx.hideLoading()
 
-                    wx.saveImageToPhotosAlbum({
-                        filePath: tempFilePath,
-                        success(res) {
-                        }
-                    })
+                    // wx.saveImageToPhotosAlbum({
+                    //     filePath: tempFilePath,
+                    //     success(res) {
+                    //     }
+                    // })
 
                     if (that.data.cropperData.cropCallback) {
                         that.data.cropperData.cropCallback(tempFilePath)
@@ -645,11 +651,11 @@ var init = function (W, H) {
         // 判断是否为垂直方向
         let isVertical = rotateDegree % 180 > 0
         let rotateWidth = isVertical ? size.height : size.width
-            let rotateHeight = isVertical ? size.width : size.height
+        let rotateHeight = isVertical ? size.width : size.height
 
         console.log('rotateWidth:' + rotateWidth + ', rotateHeight:' + rotateHeight)
 
-        cropperChangableData.previewImageInfo.x = (W-rotateWidth)/2
+        cropperChangableData.previewImageInfo.x = (W - rotateWidth) / 2
         cropperChangableData.previewImageInfo.y = (H - rotateHeight) / 2
         cropperChangableData.previewImageInfo.w = rotateWidth
         cropperChangableData.previewImageInfo.h = rotateHeight
