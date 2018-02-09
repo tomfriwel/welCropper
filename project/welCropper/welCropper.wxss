@@ -112,12 +112,12 @@
 
 /* crop_image_button */
 
- .crop_image_button {
+.crop_image_button {
     /* position: absolute;
     right: 0;
     top: 0; */
     color: #26ab28;
-} 
+}
 
 .crop_image_button.disable {
     /* color: #038905;  */
@@ -140,8 +140,8 @@
 
 .cropper_movable_area_container .move_item {
     z-index: 100;
-      opacity: 0.7;    
-     /* opacity: 0;  */
+    opacity: 0.7;
+    /* opacity: 0;  */
     background: white;
     /* border-radius: 50%; */
 }
@@ -160,6 +160,8 @@
     left: 750rpx;
     top: 100vh;
 }
+
 .scale-image {
     position: absolute;
+    transform-origin: center center;
 }

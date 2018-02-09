@@ -542,6 +542,8 @@ var init = function (W, H) {
             cropperData: cropperData
         })
 
+        console.log(cropperChangableData)
+
         let cropperMovableItemsCopy = that.data.cropperMovableItems
         let cropperMovableItems = {
             topleft: {

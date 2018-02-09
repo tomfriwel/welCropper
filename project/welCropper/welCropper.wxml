@@ -6,7 +6,8 @@
 
             <view class='cropper_canvas_container'>
                 <!-- <canvas class="canvas" canvas-id="canvas" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;"></canvas>   -->
-                <image src='{{data.imageInfo.path}}' class='scale-image' style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;"></image>
+                <!-- <image src='{{data.imageInfo.path}}' class='scale-image' mode='aspectFill' style="left:{{cropperChangableData.rotateDegree%180?data.top:data.left}}px;top:{{cropperChangableData.rotateDegree%180?data.left:data.top}}px;width:{{cropperChangableData.rotateDegree%180?cropperChangableData.scaleSize.height:cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.rotateDegree%180?cropperChangableData.scaleSize.width:cropperChangableData.scaleSize.height}}px;transform:rotate({{cropperChangableData.rotateDegree}}deg);"></image> -->
+                <image src='{{data.imageInfo.path}}' class='scale-image' mode='aspectFill' style="width:{{cropperChangableData.rotateDegree%180?cropperChangableData.scaleSize.height:cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.rotateDegree%180?cropperChangableData.scaleSize.width:cropperChangableData.scaleSize.height}}px;transform:rotate({{cropperChangableData.rotateDegree}}deg);"></image>
                 <canvas class="move_canvas" canvas-id="moveCanvas" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;"></canvas>
 
                 <movable-area class="cropper_movable_area_container" style="left:{{data.left}}px;top:{{data.top}}px;width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
