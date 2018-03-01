@@ -72,6 +72,8 @@
 
 .cropper_movable_area_container {
     position: relative;
+    /* background: salmon;
+    border: 2px solid red; */
 }
 .cropper_canvas_container_item {
     position: absolute;
@@ -114,4 +116,9 @@
     position: absolute;
     left: 0;
     top: 0;
+}
+
+.move_canvas {
+    /* border: 2px solid blue; */
+     /* background: red;  */
 }

@@ -7,13 +7,24 @@
             <view class='cropper_canvas_container' style="width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
                 <canvas class="move_canvas cropper_canvas_container_item" canvas-id="moveCanvas"></canvas>
 
-                <movable-area class="cropper_movable_area_container" style="width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
-                    <block wx:if="{{cropperMovableItems}}">
-                        <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
-                            <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{item.x-data.itemLength/2}}" y="{{item.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
+                <block wx:if="{{data.drawSign==1}}">
+                    <movable-area class="cropper_movable_area_container" style="width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
+                        <block wx:if="{{cropperMovableItems}}">
+                            <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
+                                <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{item.x-data.itemLength/2}}" y="{{item.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
+                            </block>
                         </block>
-                    </block>
-                </movable-area>
+                    </movable-area>
+                </block>
+                <block wx:else>
+                    <movable-area class="cropper_movable_area_container" style="width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
+                        <block wx:if="{{cropperMovableItems}}">
+                            <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
+                                <movable-view class="move_item" style="width:{{data.itemLength}}px; height:{{data.itemLength}}px;" direction="all" x="{{item.x-data.itemLength/2}}" y="{{item.y-data.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
+                            </block>
+                        </block>
+                    </movable-area>
+                </block>
             </view>
         </view>
 

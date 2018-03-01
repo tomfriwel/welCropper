@@ -8,6 +8,7 @@ let cropper = require('../../welCropper/welCropper.js');
 
 Page({
     data: {
+        hash: 0,
         path: '',
         isShowCropper: false,
         size: {
@@ -30,7 +31,7 @@ Page({
         //     },
         // })
     },
-    startEvent:function(e) {
+    startEvent: function (e) {
         var left = this.data.left
         var top = this.data.top
     },
@@ -72,12 +73,12 @@ Page({
             })
         }
     },
-    openCropper: function() {
+    openCropper: function () {
         this.setData({
             isShowCropper: !this.data.isShowCropper
         })
     },
-    cropperHide: function() {
+    cropperHide: function () {
         this.setData({
             isShowCropper: false
         })
@@ -88,20 +89,22 @@ Page({
         var item = this.data.item
         this.setData({
             size: {
-                width: 300,
-                height: 300,
+                width: 300 * Math.random(),
+                height: 300 * Math.random(),
             },
             item: {
                 x: -1,
                 y: -1,
             },
+            hash:!this.data.hash
         })
 
-        setTimeout(function () {
-            z.setData({
-                item
-            })
-        }, 100)
+        // setTimeout(function () {
+        //     z.setData({
+        //         item: item,
+        //         // hash: 1
+        //     })
+        // }, 100)
     },
     selectImage: function () {
         var z = this

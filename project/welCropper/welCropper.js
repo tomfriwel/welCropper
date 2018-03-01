@@ -184,6 +184,7 @@ var init = function (W, H) {
 
     that.setData({
         cropperData: {
+            drawSign: 0,
             hidden: true,
             left: 0,
             top: 0,
@@ -272,6 +273,7 @@ var init = function (W, H) {
             cropperData.mode = mode
         }
         cropperData.hidden = false
+        cropperData.hash = Math.random()
         cropperData.cropCallback = callback
         cropperData.sizeType = filterType
 
@@ -610,6 +612,7 @@ var init = function (W, H) {
         let updateData = {}
         let cropperData = z.data.cropperData
 
+        cropperData.drawSign = !cropperData.drawSign
         if (!isRotate) {
             cropperData.imageInfo = {
                 path: src,
@@ -708,7 +711,7 @@ var init = function (W, H) {
             canvas.draw()
 
             // 清空白线框
-            let moveCanvas = wx.createCanvasContext("moveCanvas")
+            let moveCanvas = wx.createCanvasContext("moveCanvas1")
             moveCanvas.clearRect(0, 0, size.width, size.height)
             moveCanvas.draw()
         }
@@ -797,7 +800,7 @@ var init = function (W, H) {
             callback(canCrop)
         }
 
-        let ctx = wx.createCanvasContext("moveCanvas")
+        let ctx = wx.createCanvasContext("moveCanvas1")
 
         //绘制高亮选中区域
         let rect = cropperUtil.getCropRect(convexDots)
@@ -892,6 +895,8 @@ var init = function (W, H) {
         }
 
         ctx.draw()
+        console.log(ctx)
+        console.log(orderedDots)
     }
 
     // move events

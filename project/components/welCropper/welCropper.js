@@ -55,6 +55,13 @@ Component({
                         }
                     })
                 }
+                else {
+                    cropper.init.apply(this, [W, H]);
+
+                    this.setData({
+                        ready: true
+                    })
+                }
             }
         },
     },
@@ -63,12 +70,6 @@ Component({
     },
     ready: function () {
         console.log(1)
-
-        cropper.init.apply(this, [W, H]);
-
-        this.setData({
-            ready:true
-        })
     },
     methods: {    // 显示cropper，如果有图片则载入
     }
