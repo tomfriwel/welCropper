@@ -298,7 +298,7 @@ var init = function (W, H) {
                         cropperData: cropperData
                     })
 
-                    that.loadImage(src, w, h, false)
+                    z.loadImage(src, w, h, false)
                 }
             })
         }
@@ -345,6 +345,7 @@ var init = function (W, H) {
 
         that.clearCanvas(that.data.cropperData.imageInfo)
     }
+
 
     // 原图按钮被点击
     that.originalChange = () => {
@@ -681,6 +682,21 @@ var init = function (W, H) {
         updateData.cropperChangableData = cropperChangableData
 
         z.setData(updateData)
+
+
+        // setTimeout(function(){
+        //     console.log('draw')
+        //     let ctx = wx.createCanvasContext('move_canvas', this)
+        //     ctx.setFillStyle('red')
+        //     ctx.beginPath()
+        //     ctx.arc(222, 222, 10, 0, 2 * Math.PI, true)
+        //     ctx.fill()
+        //     ctx.closePath()
+        //     ctx.draw()
+        // }, 2000)
+
+
+        // return
 
         // console.log("loadImage size:" + width + "*" + height)
         z.drawImage({
