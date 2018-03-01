@@ -35,7 +35,7 @@ Component({
                         mode: newVal.mode,
                         sizeType: newVal.sizeType,   //'original'(default) | 'compressed'
                         callback: (res) => {
-                            if (mode == 'rectangle') {
+                            if (newVal.mode == 'rectangle') {
                                 console.log("crop callback:" + res)
                                 wx.previewImage({
                                     current: '',
@@ -136,6 +136,14 @@ Component({
         console.log(1)
     },
     methods: {
+        // draw: function() {
+        //     let ctx = wx.createCanvasContext('test', this)
+        //     ctx.beginPath()
+        //     ctx.arc(dot.x, dot.y, 10, 0, 2 * Math.PI, true)
+        //     ctx.fill()
+        //     ctx.closePath()
+        //     ctx.draw()
+        // },
         // 显示cropper，如果有图片则载入
         showCropper: function(options) {
             console.log(options)
@@ -292,14 +300,14 @@ Component({
 
         // 截取选中图片，如果有回调，则调用
         cropImage: function() {
-            let that = this
-            let cropperData = that.data.cropperData
+            let z = this
+            let cropperData = z.data.cropperData
             let mode = cropperData.mode
             let scaleInfo = cropperData.scaleInfo
             let width = cropperData.width
             let height = cropperData.height
 
-            let cropperMovableItems = that.data.cropperMovableItems
+            let cropperMovableItems = z.data.cropperMovableItems
 
             if (mode == 'rectangle') {
                 let maxX = 0, maxY = 0
@@ -324,7 +332,7 @@ Component({
 
                 console.log('crop rect: x=' + x + ',y=' + y + ',w=' + w + ',h=' + h)
 
-                let ctx = wx.createCanvasContext("originalCanvas")
+                let ctx = wx.createCanvasContext("originalCanvas", z)
 
                 wx.showLoading({
                     title: '正在截取...',
@@ -348,8 +356,8 @@ Component({
                         //     }
                         // })
 
-                        if (that.data.cropperData.cropCallback) {
-                            that.data.cropperData.cropCallback(tempFilePath)
+                        if (z.data.cropperData.cropCallback) {
+                            z.data.cropperData.cropCallback(tempFilePath)
                         }
                     },
                     fail(res) {
@@ -361,7 +369,7 @@ Component({
                         console.log("fail res:")
                         console.log(res)
                     }
-                })
+                }, z)
             }
             else {
                 let res = [[0, 0], [0, 0], [0, 0], [0, 0]]
@@ -391,8 +399,8 @@ Component({
 
                 cropperUtil.convexHull(points, points.length)
 
-                if (that.data.cropperData.cropCallback) {
-                    that.data.cropperData.cropCallback(res)
+                if (z.data.cropperData.cropCallback) {
+                    z.data.cropperData.cropCallback(res)
                 }
             }
         },
@@ -583,25 +591,25 @@ Component({
 
         // 清空canvas上的数据
         clearCanvas: function(imageInfo) {
-            let that = this
-            let cropperData = that.data.cropperData
+            let z = this
+            let cropperData = z.data.cropperData
             let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
 
             if (imageInfo.path != '') {
-                let compressedScale = that.data.cropperData.original ? 1.0 : 0.4
+                let compressedScale = z.data.cropperData.original ? 1.0 : 0.4
 
                 //清空原图
-                let ctx = wx.createCanvasContext("originalCanvas")
+                let ctx = wx.createCanvasContext("originalCanvas", z)
                 ctx.clearRect(0, 0, imageInfo.width * compressedScale, imageInfo.height * compressedScale)
                 ctx.draw()
 
                 //清空选择区图片
-                let canvas = wx.createCanvasContext("canvas")
+                let canvas = wx.createCanvasContext("canvas", z)
                 canvas.clearRect(0, 0, size.width, size.height)
                 canvas.draw()
 
                 // 清空白线框
-                let moveCanvas = wx.createCanvasContext("moveCanvas")
+                let moveCanvas = wx.createCanvasContext("moveCanvas", z)
                 moveCanvas.clearRect(0, 0, size.width, size.height)
                 moveCanvas.draw()
             }
@@ -609,18 +617,20 @@ Component({
 
         //绘制图片
         drawImage: function(imageInfo) {
-            let that = this
-            let cropperData = that.data.cropperData
+            let z = this
+            let cropperData = z.data.cropperData
             let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
 
             if (imageInfo.path != '') {
                 let path = imageInfo.path
-                let compressedScale = that.data.cropperData.original ? 1.0 : 0.4
-                let rotateDegree = that.data.cropperChangableData.rotateDegree
+                let compressedScale = z.data.cropperData.original ? 1.0 : 0.4
+                let rotateDegree = z.data.cropperChangableData.rotateDegree
 
+                let originalCtx = wx.createCanvasContext('originalCanvas', z)
+                let ctx = wx.createCanvasContext('canvas', z)
                 //绘制原图
                 cropperUtil.drawImageWithDegree(
-                    "originalCanvas",
+                    originalCtx,
                     path,
                     imageInfo.width * compressedScale,
                     imageInfo.height * compressedScale,
@@ -631,7 +641,7 @@ Component({
                 // originalCanvas.draw()
 
                 //绘制选择区图片
-                cropperUtil.drawImageWithDegree("canvas", path, size.width, size.height, rotateDegree)
+                cropperUtil.drawImageWithDegree(ctx, path, size.width, size.height, rotateDegree)
                 // let canvas = wx.createCanvasContext("canvas")
                 // canvas.drawImage(path, 0, 0, size.width, size.height)
                 // canvas.draw()
@@ -652,9 +662,10 @@ Component({
                 let compressedScale = that.data.cropperData.original ? 1.0 : 0.4
                 let rotateDegree = that.data.cropperChangableData.rotateDegree
 
+                let originalCtx = wx.createCanvasContext('originalCanvas', this)
                 //绘制原图
                 cropperUtil.drawImageWithDegree(
-                    "originalCanvas",
+                    originalCtx,
                     path,
                     originalSize.width * compressedScale,
                     originalSize.height * compressedScale,
@@ -690,7 +701,7 @@ Component({
                 callback(canCrop)
             }
 
-            let ctx = wx.createCanvasContext("moveCanvas")
+            let ctx = wx.createCanvasContext("moveCanvas", this)
 
             //绘制高亮选中区域
             let rect = cropperUtil.getCropRect(convexDots)

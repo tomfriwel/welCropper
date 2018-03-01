@@ -112,9 +112,7 @@ function convexHull(points, n) {
     return hull
 }
 
-function drawImageWithDegree(canvasId, path, width, height, degree) {
-    let ctx = wx.createCanvasContext(canvasId)
-
+function drawImageWithDegree(ctx, path, width, height, degree) {
     let isVertical = degree % 180 > 0
 
     let drawWidth = isVertical ? height : width
