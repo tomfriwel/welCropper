@@ -3,3 +3,4 @@ jsconfig.json
 .vscode
 typings
 node_modules
+*.zip
