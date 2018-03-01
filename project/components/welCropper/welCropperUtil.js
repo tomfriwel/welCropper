@@ -22,7 +22,6 @@ const getCropRect = (cropperMovableItems) => {
     }
 }
 
-
 // 获取适应屏幕的图片显示大小
 const getAdjustSize = (W, H, width, height) => {
     if (width > W) {
@@ -150,19 +149,32 @@ function drawImageWithDegree(canvasId, path, width, height, degree) {
         ctx.drawImage(path, 0, 0, drawWidth, drawHeight)
     }
 
-    ctx.draw()
+    ctx.draw(false, function (e) {
+        console.log('draw callback')
+    })
 }
 
-// const cropperUtil = {
-//     getCropRect,
-//     getAdjustSize,
-//     convexHull,
-//     drawImageWithDegree
-// }
+// 查找topleft的点
+function findTopLeft(items) {
+    let x = items.topleft.x, y = items.topleft.y
+    for (let i in items) {
+        let item = items[i]
+        if (x > item.x) {
+            x = item.x
+        }
+        if (y > item.y) {
+            y = item.y
+        }
+    }
+    return {
+        x, y
+    }
+}
 
 module.exports = {
     getCropRect,
     getAdjustSize,
     convexHull,
-    drawImageWithDegree
+    drawImageWithDegree,
+    findTopLeft
 }

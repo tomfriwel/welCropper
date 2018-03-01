@@ -135,7 +135,7 @@ Component({
     ready: function () {
         console.log(1)
     },
-    methods: {    // 显示cropper，如果有图片则载入
+    methods: {
         // 显示cropper，如果有图片则载入
         showCropper: function(options) {
             console.log(options)
@@ -571,21 +571,6 @@ Component({
 
             z.setData(updateData)
 
-
-            // setTimeout(function(){
-            //     console.log('draw')
-            //     let ctx = wx.createCanvasContext('move_canvas', this)
-            //     ctx.setFillStyle('red')
-            //     ctx.beginPath()
-            //     ctx.arc(222, 222, 10, 0, 2 * Math.PI, true)
-            //     ctx.fill()
-            //     ctx.closePath()
-            //     ctx.draw()
-            // }, 2000)
-
-
-            // return
-
             // console.log("loadImage size:" + width + "*" + height)
             z.drawImage({
                 path: z.data.cropperData.imageInfo.path,
@@ -598,6 +583,7 @@ Component({
 
         // 清空canvas上的数据
         clearCanvas: function(imageInfo) {
+            let that = this
             let cropperData = that.data.cropperData
             let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
 
@@ -615,7 +601,7 @@ Component({
                 canvas.draw()
 
                 // 清空白线框
-                let moveCanvas = wx.createCanvasContext("moveCanvas1")
+                let moveCanvas = wx.createCanvasContext("moveCanvas")
                 moveCanvas.clearRect(0, 0, size.width, size.height)
                 moveCanvas.draw()
             }
@@ -704,7 +690,7 @@ Component({
                 callback(canCrop)
             }
 
-            let ctx = wx.createCanvasContext("moveCanvas1")
+            let ctx = wx.createCanvasContext("moveCanvas")
 
             //绘制高亮选中区域
             let rect = cropperUtil.getCropRect(convexDots)
@@ -799,8 +785,6 @@ Component({
             }
 
             ctx.draw()
-            console.log(ctx)
-            console.log(orderedDots)
         },
 
         // move events
@@ -889,12 +873,9 @@ Component({
                 height: originalSize.height
             }, (cropperMovableItems, canCrop) => {
                 cropperChangableData.canCrop = canCrop
-
-                console.log(cropperMovableItems)
-
                 that.setData({
                     cropperChangableData: cropperChangableData,
-                    cropperMovableItems: cropperMovableItems,
+                    cropperMovableItems: cropperMovableItems
                 })
             })
         }

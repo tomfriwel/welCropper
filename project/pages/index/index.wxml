@@ -5,7 +5,7 @@
 
 <!-- 调用组件 -->
 <!-- <template is="welCropper" data="{{data:cropperData, cropperMovableItems:cropperMovableItems}}"></template> -->
- <template is="welCropper" data="{{data:cropperData, cropperMovableItems:cropperMovableItems, cropperChangableData:cropperChangableData}}"></template> 
+ <template is="welCropper" data="{{cropperData:cropperData, cropperMovableItems:cropperMovableItems, cropperChangableData:cropperChangableData}}"></template> 
 
 <!-- 用于选择图片，传入cropper中 -->
 <button bindtap='selectTap' data-mode='rectangle'>select image (mode=rectangle)</button>
