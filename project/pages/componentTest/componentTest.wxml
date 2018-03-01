@@ -1,0 +1,3 @@
+<!--pages/componentTest/componentTest.wxml-->
+<button bindtap='openCropper'>open cropper</button>
+<wel-cropper is-show="{{isShowCropper}}" bindhide="cropperHide" path="{{path}}" />  

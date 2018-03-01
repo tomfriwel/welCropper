@@ -30,19 +30,12 @@
 
             <block wx:if="{{data.sizeType.length==2}}">
                 <view class="original_button button_item {{data.original?'checked':''}}" bindtap="originalChange">
-                    <!-- <view class='check_container'>
-                        <view class='check_border'></view>
-                        <view class='check_center'></view>
-                    </view> -->
                     <view>原图</view>
                 </view>
             </block>
             <view class="crop_image_button button_item {{cropperChangableData.canCrop?'':'disable'}}" bindtap="{{cropperChangableData.canCrop?'cropImage':''}}">
                 完成
             </view>
-            <!-- <view class="crop_image_button button_item" bindtap="cropImage">
-                完成
-            </view> -->
         </view>
     </scroll-view>
 </template>

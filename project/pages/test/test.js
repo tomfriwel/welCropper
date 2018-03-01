@@ -4,6 +4,8 @@ const device = wx.getSystemInfoSync()
 const W = device.windowWidth
 const H = device.windowHeight - 50
 
+let cropper = require('../../welCropper/welCropper.js');
+
 Page({
     data: {
         path: '',
@@ -69,6 +71,16 @@ Page({
                 y
             })
         }
+    },
+    openCropper: function() {
+        this.setData({
+            isShowCropper: !this.data.isShowCropper
+        })
+    },
+    cropperHide: function() {
+        this.setData({
+            isShowCropper: false
+        })
     },
     tapHandler: function () {
         var z = this

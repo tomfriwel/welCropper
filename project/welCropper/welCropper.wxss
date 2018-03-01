@@ -44,23 +44,6 @@
     height: 50px;
 }
 
-/* cancel_button */
-
-/* .cancel_button {
-    position: absolute;
-    left: 0;
-    top: 0;
-} */
-
-/* original_button */
-
-/* .original_button {
-    position: relative;
-    margin: 0 auto;
-    width: 70px;
-    height: 50px;
-} */
-
 .original_button .check_container {
     position: relative;
     float: left;
@@ -74,50 +57,9 @@
     background: #26ab28;
 }
 
-/* .original_button .check_container .check_border {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: 1px solid #fff;
-    overflow: hidden;
-}
-
-.original_button .check_container .check_center {
-    position: absolute;
-    left: 3px;
-    top: 3px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-.original_button.checked .check_container .check_center {
-    background: #26ab28;
-}
-
-.original_button .check_text {
-    float: left;
-    width: 50px;
-} */
-
-/* rotate image */
-
-/* .rotate_button {
-    position: absolute;
-    left: 50px;
-    top: 0;
-} */
-
 /* crop_image_button */
 
 .crop_image_button {
-    /* position: absolute;
-    right: 0;
-    top: 0; */
     color: #26ab28;
 }
 
@@ -140,9 +82,6 @@
 }
 
 .cropper_canvas_container {
-    /* position: absolute;
-    left: 0;
-    top: 0; */
     position: relative;
 }
 
@@ -153,7 +92,7 @@
     opacity: 0.7;
     /* opacity: 0;  */
     background: white;
-    /* border-radius: 50%; */
+     border-radius: 50%; 
 }
 
 .cropper_canvas_container .canvas {

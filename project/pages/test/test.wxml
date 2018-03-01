@@ -2,7 +2,7 @@
 
 <!-- <room /> -->
 <!-- <view class='move_container' style="width:{{size.width}}px; height:{{size.height}}px;left:{{left}}px;top:{{top}}px;" bindtouchmove='moveEvent' bindtouchend='endEvent'></view> -->
-<button bindtap='tapHandler'>change size</button>
+<button bindtap='openCropper'>open cropper</button>
 <!-- <block wx:if="{{showCropper}}"> -->
-  <wel-cropper is-show="{{isShowCropper}}" path="{{path}}" />  
+<wel-cropper is-show="{{isShowCropper}}" bindhide="cropperHide" path="{{path}}" />  
 <!-- </block> -->
