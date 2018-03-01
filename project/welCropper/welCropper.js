@@ -683,21 +683,6 @@ var init = function (W, H) {
 
         z.setData(updateData)
 
-
-        // setTimeout(function(){
-        //     console.log('draw')
-        //     let ctx = wx.createCanvasContext('move_canvas', this)
-        //     ctx.setFillStyle('red')
-        //     ctx.beginPath()
-        //     ctx.arc(222, 222, 10, 0, 2 * Math.PI, true)
-        //     ctx.fill()
-        //     ctx.closePath()
-        //     ctx.draw()
-        // }, 2000)
-
-
-        // return
-
         // console.log("loadImage size:" + width + "*" + height)
         z.drawImage({
             path: z.data.cropperData.imageInfo.path,
@@ -727,7 +712,7 @@ var init = function (W, H) {
             canvas.draw()
 
             // 清空白线框
-            let moveCanvas = wx.createCanvasContext("moveCanvas1")
+            let moveCanvas = wx.createCanvasContext("moveCanvas")
             moveCanvas.clearRect(0, 0, size.width, size.height)
             moveCanvas.draw()
         }
@@ -816,7 +801,7 @@ var init = function (W, H) {
             callback(canCrop)
         }
 
-        let ctx = wx.createCanvasContext("moveCanvas1")
+        let ctx = wx.createCanvasContext("moveCanvas")
 
         //绘制高亮选中区域
         let rect = cropperUtil.getCropRect(convexDots)
@@ -911,8 +896,6 @@ var init = function (W, H) {
         }
 
         ctx.draw()
-        console.log(ctx)
-        console.log(orderedDots)
     }
 
     // move events
@@ -1001,12 +984,9 @@ var init = function (W, H) {
             height: originalSize.height
         }, (cropperMovableItems, canCrop) => {
             cropperChangableData.canCrop = canCrop
-
-            console.log(cropperMovableItems)
-
             that.setData({
                 cropperChangableData: cropperChangableData,
-                cropperMovableItems: cropperMovableItems,
+                cropperMovableItems: cropperMovableItems
             })
         })
     }
@@ -1016,4 +996,3 @@ var init = function (W, H) {
 module.exports = {
     init
 }
-
