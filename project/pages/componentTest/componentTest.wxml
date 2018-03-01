@@ -1,3 +1,5 @@
 <!--pages/componentTest/componentTest.wxml-->
-<button bindtap='openCropper'>open cropper</button>
-<wel-cropper is-show="{{isShowCropper}}" bindhide="cropperHide" path="{{path}}" />  
+<button bindtap='selectTap' data-mode='rectangle'>select image (mode=rectangle)</button>
+<button bindtap='selectTap' data-mode='quadrectangle'>select image (mode=quadrectangle)</button>
+
+<wel-cropper cropper-options="{{cropperOptions}}" bindhide="cropperHide" />  

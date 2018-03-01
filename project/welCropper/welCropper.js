@@ -249,6 +249,7 @@ var init = function (W, H) {
 
     // 显示cropper，如果有图片则载入
     that.showCropper = (options) => {
+        console.log(options)
         let z = this
         let cropperData = z.data.cropperData
         let src = options.src
@@ -461,6 +462,11 @@ var init = function (W, H) {
                     }
                 },
                 fail(res) {
+                    wx.hideLoading()
+                    wx.showModal({
+                        title: '截取失败',
+                        content: res.errMsg
+                    })
                     console.log("fail res:")
                     console.log(res)
                 }

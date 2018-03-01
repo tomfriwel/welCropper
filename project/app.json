@@ -1,8 +1,8 @@
 {
     "pages": [
         "pages/index/index",
-        "pages/test/test",
-        "pages/componentTest/componentTest"
+        "pages/componentTest/componentTest",
+        "pages/test/test"
     ],
     "window": {
         "backgroundTextStyle": "light",
