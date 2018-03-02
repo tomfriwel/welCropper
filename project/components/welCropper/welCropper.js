@@ -575,7 +575,7 @@ Component({
                 height: height
             })
             // that.drawImage(that.data.cropperData.imageInfo)
-            z.drawLines(z.data.cropperMovableItems, z.data.cropperData.imageInfo)
+            z.drawLines(z.data.cropperMovableItems, z.data.cropperData.imageInfo, cropperChangableData.rotateDegree)
         },
 
         // 清空canvas上的数据
@@ -667,11 +667,12 @@ Component({
         },
 
         //绘制选框
-        drawLines: function (cropperMovableItems, imageInfo, callback) {
+        drawLines: function (cropperMovableItems, imageInfo, rotateDegree, callback) {
             let that = this
+            let isVertical = rotateDegree % 180 > 0
             let cropperData = that.data.cropperData
             let mode = cropperData.mode
-            let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
+            let size = cropperUtil.getAdjustSize(W, H, isVertical ? imageInfo.height : imageInfo.width, isVertical ? imageInfo.width : imageInfo.height)
 
             let convexDots = []
             let orderedDots = []
@@ -703,6 +704,10 @@ Component({
                 // 清除选中区域的半透明遮罩，使选中区域高亮
                 ctx.setFillStyle('rgba(0,0,0,0)')
                 ctx.clearRect(rect.x, rect.y, rect.w, rect.h)
+
+                console.log('rectange')
+                console.log(size)
+                console.log(rect)
 
                 //绘制选中边框
                 ctx.setStrokeStyle('white')
@@ -797,6 +802,7 @@ Component({
             let that = this
             let cropperData = that.data.cropperData
             let cropperMovableItems = that.data.cropperMovableItems
+            let cropperChangableData = that.data.cropperChangableData
             let left = cropperData.left
             let top = cropperData.top
             let mode = cropperData.mode
@@ -841,7 +847,7 @@ Component({
                     }
                 }
 
-                that.drawLines(cropperMovableItems, imageInfo, function (canCrop) {
+                that.drawLines(cropperMovableItems, imageInfo, cropperChangableData.rotateDegree, function (canCrop) {
                     if (callback) {
                         callback(cropperMovableItems, canCrop)
                     }
