@@ -5,10 +5,6 @@ const device = wx.getSystemInfoSync()
 const W = device.windowWidth
 const H = device.windowHeight - 50
 
-console.log('component')
-console.log(W)
-console.log(H)
-
 let cropper = require('../../welCropper/welCropper.js');
 let cropperUtil = require('./welCropperUtil.js')
 
@@ -59,9 +55,6 @@ Component({
                 else {
                     // cropper.init.apply(this, [W, H]);
 
-                    this.setData({
-                        ready: true
-                    })
                 }
             }
         },
@@ -134,6 +127,9 @@ Component({
     },
     ready: function () {
         console.log(1)
+        this.setData({
+            ready: true
+        })
     },
     methods: {
         // draw: function() {
@@ -202,13 +198,13 @@ Component({
 
         // 隐藏cropper
         hideCropper: function() {
-            let that = this
+            let z = this
 
-            that.data.cropperData.hidden = true
-            that.data.cropperData.cropCallback = null
+            z.data.cropperData.hidden = true
+            z.data.cropperData.cropCallback = null
 
-            that.setData({
-                cropperData: that.data.cropperData,
+            z.setData({
+                cropperData: z.data.cropperData,
                 cropperMovableItems: {
                     topleft: {
                         x: -1,
@@ -230,16 +226,27 @@ Component({
                 cropperChangableData: {
                     canCrop: true,
                     rotateDegree: 0,
+                    originalSize: {
+                        width: 0,
+                        height: 0
+                    },
+                    scaleSize: {
+                        width: 0,
+                        height: 0
+                    },
+                    shape: {
+
+                    },
                     previewImageInfo: {
                         x: 0,
                         y: 0,
                         w: 0,
-                        h: 0,
+                        h: 0
                     }
                 }
             })
 
-            that.clearCanvas(that.data.cropperData.imageInfo)
+            z.clearCanvas(z.data.cropperData.imageInfo)
         },
 
 
@@ -749,6 +756,11 @@ Component({
                 ctx.lineTo(dot.x, dot.y)
 
                 ctx.stroke()
+                // 绘制选中区域
+                // ctx.setFillStyle('rgba(0,0,0,0.5)')
+                // ctx.fillRect(0, 0, size.width, size.height)
+                ctx.setFillStyle('rgba(0, 0, 0, 0.3)')
+                ctx.fill()
                 ctx.closePath()
             }
 
@@ -857,12 +869,12 @@ Component({
 
         // moveable-view touchmove
         moveEvent: function(e) {
-            let that = this
+            let z = this
             let key = e.currentTarget.dataset.key
-            let originalSize = that.data.cropperChangableData.originalSize
+            let originalSize = z.data.cropperChangableData.originalSize
 
-            that.setupMoveItem(key, e.changedTouches, {
-                path: that.data.cropperData.imageInfo.path,
+            z.setupMoveItem(key, e.changedTouches, {
+                path: z.data.cropperData.imageInfo.path,
                 width: originalSize.width,
                 height: originalSize.height
             })
@@ -871,20 +883,20 @@ Component({
         // moveable-view touchend，end的时候设置movable-view的位置，如果在move阶段设置位置，选中会不流畅
         endEvent: function(e) {
             console.log("end")
-            let that = this
-            let cropperData = that.data.cropperData
-            let cropperMovableItems = that.data.cropperMovableItems
-            let cropperChangableData = that.data.cropperChangableData
+            let z = this
+            let cropperData = z.data.cropperData
+            let cropperMovableItems = z.data.cropperMovableItems
+            let cropperChangableData = z.data.cropperChangableData
             let originalSize = cropperChangableData.originalSize
             let key = e.currentTarget.dataset.key
 
-            that.setupMoveItem(key, e.changedTouches, {
-                path: that.data.cropperData.imageInfo.path,
+            z.setupMoveItem(key, e.changedTouches, {
+                path: z.data.cropperData.imageInfo.path,
                 width: originalSize.width,
                 height: originalSize.height
             }, (cropperMovableItems, canCrop) => {
                 cropperChangableData.canCrop = canCrop
-                that.setData({
+                z.setData({
                     cropperChangableData: cropperChangableData,
                     cropperMovableItems: cropperMovableItems
                 })

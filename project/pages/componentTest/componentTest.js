@@ -4,10 +4,6 @@ const device = wx.getSystemInfoSync()
 const W = device.windowWidth
 const H = device.windowHeight - 50
 
-console.log('page')
-console.log(W)
-console.log(H)
-
 Page({
     data: {
         cropperOptions: {
