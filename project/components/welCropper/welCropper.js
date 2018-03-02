@@ -9,9 +9,6 @@ let cropper = require('../../welCropper/welCropper.js');
 let cropperUtil = require('./welCropperUtil.js')
 
 Component({
-    /**
-     * 组件的属性列表
-     */
     properties: {
         cropperOptions: {
             type: Object,
@@ -28,10 +25,6 @@ Component({
                             z.cropDone(res)
                         }
                     })
-                }
-                else {
-                    // cropper.init.apply(this, [W, H]);
-
                 }
             }
         },
@@ -114,14 +107,6 @@ Component({
             var myEventOption = {} // 触发事件的选项
             this.triggerEvent('cropdown', myEventDetail, myEventOption)
         },
-        // draw: function() {
-        //     let ctx = wx.createCanvasContext('test', this)
-        //     ctx.beginPath()
-        //     ctx.arc(dot.x, dot.y, 10, 0, 2 * Math.PI, true)
-        //     ctx.fill()
-        //     ctx.closePath()
-        //     ctx.draw()
-        // },
         // 显示cropper，如果有图片则载入
         showCropper: function (options) {
             console.log(options)
@@ -151,10 +136,6 @@ Component({
             cropperData.cropCallback = callback
             cropperData.sizeType = filterType
 
-            // z.setData({
-            //     cropperData: cropperData,
-            // })
-
             if (src) {
                 console.log(src)
                 wx.getImageInfo({
@@ -169,10 +150,30 @@ Component({
                             height: h
                         }
                         z.setData({
-                            cropperData: cropperData
+                            cropperData: cropperData,
+                            cropperMovableItems: {
+                                topleft: {
+                                    x: 0,
+                                    y: 0
+                                },
+                                topright: {
+                                    x: 0,
+                                    y: 0
+                                },
+                                bottomleft: {
+                                    x: 0,
+                                    y: 0
+                                },
+                                bottomright: {
+                                    x: 0,
+                                    y: 0
+                                }
+                            }
                         })
 
-                        z.loadImage(src, w, h, false)
+                        setTimeout(() => {
+                            z.loadImage(src, w, h, false)
+                        }, 100)
                     }
                 })
             }
@@ -452,7 +453,7 @@ Component({
 
             console.log(cropperChangableData)
 
-            let cropperMovableItemsCopy = that.data.cropperMovableItems
+            // let cropperMovableItemsCopy = that.data.cropperMovableItems
             let cropperMovableItems = {
                 topleft: {
                     x: 0,
@@ -482,7 +483,6 @@ Component({
                 //     cropperMovableItems: cropperMovableItemsCopy
                 // })
             }, 100)
-
         },
 
         // 根据图片大小设置canvas大小，并绘制图片
