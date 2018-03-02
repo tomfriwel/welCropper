@@ -17,38 +17,15 @@ Component({
             type: Object,
             value: null,
             observer: function (newVal, oldVal) {
-
-                console.log(2)
+                let z = this
                 console.log(newVal)
-
-                // this.data.cropperData.hidden = newVal.hidden
-                // this.setData({
-                //     cropperData: this.data.cropperData
-                // })
-                if (this.data.ready) {
-                    this.showCropper({
+                if (z.data.ready) {
+                    z.showCropper({
                         src: newVal.src,
                         mode: newVal.mode,
                         sizeType: newVal.sizeType,   //'original'(default) | 'compressed'
-                        callback: (res) => {
-                            if (newVal.mode == 'rectangle') {
-                                console.log("crop callback:" + res)
-                                wx.previewImage({
-                                    current: '',
-                                    urls: [res]
-                                })
-                            }
-                            else {
-                                console.log('callback :' + res)
-                                wx.showModal({
-                                    title: '',
-                                    content: JSON.stringify(res),
-                                })
-
-                                console.log(res)
-                            }
-
-                            // that.hideCropper() //隐藏，我在项目里是点击完成就上传，所以如果回调是上传，那么隐藏掉就行了，不用previewImage
+                        callback: function (res) {
+                            z.cropDone(res)
                         }
                     })
                 }
@@ -132,6 +109,11 @@ Component({
         })
     },
     methods: {
+        cropDone: function (res) {
+            var myEventDetail = { res: res } // detail对象，提供给事件监听函数
+            var myEventOption = {} // 触发事件的选项
+            this.triggerEvent('cropdown', myEventDetail, myEventOption)
+        },
         // draw: function() {
         //     let ctx = wx.createCanvasContext('test', this)
         //     ctx.beginPath()
@@ -141,7 +123,7 @@ Component({
         //     ctx.draw()
         // },
         // 显示cropper，如果有图片则载入
-        showCropper: function(options) {
+        showCropper: function (options) {
             console.log(options)
             let z = this
             let cropperData = z.data.cropperData
@@ -197,7 +179,7 @@ Component({
         },
 
         // 隐藏cropper
-        hideCropper: function() {
+        hideCropper: function () {
             let z = this
 
             z.data.cropperData.hidden = true
@@ -251,7 +233,7 @@ Component({
 
 
         // 原图按钮被点击
-        originalChange: function() {
+        originalChange: function () {
             let that = this
             let imageInfo = that.data.cropperData.imageInfo
             let originalSize = that.data.cropperChangableData.originalSize
@@ -306,7 +288,7 @@ Component({
         },
 
         // 截取选中图片，如果有回调，则调用
-        cropImage: function() {
+        cropImage: function () {
             let z = this
             let cropperData = z.data.cropperData
             let mode = cropperData.mode
@@ -414,7 +396,7 @@ Component({
 
         // 测试
         // 截取形状
-        changeCropShapeHandler: function() {
+        changeCropShapeHandler: function () {
             wx.showActionSheet({
                 itemList: ['test0', 'test1', 'test2'],
                 success: function (res) {
@@ -427,7 +409,7 @@ Component({
         },
 
         // 旋转图片
-        rotateImage: function() {
+        rotateImage: function () {
             console.log("rotate image")
             let that = this
             let imageInfo = that.data.cropperData.imageInfo
@@ -504,7 +486,7 @@ Component({
         },
 
         // 根据图片大小设置canvas大小，并绘制图片
-        loadImage: function(src, width, height, isRotate) {
+        loadImage: function (src, width, height, isRotate) {
             let z = this
             let size = cropperUtil.getAdjustSize(W, H, width, height)
 
@@ -597,7 +579,7 @@ Component({
         },
 
         // 清空canvas上的数据
-        clearCanvas: function(imageInfo) {
+        clearCanvas: function (imageInfo) {
             let z = this
             let cropperData = z.data.cropperData
             let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
@@ -623,7 +605,7 @@ Component({
         },
 
         //绘制图片
-        drawImage: function(imageInfo) {
+        drawImage: function (imageInfo) {
             let z = this
             let cropperData = z.data.cropperData
             let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
@@ -658,7 +640,7 @@ Component({
         },
 
         // 单独绘制原图，当切换原图与非原图时使用
-        drawOriginalImage: function() {
+        drawOriginalImage: function () {
             let that = this
             let cropperData = that.data.cropperData
             let imageInfo = cropperData.imageInfo
@@ -685,7 +667,7 @@ Component({
         },
 
         //绘制选框
-        drawLines: function(cropperMovableItems, imageInfo, callback) {
+        drawLines: function (cropperMovableItems, imageInfo, callback) {
             let that = this
             let cropperData = that.data.cropperData
             let mode = cropperData.mode
@@ -811,7 +793,7 @@ Component({
         },
 
         // move events
-        setupMoveItem: function(key, changedTouches, imageInfo, callback) {
+        setupMoveItem: function (key, changedTouches, imageInfo, callback) {
             let that = this
             let cropperData = that.data.cropperData
             let cropperMovableItems = that.data.cropperMovableItems
@@ -868,7 +850,7 @@ Component({
         },
 
         // moveable-view touchmove
-        moveEvent: function(e) {
+        moveEvent: function (e) {
             let z = this
             let key = e.currentTarget.dataset.key
             let originalSize = z.data.cropperChangableData.originalSize
@@ -881,7 +863,7 @@ Component({
         },
 
         // moveable-view touchend，end的时候设置movable-view的位置，如果在move阶段设置位置，选中会不流畅
-        endEvent: function(e) {
+        endEvent: function (e) {
             console.log("end")
             let z = this
             let cropperData = z.data.cropperData

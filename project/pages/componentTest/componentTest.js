@@ -43,9 +43,10 @@ Page({
             }
         })
     },
-    cropperComplete:function(e) {
-        // that.hideCropper() //隐藏，我在项目里是点击完成就上传，所以如果回调是上传，那么隐藏掉就行了，不用previewImage
-        if (mode == 'rectangle') {
+    cropperComplete: function (e) {
+        console.log(e)
+        let res = e.detail.res
+        if (this.data.cropperOptions.mode == 'rectangle') {
             console.log("crop callback:" + res)
             wx.previewImage({
                 current: '',
@@ -53,6 +54,7 @@ Page({
             })
         }
         else {
+            console.log('callback :' + res)
             wx.showModal({
                 title: '',
                 content: JSON.stringify(res),
@@ -60,5 +62,7 @@ Page({
 
             console.log(res)
         }
+
+        // that.hideCropper() //隐藏，我在项目里是点击完成就上传，所以如果回调是上传，那么隐藏掉就行了，不用previewImage
     }
 })
