@@ -662,7 +662,8 @@ var init = function (W, H) {
         let isVertical = rotateDegree % 180 > 0
         let rotateWidth = isVertical ? size.height : size.width
         let rotateHeight = isVertical ? size.width : size.height
-
+        console.log(size)
+        console.log('rotateDegree:' + rotateDegree)
         console.log('rotateWidth:' + rotateWidth + ', rotateHeight:' + rotateHeight)
 
         cropperChangableData.previewImageInfo.x = (W - rotateWidth) / 2
@@ -782,7 +783,14 @@ var init = function (W, H) {
         let that = this
         let cropperData = that.data.cropperData
         let mode = cropperData.mode
-        let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
+        let rotateDegree = that.data.cropperChangableData.rotateDegree
+        let size
+        if (rotateDegree % 180 > 0) {
+            size = cropperUtil.getAdjustSize(W, H, imageInfo.height, imageInfo.width)
+        }
+        else {
+            size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
+        }
 
         let convexDots = []
         let orderedDots = []
@@ -809,6 +817,7 @@ var init = function (W, H) {
         if (mode == 'rectangle') {
             // 绘制半透明遮罩
             ctx.setFillStyle('rgba(0,0,0,0.5)')
+
             ctx.fillRect(0, 0, size.width, size.height)
 
             // 清除选中区域的半透明遮罩，使选中区域高亮

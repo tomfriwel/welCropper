@@ -672,7 +672,13 @@ Component({
             let isVertical = rotateDegree % 180 > 0
             let cropperData = that.data.cropperData
             let mode = cropperData.mode
-            let size = cropperUtil.getAdjustSize(W, H, isVertical ? imageInfo.height : imageInfo.width, isVertical ? imageInfo.width : imageInfo.height)
+            let size
+            if (isVertical) {
+                size = cropperUtil.getAdjustSize(W, H, imageInfo.height, imageInfo.width)
+            }
+            else {
+                size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
+            }
 
             let convexDots = []
             let orderedDots = []
