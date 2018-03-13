@@ -14,33 +14,48 @@
 
 #### 文件目录结构，要在测试机上运行，工程目录选择文件夹`project`
 ```
-./
-├── documents
-│   ├── hierarchy.png
-│   ├── result.gif
-│   └── screenshot.jpeg
-├── project
-│   ├── app.js
-│   ├── app.json
-│   ├── app.wxss
-│   ├── pages
-│   │   ├── index
-│   │   │   ├── index.js
-│   │   │   ├── index.json
-│   │   │   ├── index.wxml
-│   │   │   └── index.wxss
-│   │   └── test
-│   │       ├── test.js
-│   │       ├── test.json
-│   │       ├── test.wxml
-│   │       └── test.wxss
-│   ├── utils
-│   │   └── util.js
-│   └── welCropper
-│       ├── welCropper.js
-│       ├── welCropper.wxml
-│       └── welCropper.wxss
-└── readme.md
+.
+├── app.js
+├── app.json
+├── app.wxss
+├── components
+│   ├── room
+│   │   ├── room.js
+│   │   ├── room.json
+│   │   ├── room.wxml
+│   │   └── room.wxss
+│   └── welCropper
+│       ├── package.json
+│       ├── welCropper.js
+│       ├── welCropper.json
+│       ├── welCropper.wxml
+│       ├── welCropper.wxss
+│       └── welCropperUtil.js
+├── images
+│   └── my.jpeg
+├── pages
+│   ├── componentTest
+│   │   ├── componentTest.js
+│   │   ├── componentTest.json
+│   │   ├── componentTest.wxml
+│   │   └── componentTest.wxss
+│   ├── index
+│   │   ├── index.js
+│   │   ├── index.json
+│   │   ├── index.wxml
+│   │   └── index.wxss
+│   └── test
+│       ├── test.js
+│       ├── test.json
+│       ├── test.wxml
+│       └── test.wxss
+├── project.config.json
+└── welCropper
+    ├── package.json
+    ├── welCropper.js
+    ├── welCropper.wxml
+    ├── welCropper.wxss
+    └── welCropperUtil.js
 ```
 
 * 保证图片质量，也可以选择压缩图
@@ -101,6 +116,30 @@ showCropper({
 #### 使用
 
 将`welCropper`复制到自己的工程当中（以`/pages/index/index`为例）
+
+#### 通过`npm`安装
+
+`$ npm install wel-cropper-template //for template`
+
+`$ npm install wel-cropper-component //for component`
+
+> 通过`npm`安装的需要修改一下相应的引入路径。
+
+比如`template`版:
+
+`<import src="/node_modules/wel-cropper-template/welCropper" />`
+
+`component`版页面`json`中:
+
+```
+{
+    ...
+    "usingComponents": {
+        "wel-cropper": "/node_modules/wel-cropper-component/welCropper"
+    },
+    ...
+}
+```
 
 ##### `wxml`引入并调用：
 ```
