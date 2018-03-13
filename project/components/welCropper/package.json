@@ -1,0 +1,19 @@
+{
+    "name": "wel-cropper-component",
+    "version": "1.0.1",
+    "description": "weapp image copper component",
+    "main": "./welCropper.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "weapp",
+        "cropper"
+    ],
+    "author": "tomfriwel",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/tomfriwel/welCropper/issues"
+    },
+    "homepage": "https://github.com/tomfriwel/welCropper#readme"
+}

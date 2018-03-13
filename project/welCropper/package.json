@@ -1,8 +1,8 @@
 {
-  "name": "wel-cropper",
+  "name": "wel-cropper-template",
   "version": "1.0.1",
-  "description": "weapp image copper",
-  "main": "./project/welCropper/welCropper.js",
+  "description": "weapp image copper template",
+  "main": "./welCropper.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
