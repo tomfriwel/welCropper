@@ -125,11 +125,11 @@ showCropper({
 
 > 通过`npm`安装的需要修改一下相应的引入路径。
 
-比如`template`版:
+比如`template`版：
 
 `<import src="/node_modules/wel-cropper-template/welCropper" />`
 
-`component`版页面`json`中:
+`component`版页面`json`中：
 
 ```
 {
