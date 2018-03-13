@@ -75,6 +75,7 @@ Component({
         },
         cropperChangableData: {
             canCrop: true,
+            shapeEnable: false,
             rotateDegree: 0,
             originalSize: {
                 width: 0,
@@ -85,7 +86,8 @@ Component({
                 height: 0
             },
             shape: {
-
+                x: 1.0,
+                y: 1.0
             },
             previewImageInfo: {
                 x: 0,
@@ -208,6 +210,7 @@ Component({
                 },
                 cropperChangableData: {
                     canCrop: true,
+                    shapeEnable: false,
                     rotateDegree: 0,
                     originalSize: {
                         width: 0,
@@ -218,7 +221,8 @@ Component({
                         height: 0
                     },
                     shape: {
-
+                        x: 1.0,
+                        y: 1.0
                     },
                     previewImageInfo: {
                         x: 0,
@@ -398,10 +402,30 @@ Component({
         // 测试
         // 截取形状
         changeCropShapeHandler: function () {
+            let z = this
+            let cropperChangableData = z.data.cropperChangableData
             wx.showActionSheet({
-                itemList: ['test0', 'test1', 'test2'],
+                itemList: ['正方形', 'test1', 'test2'],
                 success: function (res) {
-                    console.log(res.tapIndex)
+                    let tapIndex = res.tapIndex
+                    switch (tapIndex) {
+                        case 0: {
+                            cropperChangableData.shapeEnable = true
+                            cropperChangableData.shape = {
+                                x: 1.0,
+                                y: 1.0
+                            }
+
+                            break;
+                        }
+
+                        default:
+                            break;
+                    }
+
+                    z.setData({
+                        cropperChangableData
+                    })
                 },
                 fail: function (res) {
                     console.log(res.errMsg)
@@ -701,6 +725,12 @@ Component({
 
             //绘制高亮选中区域
             let rect = cropperUtil.getCropRect(convexDots)
+            // if(rect.w > rect.h) {
+            //     rect.h = rect.w
+            // }
+            // else {
+            //     rect.w = rect.h
+            // }
 
             if (mode == 'rectangle') {
                 // 绘制半透明遮罩
