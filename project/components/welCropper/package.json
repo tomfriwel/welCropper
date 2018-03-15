@@ -1,6 +1,6 @@
 {
     "name": "wel-cropper-component",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "weapp image copper component",
     "main": "./welCropper.js",
     "scripts": {
