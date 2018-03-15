@@ -72,6 +72,10 @@
 
 <img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/hierarchy.png" width=600 />
 
+<img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/welCropper.008.png.png" width=600 />
+
+<img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/welCropper.010.png.png" width=600 />
+
 * 使用`movable-view`的原因是不用自己实现拖拽，直接使用官方提供的这个组件。
 
 因为`cropper`的数据和事件是直接绑定到`Page`上的，所以数据和事件命名应该避免一下名字（之后会想办法避免这种情况）及其相关解释：
