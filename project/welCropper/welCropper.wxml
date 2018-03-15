@@ -32,9 +32,9 @@
             <view class="button_item cancel_button" bindtap="hideCropper">
                 取消
             </view>
-            <view class="button_item crop_shape_button" bindtap="changeCropShapeHandler">
+            <!-- <view class="button_item crop_shape_button" bindtap="changeCropShapeHandler">
                 形状
-            </view>
+            </view> -->
             <view class="button_item rotate_button" bindtap="rotateImage">
                 旋转
             </view>
