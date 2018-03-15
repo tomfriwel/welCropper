@@ -72,9 +72,9 @@
 
 <img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/hierarchy.png" width=600 />
 
-<img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/welCropper.008.png.png" width=600 />
+<img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/welCropper8.png.png" width=600 />
 
-<img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/welCropper.010.png.png" width=600 />
+<img src="https://raw.githubusercontent.com/tomfriwel/welCropper/master/documents/welCropper10.png.png" width=600 />
 
 * 使用`movable-view`的原因是不用自己实现拖拽，直接使用官方提供的这个组件。
 
