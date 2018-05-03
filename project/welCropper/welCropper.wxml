@@ -9,6 +9,7 @@
 
                 <block wx:if="{{cropperData.drawSign==1}}">
                     <movable-area class="cropper_movable_area_container" style="width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
+                        <!-- <movable-view class='main_move_item' style="width:{{cropperMainItem.w}}px; height:{{cropperMainItem.h}}px;" direction="all" x="{{cropperMainItem.x}}" y="{{cropperMainItem.y}}"></movable-view> -->
                         <block wx:if="{{cropperMovableItems}}">
                             <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
                                 <movable-view class="move_item" style="width:{{cropperData.itemLength}}px; height:{{cropperData.itemLength}}px;" direction="all" x="{{item.x-cropperData.itemLength/2}}" y="{{item.y-cropperData.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
@@ -18,6 +19,7 @@
                 </block>
                 <block wx:else>
                     <movable-area class="cropper_movable_area_container" style="width:{{cropperChangableData.scaleSize.width}}px;height:{{cropperChangableData.scaleSize.height}}px;">
+                            <!-- <movable-view class='main_move_item' style="width:{{cropperMainItem.w}}px; height:{{cropperMainItem.h}}px;" direction="all" x="{{cropperMainItem.x}}" y="{{cropperMainItem.y}}"></movable-view> -->
                         <block wx:if="{{cropperMovableItems}}">
                             <block wx:for="{{cropperMovableItems}}" wx:key="moveItem">
                                 <movable-view class="move_item" style="width:{{cropperData.itemLength}}px; height:{{cropperData.itemLength}}px;" direction="all" x="{{item.x-cropperData.itemLength/2}}" y="{{item.y-cropperData.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>

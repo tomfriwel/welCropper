@@ -46,6 +46,12 @@ var init = function (W, H) {
                 y: H - 50
             }
         },
+        cropperMainItem:{
+            x:110,
+            y:110,
+            w:50,
+            h:50
+        },
         cropperChangableData: {
             canCrop: true,
             rotateDegree: 0,
@@ -116,8 +122,15 @@ var init = function (W, H) {
                         height: h
                     }
                     z.setData({
-                        cropperData: cropperData
+                        cropperData: cropperData,
+                        // cropperMainItem: {
+                        //     x: 210,
+                        //     y: 110,
+                        //     w: 50,
+                        //     h: 50
+                        // }
                     })
+                    console.log('cropperData1')
 
                     z.loadImage(src, w, h, false)
                 }
@@ -476,6 +489,25 @@ var init = function (W, H) {
             }
         }
 
+        // updateData.cropperMainItem = {
+        //     x: 100,
+        //     y: 100,
+        //     w: 100,
+        //     h: 100
+        // }
+
+        // setTimeout(()=>{
+        //     console.log('main item')
+        //     z.setData({
+        //         cropperMainItem: {
+        //             x: 100,
+        //             y: 100,
+        //             w: 100,
+        //             h: 100
+        //         }
+        //     })
+        // }, 2000)
+
         let cropperChangableData = z.data.cropperChangableData
         let rotateDegree = cropperChangableData.rotateDegree
 
@@ -504,6 +536,9 @@ var init = function (W, H) {
         updateData.cropperChangableData = cropperChangableData
 
         z.setData(updateData)
+
+
+        console.log('cropperData2')
 
         // console.log("loadImage size:" + width + "*" + height)
         z.drawImage({

@@ -97,6 +97,13 @@
     background: white;
      border-radius: 50%; 
 }
+.cropper_movable_area_container .main_move_item {
+    z-index: 100;
+    opacity: 0.7;
+    /* opacity: 0;  */
+    background: white;
+     border-radius: 50%; 
+}
 
 .cropper_canvas_container .canvas {
     position: absolute;
