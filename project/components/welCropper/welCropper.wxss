@@ -88,6 +88,7 @@
     position: relative;
 }
 
+/* 移动的四个点的样式，如果不想显示四个圈，可以设置opacity为0 */
 /* opacity:0隐藏，如果想看就设置为1，只能在测试机能看到，真机上canvas层级在最高层 */
 
 .cropper_movable_area_container .move_item {

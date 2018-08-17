@@ -346,8 +346,12 @@ var init = function (W, H) {
     // 测试
     // 截取形状
     that.changeCropShapeHandler = () => {
+        const map = [
+            'no',
+            'square'
+        ]
         wx.showActionSheet({
-            itemList: ['test0', 'test1', 'test2'],
+            itemList: ['不定形状', '正方形'],
             success: function (res) {
                 console.log(res.tapIndex)
             },

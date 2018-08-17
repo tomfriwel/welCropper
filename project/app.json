@@ -1,5 +1,6 @@
 {
     "pages": [
+        "pages/beta/beta",
         "pages/index/index",
         "pages/componentTest/componentTest",
         "pages/test/test"
