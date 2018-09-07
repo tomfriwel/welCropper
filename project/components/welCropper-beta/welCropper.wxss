@@ -1,0 +1,126 @@
+.cropper_main_container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 100;
+    width: 750rpx;
+    height: 100vh;
+    background: #555;
+    overflow: hidden;
+}
+
+.cropper_main_container.hidden {
+    display: none;
+}
+
+.cropper_container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+}
+
+/* button */
+
+.cropper_toolbar {
+    position: absolute;
+    z-index: 100;
+    bottom: 0;
+    height: 50px;
+    background: black;
+    width: 100%;
+    line-height: 50px;
+    font-size: 15px;
+    text-align: center;
+    color: white;
+}
+
+.cropper_toolbar .button_item {
+    /* width: 70px; */
+    float: left;
+    /* width: 20%; */
+    width: 25%;
+    height: 50px;
+}
+
+.original_button .check_container {
+    position: relative;
+    float: left;
+    margin-top: 14px;
+    width: 18px;
+    height: 18px;
+    border: 1px solid white;
+}
+
+.original_button.checked {
+    background: #26ab28;
+}
+
+/* crop_image_button */
+
+.crop_image_button {
+    color: #26ab28;
+}
+
+.crop_image_button.disable {
+    /* color: #038905;  */
+    color: rgba(0, 0, 0, 0);
+}
+
+/* canvas */
+
+.cropper_movable_area_container {
+    position: relative;
+    /* background: salmon;
+    border: 2px solid red; */
+}
+.cropper_canvas_container_item {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.cropper_canvas_container {
+    position: relative;
+}
+
+/* 移动的四个点的样式，如果不想显示四个圈，可以设置opacity为0 */
+/* opacity:0隐藏，如果想看就设置为1，只能在测试机能看到，真机上canvas层级在最高层 */
+
+.cropper_movable_area_container .move_item {
+    z-index: 100;
+    opacity: 0.7;
+    /* opacity: 0;  */
+    background: white;
+     border-radius: 50%; 
+}
+
+.cropper_canvas_container .canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+    /* opacity: 0; */
+}
+
+/* 因为display:none在真机上会造成无法截取图片，所以这里是通过移到显示区域外来达到隐藏效果的 */
+
+.original_canvas {
+    position: absolute;
+    left: 750rpx;
+    top: 100vh;
+}
+
+.scale-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.move_canvas {
+     /* border: 2px solid blue;  */
+     /* background: red;  */
+}

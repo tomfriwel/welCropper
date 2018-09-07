@@ -1,0 +1,58 @@
+<!--components/welCropper.wxml-->
+<scroll-view class="cropper_main_container {{cropperData.hidden?'hidden':''}}">
+    <view class="cropper_container" style="width:{{cropperData.W}}px; height:{{cropperData.H}}px;">
+        <canvas class="original_canvas" canvas-id="originalCanvas" style="width:{{changableData.originalSize.width}}px;height:{{changableData.originalSize.height}}px;"></canvas>
+
+        <image src='{{cropperData.imageInfo.path}}' class='scale-image cropper_canvas_container_item' mode='aspectFill' style="left:{{changableData.previewImageInfo.x}}px; top:{{changableData.previewImageInfo.y}}px; width:{{changableData.previewImageInfo.w}}px; height:{{changableData.previewImageInfo.h}}px; transform:rotate({{changableData.rotateDegree}}deg);"></image>
+        <view class='cropper_canvas_container' style="width:{{changableData.scaleSize.width}}px;height:{{changableData.scaleSize.height}}px;">
+            <canvas canvas-id="moveCanvas" class="move_canvas cropper_canvas_container_item"></canvas>
+
+            <block wx:if="{{cropperData.drawSign==1}}">
+                <movable-area class="cropper_movable_area_container" style="width:{{changableData.scaleSize.width}}px;height:{{changableData.scaleSize.height}}px;">
+                    <block wx:if="{{moveItems}}">
+                        <block wx:for="{{moveItems}}" wx:key="moveItem">
+                            <movable-view class="move_item" style="width:{{cropperData.itemLength}}px; height:{{cropperData.itemLength}}px;" direction="all" x="{{item.x-cropperData.itemLength/2}}" y="{{item.y-cropperData.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent" data-key="{{index}}"></movable-view>
+                        </block>
+                    </block>
+                </movable-area>
+            </block>
+            <block wx:else>
+                <movable-area class="cropper_movable_area_container" style="width:{{changableData.scaleSize.width}}px;height:{{changableData.scaleSize.height}}px;">
+                    <block wx:if="{{moveItems}}">
+                        <block wx:for="{{moveItems}}" wx:key="moveItem">
+                            <movable-view class="move_item" style="width:{{cropperData.itemLength}}px; height:{{cropperData.itemLength}}px;" direction="all" x="{{item.x-cropperData.itemLength/2}}" y="{{item.y-cropperData.itemLength/2}}" bindtouchmove="moveEvent" bindtouchend="endEvent"
+                                data-key="{{index}}"></movable-view>
+                        </block>
+                    </block>
+                </movable-area>
+            </block>
+        </view>
+    </view>
+
+    <view class="cropper_toolbar">
+        <view class="button_item cancel_button" bindtap="hideCropper">
+            取消
+        </view>
+        <!-- <view class="button_item crop_shape_button" bindtap="changeCropShapeHandler">
+            比例
+        </view> -->
+        <view class="button_item rotate_button" bindtap="rotateImage">
+            旋转
+        </view>
+
+        <block wx:if="{{cropperData.sizeType.length==2}}">
+            <view class="original_button button_item {{cropperData.original?'checked':''}}" bindtap="originalChange">
+                <view>原图</view>
+            </view>
+        </block>
+        <view class="crop_image_button button_item {{changableData.canCrop?'':'disable'}}" bindtap="{{changableData.canCrop?'cropImage':''}}">
+            完成
+        </view>
+    </view>
+</scroll-view>
+
+<!-- 引入组件 -->
+<!-- <import src="/welCropper/welCropper.wxml" /> -->
+
+<!-- 调用组件 -->
+<!-- <template is="welCropper" data="{{data:cropperData, moveItems:moveItems, changableData:changableData}}"></template>  -->
