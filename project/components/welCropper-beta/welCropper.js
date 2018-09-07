@@ -114,10 +114,12 @@ Component({
             console.log(options)
             let z = this
             let cropperData = z.data.cropperData
-            let src = options.src
-            let callback = options.callback
-            let sizeType = options.sizeType
-            let mode = options.mode
+            let {
+                src,
+                callback,
+                sizeType,
+                mode
+            } = options
 
             let filterType = []
             if (sizeType.indexOf('original') > -1) {
@@ -139,14 +141,12 @@ Component({
             cropperData.sizeType = filterType
 
             if (src) {
-                console.log(src)
                 wx.getImageInfo({
                     src: src,
                     success: function(res) {
                         var w = res.width,
                             h = res.height
 
-                        // let cropperData = z.data.cropperData
                         cropperData.imageInfo = {
                             path: src,
                             width: w,

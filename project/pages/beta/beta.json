@@ -1,7 +1,7 @@
 {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "white",
-    "navigationBarTitleText": "component",
+    "navigationBarTitleText": "beta",
     "navigationBarTextStyle": "black",
     "usingComponents": {
         "wel-cropper": "/components/welCropper-beta/welCropper"
