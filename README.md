@@ -201,12 +201,14 @@ Page({
                 // 将选取图片传入cropper，并显示cropper
                 // mode=rectangle 返回图片path
                 // mode=quadrangle 返回4个点的坐标，并不返回图片。这个模式需要配合后台使用，用于perspective correction
+                // maxLength=1000 默认2000，允许最大长宽，避免分辨率过大导致崩溃
                 let modes = ["rectangle", "quadrangle"]
                 let mode = modes[0]   //rectangle, quadrangle
                 that.showCropper({
                     src: tempFilePath,
                     mode: mode,
                     sizeType: ['original', 'compressed'],   //'original'(default) | 'compressed'
+                    maxLength: 1000,
                     callback: (res) => {
                         if (mode == 'rectangle') {
                             console.log("crop callback:" + res)
