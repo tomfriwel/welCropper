@@ -39,6 +39,7 @@ Page({
                     src: tempFilePath,
                     mode: mode,
                     sizeType: ['original', 'compressed'],   //'original'(default) | 'compressed'
+                    maxLength: 1000, //默认2000，允许最大长宽，避免分辨率过大导致崩溃
                     callback: (res) => {
                         if (mode == 'rectangle') {
                             console.log("crop callback:" + res)

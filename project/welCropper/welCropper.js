@@ -83,6 +83,7 @@ var init = function (W, H) {
         let src = options.src
         let callback = options.callback
         let sizeType = options.sizeType
+        let maxLength = options.maxLength || 2000
         let mode = options.mode
 
         let filterType = []
@@ -96,6 +97,9 @@ var init = function (W, H) {
             cropperData.original = true
         }
 
+        if (maxLength) {
+            cropperData.maxLength = maxLength
+        }
         if (mode) {
             cropperData.mode = mode
         }
@@ -115,11 +119,16 @@ var init = function (W, H) {
                 success: function (res) {
                     var w = res.width, h = res.height
 
-                    // let cropperData = z.data.cropperData
+                    console.log({
+                        w,
+                        h
+                    })
+                    var size = cropperUtil.getAdjustMaxSize(w, h, maxLength)
+                    console.log(size)
                     cropperData.imageInfo = {
                         path: src,
-                        width: w,
-                        height: h
+                        width: size.width,
+                        height: size.height
                     }
                     z.setData({
                         cropperData: cropperData,

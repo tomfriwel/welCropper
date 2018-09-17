@@ -1,8 +1,8 @@
 {
     "pages": [
         "pages/index/index",
-        "pages/beta/beta",
         "pages/componentTest/componentTest",
+        "pages/beta/beta",
         "pages/test/test"
     ],
     "window": {

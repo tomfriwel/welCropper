@@ -40,6 +40,24 @@ const getAdjustSize = (W, H, width, height) => {
     }
 }
 
+// 获取适应最大长宽的大小
+const getAdjustMaxSize = (width, height, max) => {
+    if (width > max) {
+        height = max / width * height
+        width = max
+    }
+
+    if (height > max) {
+        width = max / height * width
+        height = max
+    }
+
+    return {
+        width: width,
+        height: height
+    }
+}
+
 // http://www.geeksforgeeks.org/convex-hull-set-1-jarviss-algorithm-or-wrapping/
 
 // To find orientation of ordered triplet (p, q, r).
@@ -172,6 +190,7 @@ function findTopLeft(items) {
 module.exports = {
     getCropRect,
     getAdjustSize,
+    getAdjustMaxSize,
     convexHull,
     drawImageWithDegree,
     findTopLeft

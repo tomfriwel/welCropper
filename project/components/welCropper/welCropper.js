@@ -13,15 +13,15 @@ Component({
         cropperOptions: {
             type: Object,
             value: null,
-            observer: function (newVal, oldVal) {
+            observer: function(newVal, oldVal) {
                 let z = this
                 console.log(newVal)
                 if (z.data.ready) {
                     z.showCropper({
                         src: newVal.src,
                         mode: newVal.mode,
-                        sizeType: newVal.sizeType,   //'original'(default) | 'compressed'
-                        callback: function (res) {
+                        sizeType: newVal.sizeType, //'original'(default) | 'compressed'
+                        callback: function(res) {
                             z.cropDone(res)
                         }
                     })
@@ -40,6 +40,7 @@ Component({
             height: H,
             W: W,
             H: H,
+            maxLength: 2000,    //允许原图最大长宽
             itemLength: 50,
             imageInfo: {
                 path: '',
@@ -51,8 +52,8 @@ Component({
                 y: 1
             },
             cropCallback: null,
-            sizeType: ['original', 'compressed'],    //'original'(default) | 'compressed'
-            original: false,  // 默认压缩，压缩比例为截图的0.4
+            sizeType: ['original', 'compressed'], //'original'(default) | 'compressed'
+            original: false, // 默认压缩，压缩比例为截图的0.4
             mode: 'rectangle', //默认矩形
         },
         cropperMovableItems: {
@@ -97,26 +98,29 @@ Component({
             }
         }
     },
-    ready: function () {
+    ready: function() {
         console.log(1)
         this.setData({
             ready: true
         })
     },
     methods: {
-        cropDone: function (res) {
-            var myEventDetail = { res: res } // detail对象，提供给事件监听函数
+        cropDone: function(res) {
+            var myEventDetail = {
+                res: res
+            } // detail对象，提供给事件监听函数
             var myEventOption = {} // 触发事件的选项
             this.triggerEvent('cropdown', myEventDetail, myEventOption)
         },
         // 显示cropper，如果有图片则载入
-        showCropper: function (options) {
+        showCropper: function(options) {
             console.log(options)
             let z = this
             let cropperData = z.data.cropperData
             let src = options.src
             let callback = options.callback
             let sizeType = options.sizeType
+            let maxLength = options.maxLength || 2000
             let mode = options.mode
 
             let filterType = []
@@ -128,6 +132,10 @@ Component({
             }
             if (filterType.length == 1 && filterType.indexOf('original') > -1) {
                 cropperData.original = true
+            }
+
+            if (maxLength) {
+                cropperData.maxLength = maxLength
             }
 
             if (mode) {
@@ -142,14 +150,21 @@ Component({
                 console.log(src)
                 wx.getImageInfo({
                     src: src,
-                    success: function (res) {
-                        var w = res.width, h = res.height
-
+                    success: function(res) {
+                        var w = res.width,
+                            h = res.height
                         // let cropperData = z.data.cropperData
+
+                        console.log({
+                            w,
+                            h
+                        })
+                        var size = cropperUtil.getAdjustMaxSize(w, h, maxLength)
+                        console.log(size)
                         cropperData.imageInfo = {
                             path: src,
-                            width: w,
-                            height: h
+                            width: size.width,
+                            height: size.height
                         }
                         z.setData({
                             cropperData: cropperData,
@@ -182,7 +197,7 @@ Component({
         },
 
         // 隐藏cropper
-        hideCropper: function () {
+        hideCropper: function() {
             let z = this
 
             z.data.cropperData.hidden = true
@@ -238,7 +253,7 @@ Component({
 
 
         // 原图按钮被点击
-        originalChange: function () {
+        originalChange: function() {
             let that = this
             let imageInfo = that.data.cropperData.imageInfo
             let originalSize = that.data.cropperChangableData.originalSize
@@ -293,7 +308,7 @@ Component({
         },
 
         // 截取选中图片，如果有回调，则调用
-        cropImage: function () {
+        cropImage: function() {
             let z = this
             let cropperData = z.data.cropperData
             let mode = cropperData.mode
@@ -304,25 +319,29 @@ Component({
             let cropperMovableItems = z.data.cropperMovableItems
 
             if (mode == 'rectangle') {
-                let maxX = 0, maxY = 0
+                let maxX = 0,
+                    maxY = 0
                 for (let key in cropperMovableItems) {
                     let item = cropperMovableItems[key]
                     maxX = item.x > maxX ? item.x : maxX
                     maxY = item.y > maxY ? item.y : maxY
                 }
 
-                let minX = maxX, minY = maxY
+                let minX = maxX,
+                    minY = maxY
                 for (let key in cropperMovableItems) {
                     let item = cropperMovableItems[key]
                     minX = item.x < minX ? item.x : minX
                     minY = item.y < minY ? item.y : minY
                 }
 
-                let w = maxX - minX, h = maxY - minY
+                let w = maxX - minX,
+                    h = maxY - minY
                 w *= scaleInfo.x
                 h *= scaleInfo.y
 
-                let x = minX * scaleInfo.x, y = minY * scaleInfo.y
+                let x = minX * scaleInfo.x,
+                    y = minY * scaleInfo.y
 
                 console.log('crop rect: x=' + x + ',y=' + y + ',w=' + w + ',h=' + h)
 
@@ -339,7 +358,7 @@ Component({
                     destWidth: w,
                     destHeight: h,
                     canvasId: 'originalCanvas',
-                    success: function (res) {
+                    success: function(res) {
                         let tempFilePath = res.tempFilePath
 
                         wx.hideLoading()
@@ -364,9 +383,13 @@ Component({
                         console.log(res)
                     }
                 }, z)
-            }
-            else {
-                let res = [[0, 0], [0, 0], [0, 0], [0, 0]]
+            } else {
+                let res = [
+                    [0, 0],
+                    [0, 0],
+                    [0, 0],
+                    [0, 0]
+                ]
                 let points = []
                 for (let key in cropperMovableItems) {
                     let x = Math.ceil(cropperMovableItems[key].x * scaleInfo.x)
@@ -376,19 +399,19 @@ Component({
                     let index = 0
                     if (key == 'topleft') {
                         index = 0
-                    }
-                    else if (key == 'bottomleft') {
+                    } else if (key == 'bottomleft') {
                         index = 1
-                    }
-                    else if (key == 'bottomright') {
+                    } else if (key == 'bottomright') {
                         index = 2
-                    }
-                    else if (key == 'topright') {
+                    } else if (key == 'topright') {
                         index = 3
                     }
                     res[index] = [x, y]
 
-                    points.push({ x, y })
+                    points.push({
+                        x,
+                        y
+                    })
                 }
 
                 cropperUtil.convexHull(points, points.length)
@@ -401,23 +424,24 @@ Component({
 
         // 测试
         // 截取形状
-        changeCropShapeHandler: function () {
+        changeCropShapeHandler: function() {
             let z = this
             let cropperChangableData = z.data.cropperChangableData
             wx.showActionSheet({
                 itemList: ['正方形', 'test1', 'test2'],
-                success: function (res) {
+                success: function(res) {
                     let tapIndex = res.tapIndex
                     switch (tapIndex) {
-                        case 0: {
-                            cropperChangableData.shapeEnable = true
-                            cropperChangableData.shape = {
-                                x: 1.0,
-                                y: 1.0
-                            }
+                        case 0:
+                            {
+                                cropperChangableData.shapeEnable = true
+                                cropperChangableData.shape = {
+                                    x: 1.0,
+                                    y: 1.0
+                                }
 
-                            break;
-                        }
+                                break;
+                            }
 
                         default:
                             break;
@@ -427,14 +451,14 @@ Component({
                         cropperChangableData
                     })
                 },
-                fail: function (res) {
+                fail: function(res) {
                     console.log(res.errMsg)
                 }
             })
         },
 
         // 旋转图片
-        rotateImage: function () {
+        rotateImage: function() {
             console.log("rotate image")
             let that = this
             let imageInfo = that.data.cropperData.imageInfo
@@ -510,7 +534,7 @@ Component({
         },
 
         // 根据图片大小设置canvas大小，并绘制图片
-        loadImage: function (src, width, height, isRotate) {
+        loadImage: function(src, width, height, isRotate) {
             let z = this
             let size = cropperUtil.getAdjustSize(W, H, width, height)
 
@@ -603,7 +627,7 @@ Component({
         },
 
         // 清空canvas上的数据
-        clearCanvas: function (imageInfo) {
+        clearCanvas: function(imageInfo) {
             let z = this
             let cropperData = z.data.cropperData
             let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
@@ -629,7 +653,7 @@ Component({
         },
 
         //绘制图片
-        drawImage: function (imageInfo) {
+        drawImage: function(imageInfo) {
             let z = this
             let cropperData = z.data.cropperData
             let size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
@@ -664,7 +688,7 @@ Component({
         },
 
         // 单独绘制原图，当切换原图与非原图时使用
-        drawOriginalImage: function () {
+        drawOriginalImage: function() {
             let that = this
             let cropperData = that.data.cropperData
             let imageInfo = cropperData.imageInfo
@@ -691,7 +715,7 @@ Component({
         },
 
         //绘制选框
-        drawLines: function (cropperMovableItems, imageInfo, rotateDegree, callback) {
+        drawLines: function(cropperMovableItems, imageInfo, rotateDegree, callback) {
             let that = this
             let isVertical = rotateDegree % 180 > 0
             let cropperData = that.data.cropperData
@@ -699,8 +723,7 @@ Component({
             let size
             if (isVertical) {
                 size = cropperUtil.getAdjustSize(W, H, imageInfo.height, imageInfo.width)
-            }
-            else {
+            } else {
                 size = cropperUtil.getAdjustSize(W, H, imageInfo.width, imageInfo.height)
             }
 
@@ -757,8 +780,7 @@ Component({
 
                 ctx.stroke()
                 ctx.closePath()
-            }
-            else {
+            } else {
                 //绘制选中边框
                 // 如果四个点组成的四边形不是凸四边形，则显示红色，表示不可取
                 let color = canCrop ? 'white' : 'red'
@@ -770,8 +792,7 @@ Component({
                     let dot = convexDots[i]
                     if (i == 0) {
                         ctx.moveTo(dot.x, dot.y)
-                    }
-                    else {
+                    } else {
                         ctx.lineTo(dot.x, dot.y)
                     }
                 }
@@ -802,9 +823,10 @@ Component({
                     ctx.fill()
                     ctx.closePath()
                 }
-            }
-            else if (cornerType == 'rect') {
-                let len = 20, w = 3.0, offset = w / 2.0
+            } else if (cornerType == 'rect') {
+                let len = 20,
+                    w = 3.0,
+                    offset = w / 2.0
 
                 ctx.setLineWidth(w)
                 ctx.beginPath()
@@ -834,7 +856,7 @@ Component({
         },
 
         // move events
-        setupMoveItem: function (key, changedTouches, imageInfo, callback) {
+        setupMoveItem: function(key, changedTouches, imageInfo, callback) {
             let that = this
             let cropperData = that.data.cropperData
             let cropperMovableItems = that.data.cropperMovableItems
@@ -868,22 +890,19 @@ Component({
                     if (key == 'topleft') {
                         cropperMovableItems['bottomleft'].x = x
                         cropperMovableItems['topright'].y = y
-                    }
-                    else if (key == 'topright') {
+                    } else if (key == 'topright') {
                         cropperMovableItems['bottomright'].x = x
                         cropperMovableItems['topleft'].y = y
-                    }
-                    else if (key == 'bottomleft') {
+                    } else if (key == 'bottomleft') {
                         cropperMovableItems['topleft'].x = x
                         cropperMovableItems['bottomright'].y = y
-                    }
-                    else if (key == 'bottomright') {
+                    } else if (key == 'bottomright') {
                         cropperMovableItems['topright'].x = x
                         cropperMovableItems['bottomleft'].y = y
                     }
                 }
 
-                that.drawLines(cropperMovableItems, imageInfo, cropperChangableData.rotateDegree, function (canCrop) {
+                that.drawLines(cropperMovableItems, imageInfo, cropperChangableData.rotateDegree, function(canCrop) {
                     if (callback) {
                         callback(cropperMovableItems, canCrop)
                     }
@@ -892,7 +911,7 @@ Component({
         },
 
         // moveable-view touchmove
-        moveEvent: function (e) {
+        moveEvent: function(e) {
             let z = this
             let key = e.currentTarget.dataset.key
             let originalSize = z.data.cropperChangableData.originalSize
@@ -905,7 +924,7 @@ Component({
         },
 
         // moveable-view touchend，end的时候设置movable-view的位置，如果在move阶段设置位置，选中会不流畅
-        endEvent: function (e) {
+        endEvent: function(e) {
             console.log("end")
             let z = this
             let cropperData = z.data.cropperData

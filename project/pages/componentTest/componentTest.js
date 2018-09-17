@@ -13,8 +13,7 @@ Page({
             sizeType: []
         }
     },
-    onLoad: function (options) {
-    },
+    onLoad: function(options) {},
     selectTap(e) {
         let z = this
         let mode = e.currentTarget.dataset.mode
@@ -37,13 +36,14 @@ Page({
                         hidden: false,
                         src: tempFilePath,
                         mode: mode,
-                        sizeType: ['original', 'compressed'],   //'original'(default) | 'compressed'
+                        sizeType: ['original', 'compressed'], //'original'(default) | 'compressed'
+                        maxLength: 1000, //默认2000，允许最大长宽，避免分辨率过大导致崩溃
                     }
                 })
             }
         })
     },
-    cropperComplete: function (e) {
+    cropperComplete: function(e) {
         console.log(e)
         let res = e.detail.res
         if (this.data.cropperOptions.mode == 'rectangle') {
@@ -52,8 +52,7 @@ Page({
                 current: '',
                 urls: [res]
             })
-        }
-        else {
+        } else {
             console.log('callback :' + res)
             wx.showModal({
                 title: '',
