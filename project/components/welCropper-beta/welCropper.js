@@ -893,21 +893,15 @@ Component({
                 if (mode == 'rectangle') {
                     // 同时设置相连两个点的位置，是相邻的两个点跟随着移动点动，保证选框为矩形
                     if (changableData.shapeEnable) {
+                        // let convexDots = []
+                        // let orderedDots = Object.values(moveItems)
+
+                        // // 获取凸边形的点
+                        // convexDots = cropperUtil.convexHull(orderedDots, orderedDots.length)
+                        // //绘制高亮选中区域
+                        // let rect = cropperUtil.getCropRect(convexDots)
+
                         let gapX, gapY
-                        if (key == 'topleft') {
-                            gapX = x - moveItems['bottomright'].x
-                            gapY = y - moveItems['bottomright'].y
-                        } else if (key == 'topright') {
-                            gapX = x - moveItems['bottomleft'].x
-                            gapY = y - moveItems['bottomleft'].y
-                        } else if (key == 'bottomleft') {
-                            gapX = x - moveItems['topright'].x
-                            gapY = y - moveItems['topright'].y
-                        } else if (key == 'bottomright') {
-                            gapX = x - moveItems['topleft'].x
-                            gapY = y - moveItems['topleft'].y
-                        }
-                        // console.log(gapX, gapY)
                         let opKey = ''
                         if (key == 'topleft') {
                             opKey = 'bottomright'
@@ -918,19 +912,29 @@ Component({
                         } else if (key == 'bottomright') {
                             opKey = 'topleft'
                         }
-                        if (gapX > gapY) {
-                            moveItems[key].x = moveItems[opKey].x + gapY
-                            moveItems[key].y = moveItems[opKey].y + gapY
 
+                        gapX = x - moveItems[opKey].x
+                        gapY = y - moveItems[opKey].y
+                        // gapX = Math.abs(gapX)
+                        // gapY = Math.abs(gapY)
+                        // console.log(gapX, gapY)
+                        if (Math.abs(gapX) > Math.abs(gapY)) {
+                            if (key == 'topleft' || key == 'bottomright') {
+                                moveItems[key].x = moveItems[opKey].x + gapY
+                                moveItems[key].y = moveItems[opKey].y + gapY
+                            } else {
+                                moveItems[key].x = moveItems[opKey].x - gapY
+                                moveItems[key].y = moveItems[opKey].y + gapY
+                            }
                         } else {
-                            moveItems[key].x = moveItems[opKey].x + gapX
-                            moveItems[key].y = moveItems[opKey].y + gapX
+                            if (key == 'topleft' || key == 'bottomright') {
+                                moveItems[key].x = moveItems[opKey].x + gapX
+                                moveItems[key].y = moveItems[opKey].y + gapX
+                            } else {
+                                moveItems[key].x = moveItems[opKey].x - gapY
+                                moveItems[key].y = moveItems[opKey].y + gapY
+                            }
                         }
-
-                        // moveItems['topright'].x = moveItems[key].x
-                        // moveItems['bottomleft'].y = moveItems[key].y
-                        // console.log(moveItems['topleft'].x - moveItems[key].x, moveItems['topleft'].y - moveItems[key].y)
-                        // console.log(moveItems)
                     }
                     if (key == 'topleft') {
                         moveItems['bottomleft'].x = moveItems[key].x
