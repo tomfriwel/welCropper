@@ -407,8 +407,15 @@ Component({
         changeCropShapeHandler: function() {
             let z = this
             let changableData = z.data.changableData
+            if (changableData.shapeEnable) {
+                changableData.shapeEnable = false
+                z.setData({
+                    changableData
+                })
+                return
+            }
             wx.showActionSheet({
-                itemList: ['正方形', 'test1', 'test2'],
+                itemList: ['正方形'],
                 success: function(res) {
                     let tapIndex = res.tapIndex
                     switch (tapIndex) {
@@ -430,11 +437,55 @@ Component({
                     z.setData({
                         changableData
                     })
+                    z.setupShape()
                 },
                 fail: function(res) {
                     console.log(res.errMsg)
                 }
             })
+        },
+        setupShape: function() {
+            let z = this
+            let changableData = z.data.changableData
+            let {
+                shape,
+                scaleSize
+            } = changableData
+
+            let {
+                width,
+                height
+            } = scaleSize
+
+            let rectW = width
+            if (width > height) {
+                rectW = height
+            }
+            rectW -= 100
+
+            let moveItems = {
+                topleft: {
+                    x: (width - rectW) / 2,
+                    y: (height - rectW) / 2
+                },
+                topright: {
+                    x: (width - rectW) / 2 + rectW,
+                    y: (height - rectW) / 2
+                },
+                bottomleft: {
+                    x: (width - rectW) / 2,
+                    y: (height - rectW) / 2 + rectW
+                },
+                bottomright: {
+                    x: (width - rectW) / 2 + rectW,
+                    y: (height - rectW) / 2 + rectW
+                }
+            }
+
+            z.setData({
+                moveItems
+            })
+            z.drawLines(z.data.moveItems, z.data.cropperData.imageInfo, changableData.rotateDegree)
         },
 
         // 旋转图片
@@ -718,9 +769,9 @@ Component({
                 ctx.setFillStyle('rgba(0,0,0,0)')
                 ctx.clearRect(rect.x, rect.y, rect.w, rect.h)
 
-                console.log('rectange')
-                console.log(size)
-                console.log(rect)
+                // console.log('rectange')
+                // console.log(size)
+                // console.log(rect)
 
                 //绘制选中边框
                 ctx.setStrokeStyle('white')
@@ -841,18 +892,58 @@ Component({
                 // 如果是在矩形模式下
                 if (mode == 'rectangle') {
                     // 同时设置相连两个点的位置，是相邻的两个点跟随着移动点动，保证选框为矩形
+                    if (changableData.shapeEnable) {
+                        let gapX, gapY
+                        if (key == 'topleft') {
+                            gapX = x - moveItems['bottomright'].x
+                            gapY = y - moveItems['bottomright'].y
+                        } else if (key == 'topright') {
+                            gapX = x - moveItems['bottomleft'].x
+                            gapY = y - moveItems['bottomleft'].y
+                        } else if (key == 'bottomleft') {
+                            gapX = x - moveItems['topright'].x
+                            gapY = y - moveItems['topright'].y
+                        } else if (key == 'bottomright') {
+                            gapX = x - moveItems['topleft'].x
+                            gapY = y - moveItems['topleft'].y
+                        }
+                        // console.log(gapX, gapY)
+                        let opKey = ''
+                        if (key == 'topleft') {
+                            opKey = 'bottomright'
+                        } else if (key == 'topright') {
+                            opKey = 'bottomleft'
+                        } else if (key == 'bottomleft') {
+                            opKey = 'topright'
+                        } else if (key == 'bottomright') {
+                            opKey = 'topleft'
+                        }
+                        if (gapX > gapY) {
+                            moveItems[key].x = moveItems[opKey].x + gapY
+                            moveItems[key].y = moveItems[opKey].y + gapY
+
+                        } else {
+                            moveItems[key].x = moveItems[opKey].x + gapX
+                            moveItems[key].y = moveItems[opKey].y + gapX
+                        }
+
+                        // moveItems['topright'].x = moveItems[key].x
+                        // moveItems['bottomleft'].y = moveItems[key].y
+                        // console.log(moveItems['topleft'].x - moveItems[key].x, moveItems['topleft'].y - moveItems[key].y)
+                        // console.log(moveItems)
+                    }
                     if (key == 'topleft') {
-                        moveItems['bottomleft'].x = x
-                        moveItems['topright'].y = y
+                        moveItems['bottomleft'].x = moveItems[key].x
+                        moveItems['topright'].y = moveItems[key].y
                     } else if (key == 'topright') {
-                        moveItems['bottomright'].x = x
-                        moveItems['topleft'].y = y
+                        moveItems['bottomright'].x = moveItems[key].x
+                        moveItems['topleft'].y = moveItems[key].y
                     } else if (key == 'bottomleft') {
-                        moveItems['topleft'].x = x
-                        moveItems['bottomright'].y = y
+                        moveItems['topleft'].x = moveItems[key].x
+                        moveItems['bottomright'].y = moveItems[key].y
                     } else if (key == 'bottomright') {
-                        moveItems['topright'].x = x
-                        moveItems['bottomleft'].y = y
+                        moveItems['topright'].x = moveItems[key].x
+                        moveItems['bottomleft'].y = moveItems[key].y
                     }
                 }
 
