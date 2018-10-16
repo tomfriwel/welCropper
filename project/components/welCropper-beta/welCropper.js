@@ -918,6 +918,9 @@ Component({
                         // gapX = Math.abs(gapX)
                         // gapY = Math.abs(gapY)
                         // console.log(gapX, gapY)
+                        // let cx = gapX > 0 ? 1 : -1
+                        // let cy = gapY > 0 ? 1 : -1
+                        // console.log(cx, cy, gapX, gapY)
                         if (Math.abs(gapX) > Math.abs(gapY)) {
                             if (key == 'topleft' || key == 'bottomright') {
                                 moveItems[key].x = moveItems[opKey].x + gapY
@@ -931,8 +934,8 @@ Component({
                                 moveItems[key].x = moveItems[opKey].x + gapX
                                 moveItems[key].y = moveItems[opKey].y + gapX
                             } else {
-                                moveItems[key].x = moveItems[opKey].x - gapY
-                                moveItems[key].y = moveItems[opKey].y + gapY
+                                moveItems[key].x = moveItems[opKey].x + gapX
+                                moveItems[key].y = moveItems[opKey].y - gapX
                             }
                         }
                     }
